@@ -12,7 +12,7 @@ class PropertyStatus extends React.Component{
 
     constructor(props) {
     super(props);
-    this.state = {
+    this.state = { 
        open: false,
       statuses: [
         {statusName: ''}
@@ -96,7 +96,7 @@ class PropertyStatus extends React.Component{
                         </tr>
                       </thead>
                       <tbody>
-                      {this.DataTable()}
+                      
                       </tbody>
                     </table>
                   </CardBody>
