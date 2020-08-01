@@ -36,7 +36,7 @@ export default class StatusForm extends Component {
     const status = {
       statusName: this.state.statusName
     };
-    axios.post('https://terrelldavies.com/api/create-status', status)
+    axios.post('https://api.terrelldavies.com/api/create-status', status)
     .then(res => console.log(res.data));
 
     <SweetAlert
