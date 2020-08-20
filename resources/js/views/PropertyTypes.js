@@ -1,41 +1,39 @@
-import React from "react";
+import React, {useState} from "react";
 import { Container, Row, Col, Card, CardHeader, CardBody } from "shards-react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import PageTitle from "../components/common/PageTitle";
-import SmallButtons from "../components/components-overview/SmallButtons";
-import { Button, Modal, ModalBody, ModalHeader } from "shards-react";
-import Forms from "../components/components-overview/Forms";
-import FormValidation from "../components/components-overview/FormValidation";
-import TypeForm from "../components/components-overview/TypeForm";
+import { Button } from "shards-react";
+import AddType from "../components/components-overview/Forms/PropertyTypes/AddType";
+import {Modal} from "react-bootstrap";
 
-class PropertyTypes extends React.Component{
+function AddTypeForm(props) {
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+         Add New Property Type
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <AddType/>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide}>Close</Button>
+      </Modal.Footer>
+    </Modal>
+  );
+}
 
-    constructor(props) {
-    super(props);
-    this.state = { open: false };
-    this.toggle = this.toggle.bind(this);
-
-    }
-    toggle() {
-        this.setState({
-          open: !this.state.open
-        });
-      }
-      render() {
-        const { open } = this.state;
+const PropertyTypes = ()=> {
+  const [modalShow, setModalShow] = useState(false);
         return (
             <React.Fragment>
-            <div>
-            <Modal className="modal-lg" open={open} toggle={this.toggle}>
-              <ModalHeader>
-              Add New Property Type
-              </ModalHeader>
-              <ModalBody>
-            <TypeForm />
-            
-            </ModalBody>
-            </Modal>
-            </div>
+       
             <Container fluid className="main-content-container px-4">
             {/* Page Header */}
             <Row noGutters className="page-header py-4">
@@ -47,8 +45,11 @@ class PropertyTypes extends React.Component{
               <Col>
                 <Card small className="mb-4">
                   <CardHeader className="border-bottom">
-                    <h6 className="m-0">Type <button onClick={this.toggle}  type="button" class="btn btn-secondary">Add +</button></h6>
-                    
+                    <h6 className="m-0">Type <button onClick={() => setModalShow(true)}  type="button" class="btn btn-secondary">Add +</button></h6>
+                    <AddTypeForm
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                  />
                   </CardHeader>
                   <CardBody className="p-0 pb-3">
                     <table className="table mb-0">
@@ -87,8 +88,6 @@ class PropertyTypes extends React.Component{
           </Container>
           </React.Fragment>
         );
-      }
-
-    };
+      };
 
 export default PropertyTypes;

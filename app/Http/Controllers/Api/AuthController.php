@@ -9,7 +9,7 @@ use Hash;
 use App\User;
 use Auth;
 
-class AuthController extends Controller
+class AuthController extends Controller 
 {
     public function login(Request $request)
     {
@@ -18,6 +18,7 @@ class AuthController extends Controller
              $user = $request->user();
              $data['token'] = $user->createToken('MyApp')->accessToken;
              $data['name']  = $user->name;
+             $data['userType'] = $user->userType;
              return response()->json($data, 200);
          }
 
@@ -30,8 +31,9 @@ class AuthController extends Controller
       $validator = Validator::make($request->all(), [
         'name' => 'required',
         'email' => 'required|email|unique:users',
-        'password' => 'required|min:8|confirmed',
-        'phone' => 'required|unique:users'
+        'password' => 'required|min:8|',
+        'phone' => 'required|unique:users',
+        'userType' => 'required'
       ]);
 
       if ($validator->fails()) {
@@ -43,6 +45,7 @@ class AuthController extends Controller
       $user = User::create($user);
       $success['token'] =  $user->createToken('MyApp')-> accessToken;
       $success['name'] =  $user->name;
+      $success['userType'] = $user->userType;
 
       return response()->json(['success'=>$success], 200);
     }
@@ -52,5 +55,29 @@ class AuthController extends Controller
         $user = Auth::user();
 
         return response()->json(['user' => $user], 200);
+    }
+
+    public function logout(Request $request)
+    {
+        $user = Auth::guard('api')->user();
+ 
+        if ($user) {
+            $user->api_token = null;
+            $user->save();
+ 
+            return response()->json(['data' => 'User logged out.'], 200);
+        }
+ 
+        return response()->json(['state' => 0, 'message' => 'Unauthenticated'], 401);
+    }
+    public function checkAuth(Request $request)
+    {
+        $user = Auth::guard('api')->user();
+ 
+        if ($user && $user->userType) {
+            return response()->json(['state' => 'admin'], 200);
+        }
+ 
+        return response()->json(['state' => 0], 401);
     }
 }

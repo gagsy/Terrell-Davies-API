@@ -1,41 +1,57 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Container, Row, Col, Card, CardHeader, CardBody } from "shards-react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import PageTitle from "../components/common/PageTitle";
-import SmallButtons from "../components/components-overview/SmallButtons";
-import { Button, Modal, ModalBody, ModalHeader } from "shards-react";
-import Forms from "../components/components-overview/Forms";
-import FormValidation from "../components/components-overview/FormValidation";
-import PropertyForm from "../components/components-overview/FeatureForm";
+import { Button } from "shards-react";
+import {Modal} from "react-bootstrap";
+import AddFeature from "../components/components-overview/Forms/PropertyFeature/AddFeature";
+import {getFeatures} from "../Services/featureService"
+import FeatureDataService from "../Services/featureService"
+import axios from 'axios';
+import moment from "moment"
 
-class PropertyFeature extends React.Component{
+function AddFeatureForm(props) {
+  return (
+    <Modal
+      {...props}
+      size="md"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+         Add New Property Feature
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <AddFeature />
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide}>Close</Button>
+      </Modal.Footer>
+    </Modal>
+  );
+}
 
-    constructor(props) {
-    super(props);
-    this.state = { open: false };
-    this.toggle = this.toggle.bind(this);
+const PropertyFeature = () => {
+const [modalShow, setModalShow] = useState(false);
 
-    }
-    toggle() {
-        this.setState({
-          open: !this.state.open
-        });
-      }
-      render() {
-        const { open } = this.state;
+const [state, setState] = useState({ features: []})
+  
+  useEffect(() => {
+    getAll()
+  },[])
+  const getAll = () =>{
+    getFeatures().then(data =>{
+      setState( (prevState) => ({
+        ...prevState,
+        features: data.features
+      }));
+  });
+};
+
         return (
             <React.Fragment>
-            <div>
-            <Modal className="modal-lg" open={open} toggle={this.toggle}>
-              <ModalHeader>
-              Add New Feature
-              </ModalHeader>
-              <ModalBody>
-            <PropertyForm />
-            
-            </ModalBody>
-            </Modal>
-            </div>
+
             <Container fluid className="main-content-container px-4">
             {/* Page Header */}
             <Row noGutters className="page-header py-4">
@@ -47,8 +63,11 @@ class PropertyFeature extends React.Component{
               <Col>
                 <Card small className="mb-4">
                   <CardHeader className="border-bottom">
-                    <h6 className="m-0">Features <button onClick={this.toggle}  type="button" class="btn btn-secondary">Add +</button></h6>
-                    
+                    <h6 className="m-0">Features <button  type="button" onClick={() => setModalShow(true)} className="btn btn-secondary">Add +</button></h6>
+                    <AddFeatureForm
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                  />
                   </CardHeader>
                   <CardBody className="p-0 pb-3">
                     <table className="table mb-0">
@@ -61,7 +80,7 @@ class PropertyFeature extends React.Component{
                             Title
                           </th>
                           <th scope="col" className="border-0">
-                            Created At
+                            Date Created
                           </th>
                           <th scope="col" className="border-0">
                             Action
@@ -69,16 +88,18 @@ class PropertyFeature extends React.Component{
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>1</td>
-                          <td>Air Condition</td>
-                          <td>21/07/2020</td>
-                          <td>  
-                          <button type="button" class="btn btn-info">Edit</button>&nbsp;
-                          <button type="button" class="btn btn-danger">Delete</button>
-                          </td>
-                        </tr>
-                      </tbody>
+                      {state.features.map((feature, index) => (
+                        <tr key={index}>
+                         <td>{feature.id}</td>
+                         <td>{feature.featureName}</td>
+                         <td>{moment(feature.created_at).format('MMM-DD-YYYY')}</td>
+                         <td>  
+                         <button type="button" className="btn btn-info">Edit</button>&nbsp;
+                         <button type="button" className="btn btn-danger">Delete</button>
+                         </td>
+                       </tr>
+                     ))}
+                     </tbody>
                     </table>
                   </CardBody>
                 </Card>
@@ -87,7 +108,6 @@ class PropertyFeature extends React.Component{
           </Container>
           </React.Fragment>
         );
-      }
 
     };
 

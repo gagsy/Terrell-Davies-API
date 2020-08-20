@@ -19,13 +19,14 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('phone');
-            $table->string('userType')->default('user');
+            $table->string('userType')->default('individual');
             $table->tinyInteger('isActivated')->default(0);
             $table->string('passwordResetCode')->nullable();
             $table->string('activationCode')->nullable();
             $table->string('socialType')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            
         });
     }
 

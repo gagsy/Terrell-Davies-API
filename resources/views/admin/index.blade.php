@@ -16,6 +16,8 @@
     <body>
        <div id="app">
         </div>
+
          <script src="/js/app.js"></script>
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.js"></script>
     </body>
 </html>

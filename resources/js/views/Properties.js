@@ -44,7 +44,7 @@ class Properties extends React.Component{
               <Col>
                 <Card small className="mb-4">
                   <CardHeader className="border-bottom">
-                    <h6 className="m-0">Properties <Link to="/add-property"><button  type="button" class="btn btn-secondary">Add +</button></Link></h6>
+                    <h6 className="m-0">Properties <Link to="/admin/add-property"><button  type="button" class="btn btn-secondary">Add +</button></Link></h6>
                     
                   </CardHeader>
                   <CardBody className="p-0 pb-3">

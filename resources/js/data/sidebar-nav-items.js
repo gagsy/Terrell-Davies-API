@@ -8,7 +8,7 @@ export default function() {
     },
     {
       title: "Properties",
-      htmlBefore: '<i class="material-icons">vertical_split</i>',
+      htmlBefore: '<i class="material-icons">house</i>',
       to: "/admin/properties",
     },
     {
@@ -28,9 +28,14 @@ export default function() {
     },
   
     {
-      title: "User Profile",
+      title: "Agents",
       htmlBefore: '<i class="material-icons">person</i>',
-      to: "/admin/user-profile",
+      to: "/admin/agents",
+    },
+    {
+      title: "Settings",
+      htmlBefore: '<i class="material-icons">settings</i>',
+      to: "/admin/settings",
     },
   ];
 }

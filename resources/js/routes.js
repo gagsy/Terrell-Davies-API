@@ -6,13 +6,16 @@ import { DefaultLayout } from "./layouts";
 
 // Route Views
 import Dashboard from "./views/Dashboard";
-import UserProfileLite from "./views/UserProfileLite";
+import AdminProfile from "./views/AdminProfile";
+import Settings from "./views/Settings";
+import Agents from "./views/Agents";
 import Errors from "./views/Errors";
 import Properties from "./views/Properties";
 import AddNewProperty from "./views/AddNewProperty";
 import PropertyFeature from "./views/PropertyFeature";
 import PropertyStatus from "./views/PropertyStatus";
 import PropertyTypes from "./views/PropertyTypes";
+
 
 export default [
   {
@@ -52,9 +55,19 @@ export default [
     component: PropertyTypes
   },
   {
-    path: "/admin/user-profile",
+    path: "/admin/admin-profile",
     layout: DefaultLayout,
-    component: UserProfileLite
+    component: AdminProfile
+  },
+  {
+    path: "/admin/agents",
+    layout: DefaultLayout,
+    component: Agents
+  },
+  {
+    path: "/admin/settings",
+    layout: DefaultLayout,
+    component: Settings
   },
   {
     path: "/admin/errors",
