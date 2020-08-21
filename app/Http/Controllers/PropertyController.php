@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Property;
+use App\PropertyType;
+use App\PropertyCategory;
 use App\User;
 
 use Illuminate\Http\Request;
@@ -17,6 +19,8 @@ class PropertyController extends Controller
     public function index()
     {
         $properties = Property::all();
+        // $propertytypes = PropertyType::get();
+        // $propertycats = Propertycategory::get();
         return response()->json(['properties' => $properties], 200);
     }
 
@@ -39,25 +43,25 @@ class PropertyController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
+            'prperty_cat_id' => 'required',
+            'prperty_type_id' => 'required',
             'title' => 'required',
-            'slug' => 'required|unique:properties',
             'description' => 'required',
-            'location' => 'required',
-            'type' => 'required',
-            'status' => 'required',
-            'price' => 'required',
-            'featuredImage' => 'required',
-            'galleryImage' => 'required',
-            'user_id' => 'required',
+            'state' => 'required',
+            'market-status' => 'required',
+            'locality' => 'required',
+            'budget' => 'required',
+            'featuredImage' => 'required|image',
+            'galleryImage' => 'required|image',
             'agent' => 'required',
             'feature' => 'required',
             'bedroom' => 'required',
             'bathroom' => 'required',
             'garage' => 'required',
             'toilet' => 'required',
-            'views' => 'required',
+            'totalarea' => 'required',
+            'video-link' => 'required',
             'metaDescription' => 'required',
-            'visible' => 'required',
         ]);
 
         try{
@@ -98,15 +102,7 @@ class PropertyController extends Controller
      */
     public function show(Property $id)
     {
-        if (Property::where('id', $id)->exists()) {
-            $property = Property::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
-            return response($property, 200);
-          } else {
-            return response()->json([
-              "message" => "Property not found",
-              'property' => $property,
-            ], 404);
-          }
+        //
     }
 
     /**
@@ -115,9 +111,16 @@ class PropertyController extends Controller
      * @param  \App\Property  $property
      * @return \Illuminate\Http\Response
      */
-    public function edit(Property $property)
+    public function edit($id)
     {
-        //
+        if (Property::where('id', $id)->exists()) {
+            $propertyDetails = Property::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
+            return response($propertyDetails, 200);
+          } else {
+            return response()->json([
+              "message" => "Property not found"
+            ], 404);
+          }
     }
 
     /**
@@ -151,36 +154,34 @@ class PropertyController extends Controller
             catch(Exception $e){
                 return response()->json([
                     'message' => 'An error occured',
-                    'property' => $property,
                 ], 400);
             }
 
 
             $properties->update([
+                'prperty_cat_id' => $data['prperty_cat_id'],
+                'prperty_type_id' => $data['prperty_type_id'],
                 'title'=>$data['title'],
-                'slug'=>$data['slug'],
                 'description'=>$data['description'],
-                'location'=>$data['location'],
-                'type'=>$data['type'],
-                'status'=>$data['status'],
-                'price'=>$data['price'],
-                'featuredImage'=>$image_filename,
+                'state' => $data['state'],
+                'market-status' => $data['market-status'],
+                'locality' => $data['locality'],
+                'budget' => $data['budget'],
+                'featuredImage' => $image_filename,
                 'galleryImage'=>$image_filename1,
-                'user_id' => Auth::user()->id,
-                'agent'=>$data['agent'],
-                'feature'=>$data['feature'],
-                'bedroom'=>$data['bedroom'],
-                'bathroom'=>$data['bathroom'],
-                'garage'=>$data['garage'],
-                'toilet'=>$data['toilet'],
-                'views'=>$data['views'],
-                'metaDescription'=>$data['metaDescription'],
-                'visible'=>$data['visible'],
+                'agent' => $data['agent'],
+                'feature' => $data['feature'],
+                'bedroom' => $data['bedroom'],
+                'bathroom' => $data['bathroom'],
+                'garage' => $data['garage'],
+                'toilet' => $data['toilet'],
+                'totalarea' => $data['totalarea'],
+                'video-link' => $data['video-link'],
+                'metaDescription' => $data['metaDescription'],
             ]);
 
             return response()->json([
-                "message" => "record updated successfully",
-                'properties' => $properties,
+                "message" => "Property updated successfully",
             ], 200);
         }
     }

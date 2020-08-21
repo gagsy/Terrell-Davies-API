@@ -34,7 +34,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('/create-types', 'TypeController@store');
     Route::get('/types/{id}', 'TypeController@show');
     Route::put('/types/{id}', 'TypeController@update');
-    Route::delete('types{id}', 'TypeController@destroy');
+    Route::delete('types/{id}', 'TypeController@destroy');
 
     //Status Api Controller Routes
     Route::get('/status', 'StatusController@index');
@@ -74,7 +74,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     //Property Api Controller Routes
     Route::get('/properties', 'PropertyController@index');
     Route::post('/create-properties', 'PropertyController@store');
-    Route::get('/properties/{id}', 'PropertyController@show');
+    Route::get('/properties/{id}', 'PropertyController@edit');
     Route::put('/properties/{id}', 'PropertyController@update');
     Route::delete('properties/{id}', 'PropertyController@destroy');
 
@@ -98,6 +98,13 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('/subscription-plans/{id}', 'SubscriptionPlansController@edit');
     Route::put('/subscription-plans/{id}', 'SubscriptionPlansController@update');
     Route::delete('subscription-plans/{id}', 'SubscriptionPlansController@destroy');
+
+    //PropertyCategory Api Controller Routes
+    Route::get('/property-category', 'PropertyCategoryController@index');
+    Route::post('/create-property-category', 'PropertyCategoryController@store');
+    Route::get('/property-category/{id}', 'PropertyCategoryController@edit');
+    Route::put('/property-category/{id}', 'PropertyCategoryController@update');
+    Route::delete('property-category/{id}', 'PropertyCategoryController@destroy');
 
 });
 
