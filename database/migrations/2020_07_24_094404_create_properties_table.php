@@ -23,7 +23,7 @@ class CreatePropertiesTable extends Migration
             $table->string('status');
             $table->string('price');
             $table->string('featuredImage');
-            $table->string('galleryImage');
+            $table->string('galleryImage'); 
             $table->unsignedBigInteger('user_id')->index();
             $table->string('agent');
             $table->string('feature');
