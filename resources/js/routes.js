@@ -26,11 +26,13 @@ export default [
   },
   {
     path: "/admin/dashboard",
+    exact: true,
     layout: DefaultLayout,
     component: Dashboard
   },
   {
     path: "/admin/properties",
+    exact: true,
     layout: DefaultLayout,
     component: Properties
   },

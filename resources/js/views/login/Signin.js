@@ -1,14 +1,27 @@
-import React from 'react'
+import React, {Component} from 'react'
 import "../../styles/Auth/auth.css"
 import Auth from '../../Services/Auth'
-const Signin = () => {
+
+class Signin extends Component {
+
+    constructor(props) {
+        super(props)
+    
+        this.state = {
+             
+        }
+    }
+    
+    render() {
     return (
         <React.Fragment>
         <div className="login-wrap">
         <div className="login-html">
             <input id="tab-1" type="radio" name="tab" className="sign-in" checked /><label for="tab-1" className="tab">Sign In</label>
             <input id="tab-2" type="radio" name="tab" className="sign-up" /><label for="tab-2" className="tab">Sign Up</label>
+            
             <div className="login-form">
+            <form action="#" method="post" onSubmit={this.handleSubmit}>
                 <div className="sign-in-htm">
                     <div className="group">
                         <label for="user" className="label">Username</label>
@@ -30,6 +43,8 @@ const Signin = () => {
                         <a href="#forgot">Forgot Password?</a>
                     </div>
                 </div>
+                </form>
+                
                 <div className="sign-up-htm">
                     <div className="group">
                         <label for="user" className="label">Username</label>
@@ -59,7 +74,8 @@ const Signin = () => {
         </div>
     </div>
         </React.Fragment>
-    )
+        )
+     }
 }
 
 export default Signin
