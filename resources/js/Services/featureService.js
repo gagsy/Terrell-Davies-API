@@ -1,6 +1,6 @@
 import http from "../http-common";
 
- const getFeatures = () => {
+ export const getFeatures = () => {
   return http
   .get("/features")
   .then(res => {

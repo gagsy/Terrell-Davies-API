@@ -18,12 +18,7 @@ import PropertyTypes from "./views/PropertyTypes";
 
 
 export default [
-  {
-    path: "/admin",
-    exact: true,
-    layout: DefaultLayout,
-    component: () => <Redirect to="/admin/dashboard" />
-  },
+ 
   {
     path: "/admin/dashboard",
     layout: DefaultLayout,
