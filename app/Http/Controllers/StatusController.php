@@ -58,12 +58,12 @@ class StatusController extends Controller
         if (Status::where('id', $id)->exists()) {
             $status = Status::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
             return response($status, 200);
-          } else {
+        } else {
             return response()->json([
-              "message" => "Status not found",
-              'status' => $status,
+            "message" => "Status not found",
+            'status' => $status,
             ], 404);
-          }
+        }
     }
 
     /**
