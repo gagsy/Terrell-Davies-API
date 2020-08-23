@@ -20,13 +20,22 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('phone');
             $table->string('userType')->default('individual');
+            $table->string('company_name')->nullable();
+            $table->string('address')->nullable();
+            $table->string('locality')->nulclearlable();
+            $table->string('state')->nullable();
+            $table->string('country')->nullable();
+            $table->string('mobile')->nullable();
+            $table->string('services')->nullable();
+            $table->string('facebook_profile')->nullable();
+            $table->string('twitter_profile')->nullable();
+            $table->string('linkedin_profile')->nullable();
             $table->tinyInteger('isActivated')->default(0);
             $table->string('passwordResetCode')->nullable();
             $table->string('activationCode')->nullable();
             $table->string('socialType')->nullable();
             $table->rememberToken();
             $table->timestamps();
-            
         });
     }
 
