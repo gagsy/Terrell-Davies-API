@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\PropertyFeature;
+use App\Property;
 use App\Feature;
 use Illuminate\Http\Request;
 
@@ -57,7 +58,7 @@ class PropertyFeatureController extends Controller
      * @param  \App\PropertyFeature  $propertyFeature
      * @return \Illuminate\Http\Response
      */
-    public function show(PropertyFeature $id)
+    public function show($id)
     {
         if (PropertyFeature::where('id', $id)->exists()) {
             $property_features = PropertyFeature::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);

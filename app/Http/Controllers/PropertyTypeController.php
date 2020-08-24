@@ -58,7 +58,7 @@ class PropertyTypeController extends Controller
      * @param  \App\PropertyType  $propertyType
      * @return \Illuminate\Http\Response
      */
-    public function show(PropertyType $id)
+    public function show($id)
     {
         if (PropertyType::where('id', $id)->exists()) {
             $property_type = PropertyType::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);

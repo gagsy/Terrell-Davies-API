@@ -16,7 +16,7 @@ class PropertyLocationController extends Controller
      */
     public function index()
     {
-        $property_locations = PropertyStatus::all();
+        $property_locations = PropertyLocation::all();
         $properties = Property::get();
         $locations = Location::get();
         return response()->json(['property_locations' => $property_locations, 'properties' => $properties, 'locations' => $locations], 200);
@@ -58,7 +58,7 @@ class PropertyLocationController extends Controller
      * @param  \App\PropertyLocation  $propertyLocation
      * @return \Illuminate\Http\Response
      */
-    public function show(PropertyLocation $id)
+    public function show($id)
     {
         if (PropertyLocation::where('id', $id)->exists()) {
             $property_locations = PropertyLocation::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
