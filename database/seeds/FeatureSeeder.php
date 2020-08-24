@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class PropertyCategorySeeder extends Seeder
+class FeatureSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,9 +14,8 @@ class PropertyCategorySeeder extends Seeder
         $faker = Faker\Factory::create();
 
         for($i = 0; $i < 50; $i++) {
-            App\PropertyCategory::create([
-                'category_id' => $faker->randomDigit,
-                'property_id' => $faker->randomDigit,
+            App\Feature::create([
+                'name' => $faker->name,
             ]);
         }
     }

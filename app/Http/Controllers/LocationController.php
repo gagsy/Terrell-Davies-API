@@ -37,7 +37,7 @@ class LocationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'locationName' => 'required'
+            'name' => 'required'
         ]);
 
         $location = Location::create($request->all());
@@ -53,7 +53,7 @@ class LocationController extends Controller
      * @param  \App\Location  $location
      * @return \Illuminate\Http\Response
      */
-    public function show(Location $id)
+    public function show($id)
     {
         if (Location::where('id', $id)->exists()) {
             $location = Location::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
@@ -88,7 +88,7 @@ class LocationController extends Controller
     {
         if (Location::where('id', $id)->exists()) {
             $location = Location::find($id);
-            $location->locationName = is_null($request->locationName) ? $location->locationName : $request->locationName;
+            $location->name = is_null($request->name) ? $location->name : $request->name;
             $Location->save();
 
             return response()->json([

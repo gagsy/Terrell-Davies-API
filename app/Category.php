@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Status extends Model
+class Category extends Model
 {
     protected $fillable = [
-        'statusName'
+        'name'
     ];
 }

@@ -37,7 +37,7 @@ class FeatureController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'featureName' => 'required'
+            'name' => 'required'
         ]);
 
         $feature = Feature::create($request->all());
@@ -53,7 +53,7 @@ class FeatureController extends Controller
      * @param  \App\Feature  $feature
      * @return \Illuminate\Http\Response
      */
-    public function show(Feature $id)
+    public function show($id)
     {
         if (Feature::where('id', $id)->exists()) {
             $feature = Feature::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
@@ -88,7 +88,7 @@ class FeatureController extends Controller
     {
         if (Feature::where('id', $id)->exists()) {
             $feature = Feature::find($id);
-            $feature->featureName = is_null($request->featureName) ? $feature->featureName : $request->featureName;
+            $feature->name = is_null($request->name) ? $feature->name : $request->name;
             $feature->save();
 
             return response()->json([
