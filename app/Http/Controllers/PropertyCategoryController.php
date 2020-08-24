@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\PropertyCategory;
+use App\Category;
+use App\Property;
 use Illuminate\Http\Request;
 
 class PropertyCategoryController extends Controller
@@ -15,7 +17,9 @@ class PropertyCategoryController extends Controller
     public function index()
     {
         $propertycats = PropertyCategory::all();
-        return response()->json(['propertycats' => $propertycats], 200);
+        $properties = Property::get();
+        $categories = Category::get();
+        return response()->json(['propertycats' => $propertycats, 'properties' => $properties, 'categories' => $categories], 200);
     }
 
     /**
@@ -37,7 +41,8 @@ class PropertyCategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'category_id' => 'required',
+            'property_id' => 'required',
         ]);
 
         $propertycat = PropertyCategory::create($request->all());
@@ -64,7 +69,7 @@ class PropertyCategoryController extends Controller
      * @param  \App\PropertyCategory  $propertyCategory
      * @return \Illuminate\Http\Response
      */
-    public function edit(PropertyCategory $id)
+    public function edit($id)
     {
         if (PropertyCategory::where('id', $id)->exists()) {
             $propertycatDetails = PropertyCategory::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
@@ -87,7 +92,8 @@ class PropertyCategoryController extends Controller
     {
         if (PropertyCategory::where('id', $id)->exists()) {
             $propertycat = PropertyCategory::find($id);
-            $propertycat->name = is_null($request->name) ? $propertycat->name : $request->name;
+            $propertycat->category_id = is_null($request->category_id) ? $propertycat->category_id : $request->category_id;
+            $propertycat->property_id = is_null($request->property_id) ? $propertycat->property_id : $request->property_id;
             $propertycat->save();
 
             return response()->json([

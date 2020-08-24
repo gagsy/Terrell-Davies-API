@@ -15,7 +15,8 @@ class PropertyCategorySeeder extends Seeder
 
         for($i = 0; $i < 50; $i++) {
             App\PropertyCategory::create([
-                'name' => $faker->name,
+                'category_id' => $faker->randomDigit,
+                'property_id' => $faker->randomDigit,
             ]);
         }
     }

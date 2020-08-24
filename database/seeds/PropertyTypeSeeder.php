@@ -15,7 +15,8 @@ class PropertyTypeSeeder extends Seeder
 
         for($i = 0; $i < 50; $i++) {
             App\PropertyType::create([
-                'name' => $faker->name,
+                'type_id' => $faker->randomDigit,
+                'property_id' => $faker->randomDigit,
             ]);
         }
     }

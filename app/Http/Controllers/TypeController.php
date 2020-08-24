@@ -53,7 +53,7 @@ class TypeController extends Controller
      * @param  \App\Type  $type
      * @return \Illuminate\Http\Response
      */
-    public function show(Type $id)
+    public function show($id)
     {
         if (Type::where('id', $id)->exists()) {
             $type = Type::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
