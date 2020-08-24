@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('userType')->default('individual');
             $table->string('company_name')->nullable();
             $table->string('address')->nullable();
-            $table->string('locality')->nulclearlable();
+            $table->string('locality')->nullable();
             $table->string('state')->nullable();
             $table->string('country')->nullable();
             $table->string('mobile')->nullable();
