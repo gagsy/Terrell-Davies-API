@@ -22,7 +22,7 @@ class PropertySeeder extends Seeder
                 'state' => $faker->sentence,
                 'market-status' => $faker->sentence,
                 'locality' => $faker->sentence,
-                'budget' => $faker->randomFloat,
+                'budget' => $faker->randomFloat(3, 887, 888, 9999999),
                 'featuredImage' => $faker->image('public/FeaturedProperty_images',640,480, null, false),
                 'galleryImage' => $faker->image('public/Gallery_images',640,480, null, false),
                 'agent' => $faker->name,

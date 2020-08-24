@@ -11,16 +11,16 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        // $user = \App\User::create([
-        //     'name' => 'Terrell Davies',
-        //     'email' => 'admin@terrelldavies.com',
-        //     'password' => bcrypt('admin'),
-        //     'phone' => '08165983685',
-        //     'userType' => 'admin',
-        //     'isActivated' => 1,
+        $user = \App\User::create([
+            'name' => 'Terrell Davies',
+            'email' => 'admin@terrelldavies.com',
+            'password' => bcrypt('admin'),
+            'phone' => '08165983685',
+            'userType' => 'admin',
+            'isActivated' => 1,
 
 
-        //]);
+        ]);
         $faker = Faker\Factory::create();
 
         for($i = 0; $i < 50; $i++) {
@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
                 'email' => $faker->email,
                 'password' => bcrypt('password'),
                 'phone' => $faker->phoneNumber,
-                'userType' => 'user',
+                'userType' => 'individual',
                 'isActivated' => 1,
             ]);
         }
