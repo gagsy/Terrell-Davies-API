@@ -20,7 +20,7 @@ class CreatePropertiesTable extends Migration
             $table->string('title');
             $table->longText('description');
             $table->string('state');
-            $table->string('market-status');
+            $table->string('market_status');
             $table->string('locality');
             $table->decimal('budget',5, 2);
             $table->string('featuredImage');
@@ -32,7 +32,7 @@ class CreatePropertiesTable extends Migration
             $table->string('garage');
             $table->string('toilet');
             $table->string('totalarea');
-            $table->string('video-link')->nullable();
+            $table->string('video_link')->nullable();
             $table->integer('views')->nullable();
             $table->longText('metaDescription');
             $table->tinyInteger('visible')->default(1);

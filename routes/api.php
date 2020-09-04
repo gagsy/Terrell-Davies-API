@@ -26,7 +26,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/user-detail', 'Api\AuthController@userDetail');
 Route::get('/types', 'TypeController@index');
 Route::get('/property-type', 'PropertyTypeController@index');
 Route::get('/property-locations', 'PropertyLocationController@index');
@@ -37,8 +36,11 @@ Route::get('/features', 'FeatureController@index');
 Route::get('/subscription-plans', 'SubscriptionPlansController@index');
 Route::get('/property-category', 'PropertyCategoryController@index');
 Route::get('/category', 'CategoryController@index');
+Route::get('/blogs', 'BlogController@index');
+Route::get('/search', 'PropertyController@getSearchResults');
 
 Route::group(['middleware' => 'auth:api'], function(){
+    Route::get('/user-detail', 'Api\AuthController@userDetail');
     //Type Api Controller Routes
     Route::post('/create-types', 'TypeController@store');
     Route::get('/types/{id}', 'TypeController@show');
@@ -98,6 +100,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('/category/{id}', 'CategoryController@edit');
     Route::put('/category/{id}', 'CategoryController@update');
     Route::delete('category/{id}', 'CategoryController@destroy');
+
+    //Blog Api Controller Routes
 
 });
 

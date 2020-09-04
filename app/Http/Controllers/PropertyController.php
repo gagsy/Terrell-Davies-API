@@ -42,7 +42,7 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $search = $request->validate([
             'prperty_cat_id' => 'required',
             'prperty_type_id' => 'required',
             'title' => 'required',
@@ -71,16 +71,16 @@ class PropertyController extends Controller
             $image_path = public_path('/FeaturedProperty_images');
             $featuredImage->move($image_path,$image_filename);
 
-            $data['featuredImage'] = $image_filename;
+            $search['featuredImage'] = $image_filename;
 
             $galleryImage = $request->file('image');
             $image_filename1 = time().'.'.$galleryImage->getClientOriginalExtension();
             $image_path = public_path('/Gallery_images');
             $galleryImage->move($image_path,$image_filename1);
 
-            $data['galleryImage'] = $image_filename1;
+            $search['galleryImage'] = $image_filename1;
 
-            $property = Property::create($data);
+            $property = Property::create($search);
             return response()->json([
                 'message' => 'Type Created',
                 'property' => $property,
@@ -134,7 +134,7 @@ class PropertyController extends Controller
     {
         $properties = Property::findorfail($id);
         if ($request->isMethod('post')) {
-            $data = $request->all();
+            $search = $request->all();
             try{
 
                 $featuredImage = $request->file('image');
@@ -142,14 +142,14 @@ class PropertyController extends Controller
                 $image_path = public_path('/FeaturedProperty_images');
                 $featuredImage->move($image_path,$image_filename);
 
-                $data['featuredImage'] = $image_filename;
+                $search['featuredImage'] = $image_filename;
 
                 $galleryImage = $request->file('image');
                 $image_filename1 = time().'.'.$galleryImage->getClientOriginalExtension();
                 $image_path = public_path('/Gallery_images');
                 $galleryImage->move($image_path,$image_filename1);
 
-                $data['galleryImage'] = $image_filename1;
+                $search['galleryImage'] = $image_filename1;
             }
             catch(Exception $e){
                 return response()->json([
@@ -159,25 +159,25 @@ class PropertyController extends Controller
 
 
             $properties->update([
-                'prperty_cat_id' => $data['prperty_cat_id'],
-                'prperty_type_id' => $data['prperty_type_id'],
-                'title'=>$data['title'],
-                'description'=>$data['description'],
-                'state' => $data['state'],
-                'market-status' => $data['market-status'],
-                'locality' => $data['locality'],
-                'budget' => $data['budget'],
+                'prperty_cat_id' => $search['prperty_cat_id'],
+                'prperty_type_id' => $search['prperty_type_id'],
+                'title'=>$search['title'],
+                'description'=>$search['description'],
+                'state' => $search['state'],
+                'market-status' => $search['market-status'],
+                'locality' => $search['locality'],
+                'budget' => $search['budget'],
                 'featuredImage' => $image_filename,
                 'galleryImage'=>$image_filename1,
-                'agent' => $data['agent'],
-                'feature' => $data['feature'],
-                'bedroom' => $data['bedroom'],
-                'bathroom' => $data['bathroom'],
-                'garage' => $data['garage'],
-                'toilet' => $data['toilet'],
-                'totalarea' => $data['totalarea'],
-                'video-link' => $data['video-link'],
-                'metaDescription' => $data['metaDescription'],
+                'agent' => $search['agent'],
+                'feature' => $search['feature'],
+                'bedroom' => $search['bedroom'],
+                'bathroom' => $search['bathroom'],
+                'garage' => $search['garage'],
+                'toilet' => $search['toilet'],
+                'totalarea' => $search['totalarea'],
+                'video-link' => $search['video-link'],
+                'metaDescription' => $search['metaDescription'],
             ]);
 
             return response()->json([
@@ -208,5 +208,21 @@ class PropertyController extends Controller
               'properties' => $properties,
             ], 404);
         }
+    }
+
+    public function search(Request $request){
+        // $searchTerm = $request->input('searchTerm');
+        // $properties = Property::search($searchTerm)->get();
+        // return response()->json(['properties' => $properties], 200);
+    }
+
+    public function getSearchResults(Request $request) {
+        $data = $request->get('data');
+
+        $properties = Property::where('title', 'like', "%{$data}%")->get();
+
+        return response()->json([
+            'search' => $properties
+        ]);
     }
 }
