@@ -32,4 +32,10 @@ class Property extends Model
 	{
 		return $this->belongsTo(User::class);
     }
+
+    // public static function scopeSearch($query, $searchTerm)
+    // {
+    //     return $query->where('title', 'like', '%' .$searchTerm. '%')
+    //                  ->orWhere('slug', 'like', '%' .$searchTerm. '%');
+    // }
 }
