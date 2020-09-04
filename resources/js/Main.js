@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import AuthRoute from './AuthRoute'
+//import AuthRoute from './AuthRoute'
 import routes from "./routes";
 import withTracker from "./withTracker";
 
@@ -29,7 +29,7 @@ export default () => (
       {routes.map((route, index) => {
         return (
           
-          <AuthRoute
+          <Route
             key={index}
             path={route.path}
             exact={route.exact}

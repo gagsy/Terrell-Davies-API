@@ -13,7 +13,7 @@ import Errors from "./views/Errors";
 import Properties from "./views/Properties";
 import AddNewProperty from "./views/AddNewProperty";
 import PropertyFeature from "./views/PropertyFeature";
-import PropertyStatus from "./views/PropertyStatus";
+import PropertyCategory from "./views/PropertyCategory";
 import PropertyTypes from "./views/PropertyTypes";
 
 
@@ -40,9 +40,9 @@ export default [
     component: PropertyFeature
   },
   {
-    path: "/admin/property-status",
+    path: "/admin/property-category",
     layout: DefaultLayout,
-    component: PropertyStatus
+    component: PropertyCategory
   },
   {
     path: "/admin/property-types",

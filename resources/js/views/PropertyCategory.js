@@ -4,10 +4,10 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import PageTitle from "../components/common/PageTitle";
 import { Button } from "shards-react";
 import {Modal} from "react-bootstrap";
-import AddStatus from "../components/components-overview/Forms/PropertyStatus/AddStatus";
+import AddCategory from "../components/components-overview/Forms/PropertyCategory/AddCategory";
 import axios from 'axios'
 
-function AddStatusForm(props) {
+function AddCategoryForm(props) {
   return (
     <Modal
       {...props}
@@ -17,11 +17,11 @@ function AddStatusForm(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-         Add New Property Status
+         Add New Property Category
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <AddStatus/>
+        <AddCategory/>
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={props.onHide}>Close</Button>
@@ -30,15 +30,15 @@ function AddStatusForm(props) {
   );
 }
 
-const PropertyStatus = ()=> {
+const PropertyCategory = ()=> {
   const [modalShow, setModalShow] = useState(false);
-        return (
-            <React.Fragment>
+  return (
+  <React.Fragment>
            
             <Container fluid className="main-content-container px-4">
             {/* Page Header */}
             <Row noGutters className="page-header py-4">
-              <PageTitle sm="4" title="Status" subtitle="Properties" className="text-sm-left" />
+              <PageTitle sm="4" title="Category" subtitle="Properties" className="text-sm-left" />
             </Row>
         
             {/* Default Light Table */}
@@ -46,8 +46,8 @@ const PropertyStatus = ()=> {
               <Col>
                 <Card small className="mb-4">
                   <CardHeader className="border-bottom">
-                    <h6 className="m-0">Status <button onClick={() => setModalShow(true)}  type="button" class="btn btn-secondary">Add +</button></h6>
-                    <AddStatusForm
+                    <h6 className="m-0">Category <button onClick={() => setModalShow(true)}  type="button" class="btn btn-secondary">Add +</button></h6>
+                    <AddCategoryForm
                     show={modalShow}
                     onHide={() => setModalShow(false)}
                   />
@@ -76,8 +76,8 @@ const PropertyStatus = ()=> {
                       <td>Air Condition</td>
                       <td>21/07/2020</td>
                       <td>  
-                      <button type="button" class="btn btn-info">Edit</button>&nbsp;
-                      <button type="button" class="btn btn-danger">Delete</button>
+                      <button type="button" className="btn btn-info">Edit</button>&nbsp;
+                      <button type="button" className="btn btn-danger">Delete</button>
                       </td>
                     </tr>
                       </tbody>
@@ -92,4 +92,4 @@ const PropertyStatus = ()=> {
       };
 
 
-export default PropertyStatus;
+export default PropertyCategory
