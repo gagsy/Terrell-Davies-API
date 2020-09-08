@@ -88,22 +88,18 @@ class PropertyLocationController extends Controller
      * @param  \App\PropertyLocation  $propertyLocation
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PropertyLocation $id)
+    public function update(Request $request, $id)
     {
         if (PropertyLocation::where('id', $id)->exists()) {
-            $property_locations = PropertyLocation::find($id);
-            $property_locations->location_id = is_null($request->location_id) ? $property_locations->location_id : $request->location_id;
-            $property_locations->property_id = is_null($request->property_id) ? $property_locations->property_id : $request->property_id;
-            $property_locations->save();
+            $property_locations = PropertyLocation::findorFail($id);
+            $property_locations->update($request->all());
 
             return response()->json([
                 "message" => "record updated successfully",
-                'property_locations' => $property_locations,
             ], 200);
             } else {
             return response()->json([
                 "message" => "Record not found",
-                'property_locations' => $property_locations,
             ], 404);
 
         }
@@ -115,20 +111,18 @@ class PropertyLocationController extends Controller
      * @param  \App\PropertyLocation  $propertyLocation
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PropertyLocation $id)
+    public function destroy(Request $request, $id)
     {
         if(PropertyLocation::where('id', $id)->exists()) {
-            $property_locations = PropertyLocation::find($id);
+            $property_locations = PropertyLocation::findorFail($id);
             $property_locations->delete();
 
             return response()->json([
               "message" => "record deleted",
-              'property_locations' => $property_locations,
             ], 202);
           } else {
             return response()->json([
               "message" => "record not found",
-              'property_locations' => $property_locations,
             ], 404);
         }
     }

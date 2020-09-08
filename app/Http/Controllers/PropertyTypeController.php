@@ -88,22 +88,18 @@ class PropertyTypeController extends Controller
      * @param  \App\PropertyType  $propertyType
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PropertyType $id)
+    public function update(Request $request, $id)
     {
         if (PropertyType::where('id', $id)->exists()) {
-            $property_type = PropertyType::find($id);
-            $property_type->type_id = is_null($request->type_id) ? $property_type->type_id : $request->type_id;
-            $property_type->property_id = is_null($request->property_id) ? $property_type->property_id : $request->property_id;
-            $property_type->save();
+            $property_type = PropertyType::findorFail($id);
+            $property_type->update($request->all());
 
             return response()->json([
                 "message" => "record updated successfully",
-                'property_type' => $property_type,
             ], 200);
             } else {
             return response()->json([
                 "message" => "Record not found",
-                'property_type' => $property_type,
             ], 404);
 
         }
@@ -115,20 +111,18 @@ class PropertyTypeController extends Controller
      * @param  \App\PropertyType  $propertyType
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PropertyType $id)
+    public function destroy(Request $request, $id)
     {
         if(PropertyType::where('id', $id)->exists()) {
-            $property_type = PropertyType::find($id);
+            $property_type = PropertyType::findorFail($id);
             $property_type->delete();
 
             return response()->json([
               "message" => "record deleted",
-              'property_type' => $property_type,
             ], 202);
           } else {
             return response()->json([
               "message" => "record not found",
-              'property_type' => $property_type,
             ], 404);
           }
     }

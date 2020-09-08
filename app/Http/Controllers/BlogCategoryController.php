@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Feature;
+use App\BlogCategory;
 use Illuminate\Http\Request;
 
-class FeatureController extends Controller
+class BlogCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class FeatureController extends Controller
      */
     public function index()
     {
-        $features = Feature::all();
-        return response()->json(['features' => $features], 200);
+        $categories = BlogCategory::all();
+        return response()->json(['categories' => $categories], 200);
     }
 
     /**
@@ -36,65 +36,67 @@ class FeatureController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required'
+        $data = $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'url' => 'required',
         ]);
 
-        $feature = Feature::create($request->all());
+        $category = BlogCategory::create($data);
         return response()->json([
-            'message' => 'Feature Created',
-            'feature' => $feature,
+            'message' => 'Blog Category Created',
+            'category' => $category,
         ], 200);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Feature  $feature
+     * @param  \App\BlogCategory  $blogCategory
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(BlogCategory $blogCategory)
     {
-        if (Feature::where('id', $id)->exists()) {
-            $feature = Feature::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
-            return response($feature, 200);
-          } else {
-            return response()->json([
-              "message" => "Feature not found",
-            ], 404);
-          }
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Feature  $feature
+     * @param  \App\BlogCategory  $blogCategory
      * @return \Illuminate\Http\Response
      */
-    public function edit(Feature $feature)
+    public function edit($id)
     {
-        //
+        if (BlogCategory::where('id', $id)->exists()) {
+            $categories = BlogCategory::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
+            return response($categories, 200);
+          } else {
+            return response()->json([
+              "message" => "Blog Category not found",
+            ], 404);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Feature  $feature
+     * @param  \App\BlogCategory  $blogCategory
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        if (Feature::where('id', $id)->exists()) {
-            $feature = Feature::findOrFail($id);
-            $feature->update($request->all());
+        if (BlogCategory::where('id', $id)->exists()) {
+            $cat = BlogCategory::findOrFail($id);
+            $cat->update($request->all());
 
             return response()->json([
-                "message" => "Feature updated successfully",
+                "message" => "Blog Category updated successfully",
             ], 200);
             } else {
             return response()->json([
-                "message" => "Record not found",
+                "message" => "Blog Category not found",
             ], 404);
 
         }
@@ -103,22 +105,22 @@ class FeatureController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Feature  $feature
+     * @param  \App\BlogCategory  $blogCategory
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
     {
-        if(Feature::where('id', $id)->exists()) {
-            $feature = Feature::findOrFail($id);
-            $feature->delete();
+        if(BlogCategory::where('id', $id)->exists()) {
+            $cat = BlogCategory::findOrFail($id);
+            $cat->delete();
 
             return response()->json([
-              "message" => "record deleted",
+              "message" => "Blog Category deleted",
             ], 202);
           } else {
             return response()->json([
-              "message" => "record not found",
+              "message" => "Blog Category not found",
             ], 404);
-          }
+        }
     }
 }

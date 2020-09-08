@@ -37,7 +37,7 @@ class TypeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'typeName' => 'required'
+            'name' => 'required'
         ]);
 
         $type = Type::create($request->all());
@@ -84,21 +84,18 @@ class TypeController extends Controller
      * @param  \App\Type  $type
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Type $id)
+    public function update(Request $request, $id)
     {
         if (Type::where('id', $id)->exists()) {
-            $type = Type::find($id);
-            $type->typeName = is_null($request->typeName) ? $type->typeName : $request->typeName;
-            $type->save();
+            $type = Type::findorFail($id);
+            $type->update($request->all());
 
             return response()->json([
                 "message" => "Type updated successfully",
-                'type' => $type,
             ], 200);
             } else {
             return response()->json([
                 "message" => "Record not found",
-                'type' => $type,
             ], 404);
 
         }
@@ -110,7 +107,7 @@ class TypeController extends Controller
      * @param  \App\Type  $type
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Type $id)
+    public function destroy(Request $request, $id)
     {
         if(Type::where('id', $id)->exists()) {
             $type = Type::find($id);
@@ -118,12 +115,10 @@ class TypeController extends Controller
 
             return response()->json([
               "message" => "record deleted",
-              'type' => $type,
             ], 202);
           } else {
             return response()->json([
               "message" => "record not found",
-              'type' => $type,
             ], 404);
           }
     }
