@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('login', 'Api\AuthController@login')->name('login');
+Route::post('/login', 'Api\AuthController@login')->name('login');
 
 Route::post('register', 'Api\AuthController@register')->name('register');
 
@@ -39,7 +39,8 @@ Route::get('/category', 'CategoryController@index');
 Route::get('/blog-categories', 'BlogCategoryController@index');
 Route::get('/blogs', 'BlogController@index');
 Route::get('/search', 'PropertyController@getSearchResults');
-
+Route::get('/users', 'Api\AuthController@users');
+Route::post('/create-category', 'CategoryController@store');
 Route::group(['middleware' => 'auth:api'], function(){
     Route::get('/user-detail', 'Api\AuthController@userDetail');
     //Type Api Controller Routes
@@ -97,7 +98,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::delete('property-category/{id}', 'PropertyCategoryController@destroy');
 
     //Category Api Controller Routes
-    Route::post('/create-category', 'CategoryController@store');
+   
     Route::get('/category/{id}', 'CategoryController@edit');
     Route::put('/category/{id}', 'CategoryController@update');
     Route::delete('category/{id}', 'CategoryController@destroy');

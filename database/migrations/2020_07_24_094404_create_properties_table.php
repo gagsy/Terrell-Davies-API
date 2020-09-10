@@ -22,7 +22,7 @@ class CreatePropertiesTable extends Migration
             $table->string('state');
             $table->string('market_status');
             $table->string('locality');
-            $table->decimal('budget',5, 2);
+           // $table->float('budget', 8, 2);
             $table->string('featuredImage');
             $table->string('galleryImage');
             $table->string('agent');

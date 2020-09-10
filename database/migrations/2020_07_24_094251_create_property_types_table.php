@@ -14,9 +14,9 @@ class CreatePropertyTypesTable extends Migration
     public function up()
     {
         Schema::create('property_types', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('type_id')->index();
-            $table->integer('property_id')->index();
+            //$table->bigIncrements('id');
+            $table->bigInteger('type_id')->unsigned();
+            $table->bigInteger('property_id')->unsigned();
             $table->foreign('type_id')->references('id')->on('types')->onDelete('cascade');
             $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade');
             $table->timestamps();

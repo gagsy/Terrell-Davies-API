@@ -33,5 +33,17 @@ class UserSeeder extends Seeder
         //         'isActivated' => 1,
         //     ]);
         // }
+        $faker = Faker\Factory::create();
+
+        for($i = 0; $i < 50; $i++) {
+            App\User::create([
+                'name' => $faker->name,
+                'email' => $faker->email,
+                'password' => bcrypt('password'),
+                'phone' => $faker->phoneNumber,
+                'userType' => 'individual',
+                'isActivated' => 1,
+            ]);
+        }
     }
 }

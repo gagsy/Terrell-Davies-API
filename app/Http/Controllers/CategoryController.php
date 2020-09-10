@@ -106,7 +106,7 @@ class CategoryController extends Controller
      * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $id)
+    public function destroy(Request $request, $id)
     {
         if(Category::where('id', $id)->exists()) {
             $cat = Category::findOrFail($id);
@@ -114,10 +114,12 @@ class CategoryController extends Controller
 
             return response()->json([
               "message" => "Category deleted",
+
             ], 202);
           } else {
             return response()->json([
               "message" => "Category not found",
+
             ], 404);
         }
     }

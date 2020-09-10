@@ -1,65 +1,59 @@
 import React from 'react'
-import "../../styles/Auth/auth.css"
+import Bg from '../../images/bg-01.jpg'
+import Logo from '../../images/logo.png'
 import Auth from '../../Services/Auth'
+import { withRouter } from "react-router";
+
 const Signin = () => {
     return (
         <React.Fragment>
-        <div className="login-wrap">
-        <div className="login-html">
-            <input id="tab-1" type="radio" name="tab" className="sign-in" checked /><label for="tab-1" className="tab">Sign In</label>
-            <input id="tab-2" type="radio" name="tab" className="sign-up" /><label for="tab-2" className="tab">Sign Up</label>
-            <div className="login-form">
-                <div className="sign-in-htm">
-                    <div className="group">
-                        <label for="user" className="label">Username</label>
-                        <input id="user" type="text" className="input" />
-                    </div>
-                    <div className="group">
-                        <label for="pass" className="label">Password</label>
-                        <input id="pass" type="password" className="input" data-type="password" />
-                    </div>
-                    <div className="group">
-                        <input id="check" type="checkbox" className="check" checked />
-                        <label for="check"><span className="icon"></span> Keep me Signed in</label>
-                    </div>
-                    <div className="group">
-                        <input type="submit" className="button" value="Sign In" />
-                    </div>
-                    <div className="hr"></div>
-                    <div className="foot-lnk">
-                        <a href="#forgot">Forgot Password?</a>
-                    </div>
-                </div>
-                <div className="sign-up-htm">
-                    <div className="group">
-                        <label for="user" className="label">Username</label>
-                        <input id="user" type="text" className="input" />
-                    </div>
-                    <div className="group">
-                        <label for="pass" className="label">Password</label>
-                        <input id="pass" type="password" className="input" data-type="password" />
-                    </div>
-                    <div className="group">
-                        <label for="pass" className="label">Repeat Password</label>
-                        <input id="pass" type="password" className="input" data-type="password" />
-                    </div>
-                    <div className="group">
-                        <label for="pass" className="label">Email Address</label>
-                        <input id="pass" type="text" className="input" />
-                    </div>
-                    <div className="group">
-                        <input type="submit" className="button" value="Sign Up" />
-                    </div>
-                    <div className="hr"></div>
-                    <div className="foot-lnk">
-                        <label for="tab-1"><a>Already Member?</a></label>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        <div class="limiter">
+		<div class="container-login100" style={{backgroundImage: `url(${Bg})`}}>
+			<div class="wrap-login100">
+				<form class="login100-form validate-form">
+					<span class="login100-form-logo">
+                        
+                        <img src={Logo} alt="logo" style={{width: '120px', height: '120px'}} />
+					</span>
+
+					<span class="login100-form-title p-b-34 p-t-27">
+						Sign in
+					</span>
+
+					<div class="wrap-input100 validate-input" data-validate = "Enter username">
+						<input class="input100" type="text" name="username" placeholder="Username / Email" />
+						<span class="focus-input100" data-placeholder="&#xf207;"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input" data-validate="Enter password">
+						<input class="input100" type="password" name="pass" placeholder="Password" />
+						<span class="focus-input100" data-placeholder="&#xf191;"></span>
+					</div>
+
+					<div class="contact100-form-checkbox">
+						<input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me" />
+						<label class="label-checkbox100" for="ckb1">
+							Remember me
+						</label>
+					</div>
+
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn">
+							Sign in
+						</button>
+					</div>
+
+					<div class="text-center p-t-90">
+						<a class="txt1" href="#">
+							Forgot Password?
+						</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
         </React.Fragment>
     )
 }
 
-export default Signin
+export default withRouter(Signin)

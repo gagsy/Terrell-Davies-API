@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-
+//import AuthRoute from './AuthRoute'
 import routes from "./routes";
 import withTracker from "./withTracker";
 
@@ -23,9 +23,9 @@ export default () => (
   <Router basename={process.env.REACT_APP_BASENAME || ""}>
   <div>
   <AlertProvider template={AlertTemplate} {...options}>
-    <Switch>
-    <Route exact path='/admin/sign-in' component={Signin} />
-    </Switch>
+  
+    <Route exact path='/admin/login' component={Signin} />
+   
       {routes.map((route, index) => {
         return (
           

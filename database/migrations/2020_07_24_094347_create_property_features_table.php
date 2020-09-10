@@ -14,9 +14,9 @@ class CreatePropertyFeaturesTable extends Migration
     public function up()
     {
         Schema::create('property_features', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('feature_id')->index();
-            $table->integer('property_id')->index();
+            $table->increments('id');
+            $table->bigInteger('feature_id')->unsigned();
+            $table->bigInteger('property_id')->unsigned();
             $table->foreign('feature_id')->references('id')->on('features')->onDelete('cascade');
             $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade');
             $table->timestamps();

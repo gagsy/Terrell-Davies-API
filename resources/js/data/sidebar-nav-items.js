@@ -17,9 +17,9 @@ export default function() {
       to: "/admin/property-features",
     },
     {
-      title: "Status",
+      title: "Category",
       htmlBefore: '<i class="material-icons">vertical_split</i>',
-      to: "/admin/property-status",
+      to: "/admin/property-category",
     },
     {
       title: "Types",
