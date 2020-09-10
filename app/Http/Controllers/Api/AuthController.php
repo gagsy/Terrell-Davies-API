@@ -22,7 +22,7 @@ class AuthController extends Controller
              return response()->json($data, 200);
          }
 
-       return response()->json(['error'=>'Unauthorized'], 401);
+       return response()->json(['error'=>'Unauthorized'], 401,);
     }
 
     public function register(Request $request)
@@ -79,5 +79,10 @@ class AuthController extends Controller
         }
  
         return response()->json(['state' => 0], 401);
+    }
+    public function users()
+    {
+        $users = User::all();
+        return response()->json(['users' => $users], 200);
     }
 }
