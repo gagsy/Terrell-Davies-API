@@ -30,7 +30,7 @@ class CreateUsersTable extends Migration
             $table->string('facebook_profile')->nullable();
             $table->string('twitter_profile')->nullable();
             $table->string('linkedin_profile')->nullable();
-            $table->tinyInteger('isActivated')->default(0);
+            $table->string('isActivated')->default('active');
             $table->string('passwordResetCode')->nullable();
             $table->string('activationCode')->nullable();
             $table->string('socialType')->nullable();

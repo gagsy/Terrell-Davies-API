@@ -82,7 +82,11 @@ class AuthController extends Controller
     }
     public function users()
     {
-        $users = User::all();
+        $users = User::all()->except('1');
         return response()->json(['users' => $users], 200);
+    }
+    public function manageAdmin(){
+        $admin = User::where(['userType'=> 'admin'])->first();
+        return response()->json(['admin'=> $admin], 200);
     }
 }
