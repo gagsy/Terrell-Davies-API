@@ -82,9 +82,16 @@ class BlogController extends Controller
      * @param  \App\Blog  $blog
      * @return \Illuminate\Http\Response
      */
-    public function edit(Blog $blog)
+    public function edit($id)
     {
-        //
+        if (Blog::where('id', $id)->exists()) {
+            $blogs = Blog::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
+            return response($blogs, 200);
+          } else {
+            return response()->json([
+              "message" => "Blog not found",
+            ], 404);
+        }
     }
 
     /**
@@ -94,9 +101,21 @@ class BlogController extends Controller
      * @param  \App\Blog  $blog
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Blog $blog)
+    public function update(Request $request, $id)
     {
-        //
+        if (Blog::where('id', $id)->exists()) {
+            $blog = Blog::findOrFail($id);
+            $blog->update($request->all());
+
+            return response()->json([
+                "message" => "Blog updated successfully",
+            ], 200);
+            } else {
+            return response()->json([
+                "message" => "Blog not found",
+            ], 404);
+
+        }
     }
 
     /**
@@ -105,8 +124,19 @@ class BlogController extends Controller
      * @param  \App\Blog  $blog
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Blog $blog)
+    public function destroy(Request $request, $id)
     {
-        //
+        if(BlogCategory::where('id', $id)->exists()) {
+            $blog = BlogCategory::findOrFail($id);
+            $blog->delete();
+
+            return response()->json([
+              "message" => "Blog deleted",
+            ], 202);
+          } else {
+            return response()->json([
+              "message" => "Blog not found",
+            ], 404);
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class BlogSeeder extends Seeder
+class BlogCategorySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,12 +14,11 @@ class BlogSeeder extends Seeder
         $faker = Faker\Factory::create();
 
         for($i = 0; $i < 50; $i++) {
-            App\Blog::create([
-                'category_id' => $faker->randomDigit,
-                'title' => $faker->name,
-                'content' => $faker->text,
+            App\BlogCategory::create([
+                'name' => $faker->name,
+                'description' => $faker->text,
                 'url' => $faker->url,
-                'image' => $faker->image('public/Blog_images',640,480, null, false),
+                'status' => 1,
             ]);
         }
     }

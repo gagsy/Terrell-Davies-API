@@ -61,7 +61,6 @@ class LocationController extends Controller
           } else {
             return response()->json([
               "message" => "Location not found",
-              'location' => $location,
             ], 404);
           }
     }
@@ -84,21 +83,18 @@ class LocationController extends Controller
      * @param  \App\Location  $location
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Location $id)
+    public function update(Request $request, $id)
     {
         if (Location::where('id', $id)->exists()) {
-            $location = Location::find($id);
-            $location->name = is_null($request->name) ? $location->name : $request->name;
-            $Location->save();
+            $location = Location::findorFail($id);
+            $location->update($request->all());
 
             return response()->json([
                 "message" => "Location updated successfully",
-                'location' => $location,
             ], 200);
             } else {
             return response()->json([
                 "message" => "Record not found",
-                'location' => $location,
             ], 404);
 
         }
@@ -110,7 +106,7 @@ class LocationController extends Controller
      * @param  \App\Location  $location
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Location $id)
+    public function destroy(Request $request, $id)
     {
         if(Location::where('id', $id)->exists()) {
             $location = Location::find($id);
@@ -118,12 +114,10 @@ class LocationController extends Controller
 
             return response()->json([
               "message" => "record deleted",
-              'location' => $location,
             ], 202);
           } else {
             return response()->json([
               "message" => "record not found",
-              'location' => $location,
             ], 404);
           }
     }
