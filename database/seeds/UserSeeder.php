@@ -21,6 +21,18 @@ class UserSeeder extends Seeder
 
 
         ]);
+        // $faker = Faker\Factory::create();
+
+        // for($i = 0; $i < 50; $i++) {
+        //     App\User::create([
+        //         'name' => $faker->name,
+        //         'email' => $faker->email,
+        //         'password' => bcrypt('password'),
+        //         'phone' => $faker->phoneNumber,
+        //         'userType' => 'user',
+        //         'isActivated' => 1,
+        //     ]);
+        // }
         $faker = Faker\Factory::create();
 
         for($i = 0; $i < 50; $i++) {
