@@ -41,6 +41,7 @@ Route::get('/blogs', 'BlogController@index');
 Route::get('/search', 'PropertyController@getSearchResults');
 Route::get('/users', 'Api\AuthController@users');
 Route::post('/create-category', 'CategoryController@store');
+Route::get('/manage', 'Api\AuthController@manageAdmin');
 Route::group(['middleware' => 'auth:api'], function(){
     Route::get('/user-detail', 'Api\AuthController@userDetail');
     //Type Api Controller Routes
