@@ -81,9 +81,10 @@ class AuthController extends Controller
         return response()->json(['state' => 0], 401);
     }
     public function users()
-    {
+    {   
+        $userCount = User::count();
         $users = User::all()->except('1');
-        return response()->json(['users' => $users], 200);
+        return response()->json(['users' => $users,'userCount' => $userCount], 200);
     }
     public function manageAdmin(){
         $admin = User::where(['userType'=> 'admin'])->first();
