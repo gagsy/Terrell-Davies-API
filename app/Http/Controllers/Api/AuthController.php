@@ -9,12 +9,12 @@ use Hash;
 use App\User;
 use Auth;
 
-class AuthController extends Controller 
-{ 
+class AuthController extends Controller
+{
     public function login(Request $request)
     {
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'userType' => 'admin'])) {
              $user = $request->user();
              $data['token'] = $user->createToken('MyApp')->accessToken;
              $data['name']  = $user->name;
@@ -23,6 +23,30 @@ class AuthController extends Controller
          }
 
        return response()->json(['error'=>'Unauthorized'], 401,);
+    }
+
+    public function updateProfile(){
+        $user = Auth::user();
+        $user->fname = $request['fname'];
+        $user->lname = $request['lname'];
+        $user->email = $request['email'];
+            // $user->address = $request['address'];
+        $user->phone = $request['phone'];
+        $user->avatar = $avatarPath;
+        $user->save();
+
+        $affected_row = $user->save();
+
+        if (!empty($affected_row)) {
+             return response()->json([
+                'message' => 'Profile Updated',
+            ], 200);
+        } else {
+              return response()->json([
+                 "message" => "Operation Failed",
+               ], 404);
+            }
+
     }
 
     public function register(Request $request)
@@ -60,24 +84,24 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $user = Auth::guard('api')->user();
- 
+
         if ($user) {
             $user->api_token = null;
             $user->save();
- 
+
             return response()->json(['data' => 'User logged out.'], 200);
         }
- 
+
         return response()->json(['state' => 0, 'message' => 'Unauthenticated'], 401);
     }
     public function checkAuth(Request $request)
     {
         $user = Auth::guard('api')->user();
- 
+
         if ($user && $user->userType) {
             return response()->json(['state' => 'admin'], 200);
         }
- 
+
         return response()->json(['state' => 0], 401);
     }
     public function users()
