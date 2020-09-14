@@ -43,12 +43,12 @@ class PropertyController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'prperty_cat_id' => 'required',
-            'prperty_type_id' => 'required',
+            'prperty_cat_id' => '',
+            'prperty_type_id' => '',
             'title' => 'required',
             'description' => 'required',
             'state' => 'required',
-            'market-status' => 'required',
+            'market_status' => 'required',
             'locality' => 'required',
             'budget' => 'required',
             'featuredImage' => 'required|image',
@@ -60,7 +60,7 @@ class PropertyController extends Controller
             'garage' => 'required',
             'toilet' => 'required',
             'totalarea' => 'required',
-            'video-link' => 'required',
+            'video_link' => 'required',
             'metaDescription' => 'required',
         ]);
 
@@ -164,7 +164,7 @@ class PropertyController extends Controller
                 'title'=>$data['title'],
                 'description'=>$data['description'],
                 'state' => $data['state'],
-                'market-status' => $data['market-status'],
+                'market_status' => $data['market-status'],
                 'locality' => $data['locality'],
                 'budget' => $data['budget'],
                 'featuredImage' => $image_filename,
@@ -176,7 +176,7 @@ class PropertyController extends Controller
                 'garage' => $data['garage'],
                 'toilet' => $data['toilet'],
                 'totalarea' => $data['totalarea'],
-                'video-link' => $data['video-link'],
+                'video_link' => $data['video-link'],
                 'metaDescription' => $data['metaDescription'],
             ]);
 
