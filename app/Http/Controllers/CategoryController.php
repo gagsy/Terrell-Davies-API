@@ -65,10 +65,10 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
+    { 
         if (Category::where('id', $id)->exists()) {
-            $categories = Category::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
-            return response($categories, 200);
+            $category = Category::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
+            return response($category, 200);
           } else {
             return response()->json([
               "message" => "Category not found",
@@ -83,11 +83,11 @@ class CategoryController extends Controller
      * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $id)
+    public function update(Request $request, $id)
     {
         if (Category::where('id', $id)->exists()) {
-            $cat = Category::findOrFail($id);
-            $cat->update($request->all());
+            $category = Category::findOrFail($id);
+            $category->update($request->all());
 
             return response()->json([
                 "message" => "Category updated successfully",
@@ -108,9 +108,9 @@ class CategoryController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        if(Category::where('id', $id)->exists()) {
-            $cat = Category::findOrFail($id);
-            $cat->delete();
+        if(Category::where('id', $id)->exists()) { 
+            $category = Category::findOrFail($id);
+            $category->delete();
 
             return response()->json([
               "message" => "Category deleted",

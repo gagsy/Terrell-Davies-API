@@ -12,13 +12,11 @@ class CreatePropertyTypesTable extends Migration
      * @return void
      */
     public function up()
-    {
+    {   Schema::enableForeignKeyConstraints();
         Schema::create('property_types', function (Blueprint $table) {
-            //$table->bigIncrements('id');
-            $table->bigInteger('type_id')->unsigned();
-            $table->bigInteger('property_id')->unsigned();
-            $table->foreign('type_id')->references('id')->on('types')->onDelete('cascade');
-            $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade');
+            $table->bigIncrements('id');
+            $table->foreignId('type_id')->constrained('types')->onDelete('cascade');
+            $table->foreignId('property_id')->contrained('properties')->onDelete('cascade');
             $table->timestamps();
         });
     }

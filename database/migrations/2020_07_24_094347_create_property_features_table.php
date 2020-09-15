@@ -12,13 +12,11 @@ class CreatePropertyFeaturesTable extends Migration
      * @return void
      */
     public function up()
-    {
+    {   Schema::disableForeignKeyConstraints();
         Schema::create('property_features', function (Blueprint $table) {
             $table->increments('id');
-            $table->bigInteger('feature_id')->unsigned();
-            $table->bigInteger('property_id')->unsigned();
-            $table->foreign('feature_id')->references('id')->on('features')->onDelete('cascade');
-            $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade');
+            $table->foreignId('feature_id')->constrained('features')->onDelete('cascade');
+            $table->foreignId('property_id')->contrained('properties')->onDelete('cascade');
             $table->timestamps();
         });
     }

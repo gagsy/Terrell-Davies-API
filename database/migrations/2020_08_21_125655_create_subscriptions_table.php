@@ -12,16 +12,14 @@ class CreateSubscriptionsTable extends Migration
      * @return void
      */
     public function up()
-    {
+    {   Schema::disableForeignKeyConstraints();
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->index();
-            $table->unsignedBigInteger('subscription_plan_id')->index();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('subscription_plan_id')->constrained('subscription_plans')->onDelete('cascade');
             $table->string('name');
             $table->string('payment_method')->nullable();
             $table->string('payment_status')->default('Pending');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('subscription_plan_id')->references('id')->on('subscription_plans')->onDelete('cascade');
             $table->timestamps();
         });
     }
