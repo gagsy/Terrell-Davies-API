@@ -27,6 +27,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/types', 'TypeController@index');
+
+
+Route::post('/submit-request', 'PropertyRequestController@store');
+
 Route::get('/property-type', 'PropertyTypeController@index');
 Route::get('/property-locations', 'PropertyLocationController@index');
 Route::get('/property-features', 'PropertyFeatureController@index');
@@ -123,3 +127,7 @@ Route::post('/create-blog', 'BlogController@store');
 Route::get('/blog/{id}', 'BlogController@edit');
 Route::put('/blog/{id}', 'BlogController@update');
 Route::delete('blog/{id}', 'BlogController@destroy');
+
+//property Request Api Controller Routes
+Route::get('/property-requests', 'PropertyRequestController@index');
+Route::delete('property-request/{id}', 'PropertyRequestController@destroy');

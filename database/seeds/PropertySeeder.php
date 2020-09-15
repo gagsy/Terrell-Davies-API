@@ -15,8 +15,8 @@ class PropertySeeder extends Seeder
 
         for($i = 0; $i < 50; $i++) {
             App\Property::create([
-                'prperty_cat_id' => $faker->randomDigit,
-                'prperty_type_id' => $faker->randomDigit,
+                'property_cat_id' => $faker->randomDigit,
+                'property_type_id' => $faker->randomDigit,
                 'title' => $faker->sentence,
                 'description' => $faker->text,
                 'state' => $faker->sentence,
