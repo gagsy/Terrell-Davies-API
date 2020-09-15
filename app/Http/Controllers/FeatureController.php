@@ -61,7 +61,6 @@ class FeatureController extends Controller
           } else {
             return response()->json([
               "message" => "Feature not found",
-              'feature' => $feature,
             ], 404);
           }
     }
@@ -84,21 +83,18 @@ class FeatureController extends Controller
      * @param  \App\Feature  $feature
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Feature $id)
+    public function update(Request $request, $id)
     {
         if (Feature::where('id', $id)->exists()) {
-            $feature = Feature::find($id);
-            $feature->name = is_null($request->name) ? $feature->name : $request->name;
-            $feature->save();
+            $feature = Feature::findOrFail($id);
+            $feature->update($request->all());
 
             return response()->json([
                 "message" => "Feature updated successfully",
-                'feature' => $feature,
             ], 200);
             } else {
             return response()->json([
                 "message" => "Record not found",
-                'feature' => $feature,
             ], 404);
 
         }
@@ -110,20 +106,18 @@ class FeatureController extends Controller
      * @param  \App\Feature  $feature
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Feature $feature)
+    public function destroy(Request $request, $id)
     {
         if(Feature::where('id', $id)->exists()) {
-            $feature = Feature::find($id);
+            $feature = Feature::findOrFail($id);
             $feature->delete();
 
             return response()->json([
               "message" => "record deleted",
-              'feature' => $feature,
             ], 202);
           } else {
             return response()->json([
               "message" => "record not found",
-              'feature' => $feature,
             ], 404);
           }
     }

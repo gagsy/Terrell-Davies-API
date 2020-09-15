@@ -88,13 +88,11 @@ class PropertyCategoryController extends Controller
      * @param  \App\PropertyCategory  $propertyCategory
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PropertyCategory $id)
+    public function update(Request $request, $id)
     {
         if (PropertyCategory::where('id', $id)->exists()) {
-            $propertycat = PropertyCategory::find($id);
-            $propertycat->category_id = is_null($request->category_id) ? $propertycat->category_id : $request->category_id;
-            $propertycat->property_id = is_null($request->property_id) ? $propertycat->property_id : $request->property_id;
-            $propertycat->save();
+            $propertycat = PropertyCategory::findorFail($id);
+            $propertycat->update($request->all());
 
             return response()->json([
                 "message" => "Property Category updated successfully"
@@ -113,10 +111,10 @@ class PropertyCategoryController extends Controller
      * @param  \App\PropertyCategory  $propertyCategory
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PropertyCategory $id)
+    public function destroy(Request $request, $id)
     {
         if(PropertyCategory::where('id', $id)->exists()) {
-            $propertycat = PropertyCategory::find($id);
+            $propertycat = PropertyCategory::findorFail($id);
             $propertycat->delete();
 
             return response()->json([

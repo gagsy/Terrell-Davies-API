@@ -15,6 +15,7 @@ class BlogSeeder extends Seeder
 
         for($i = 0; $i < 50; $i++) {
             App\Blog::create([
+                'category_id' => $faker->randomDigit,
                 'title' => $faker->name,
                 'content' => $faker->text,
                 'url' => $faker->url,

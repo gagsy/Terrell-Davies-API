@@ -12,9 +12,10 @@ class CreateBlogsTable extends Migration
      * @return void
      */
     public function up()
-    {
+    {   Schema::disableForeignKeyConstraints();
         Schema::create('blogs', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
+            $table->foreignId('category_id')->constrained('blog_categories')->onDelete('cascade');
             $table->string('title');
             $table->text('content');
             $table->string('url');

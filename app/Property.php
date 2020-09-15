@@ -7,30 +7,35 @@ use Illuminate\Database\Eloquent\Model;
 class Property extends Model
 {
     protected $fillable = [
+        'property_cat_id',
+        'property_type_id',
         'title',
-        'slug',
         'description',
-        'location',
-        'type',
-        'status',
-        'price',
+        'state',
+        'market-status',
+        'locality',
+        'budget',
         'featuredImage',
         'galleryImage',
-        'user_id',
         'agent',
         'feature',
         'bedroom',
         'bathroom',
         'garage',
         'toilet',
-        'views',
-        'metaDescription',
-        'visible'
+        'totalarea',
+        'video-link',
+        'metaDescription'
     ];
 
-    public function user()
+    public function property_cat()
 	{
-		return $this->belongsTo(User::class);
+		return $this->belongsTo(PropertyCategory::class);
+    }
+
+    public function property_type()
+	{
+		return $this->belongsTo(PropertyType::class);
     }
 
     // public static function scopeSearch($query, $searchTerm)

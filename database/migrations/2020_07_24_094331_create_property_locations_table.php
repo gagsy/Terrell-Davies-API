@@ -12,13 +12,11 @@ class CreatePropertyLocationsTable extends Migration
      * @return void
      */
     public function up()
-    {
+    {   Schema::disableForeignKeyConstraints();
         Schema::create('property_locations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('location_id')->index();
-            $table->integer('property_id')->index();
-            $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
-            $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade');
+            $table->foreignId('location_id')->constrained('locations')->onDelete('cascade');
+            $table->foreignId('property_id')->constrained('properties')->onDelete('cascade');
             $table->timestamps();
         });
     }

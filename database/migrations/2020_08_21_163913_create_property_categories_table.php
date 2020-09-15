@@ -12,13 +12,11 @@ class CreatePropertyCategoriesTable extends Migration
      * @return void
      */
     public function up()
-    {
+    {   Schema::disableForeignKeyConstraints();
         Schema::create('property_categories', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('property_id');
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade');
+            $table->bigIncrements('id');
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->foreignId('property_id')->constrained('properties')->onDelete('cascade');
             $table->timestamps();
         });
     }

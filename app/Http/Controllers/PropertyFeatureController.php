@@ -88,22 +88,18 @@ class PropertyFeatureController extends Controller
      * @param  \App\PropertyFeature  $propertyFeature
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PropertyFeature $id)
+    public function update(Request $request, $id)
     {
         if (PropertyFeature::where('id', $id)->exists()) {
-            $property_features = PropertyFeature::find($id);
-            $property_features->feature_id = is_null($request->feature_id) ? $property_features->feature_id : $request->feature_id;
-            $property_features->property_id = is_null($request->property_id) ? $property_features->property_id : $request->property_id;
-            $property_features->save();
+            $property_features = PropertyFeature::findorFail($id);
+            $property_features->update($request->all());
 
             return response()->json([
                 "message" => "record updated successfully",
-                'property_features' => $property_features,
             ], 200);
             } else {
             return response()->json([
                 "message" => "Record not found",
-                'property_features' => $property_features,
             ], 404);
 
         }
@@ -115,20 +111,18 @@ class PropertyFeatureController extends Controller
      * @param  \App\PropertyFeature  $propertyFeature
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PropertyFeature $id)
+    public function destroy(Request $request, $id)
     {
         if(PropertyFeature::where('id', $id)->exists()) {
-            $property_features = PropertyFeature::find($id);
+            $property_features = PropertyFeature::findorFail($id);
             $property_features->delete();
 
             return response()->json([
               "message" => "record deleted",
-              'property_features' => $property_features,
             ], 202);
           } else {
             return response()->json([
               "message" => "record not found",
-              'property_features' => $property_features,
             ], 404);
         }
     }
