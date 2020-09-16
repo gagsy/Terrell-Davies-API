@@ -34,22 +34,36 @@ Route::post('/submit-request', 'PropertyRequestController@store');
 Route::get('/property-type', 'PropertyTypeController@index');
 Route::get('/property-locations', 'PropertyLocationController@index');
 Route::get('/property-features', 'PropertyFeatureController@index');
+
 Route::get('/properties', 'PropertyController@index');
+Route::get('properties/{page?}', 'PropertyController@index');
+
 Route::get('/locations', 'LocationController@index');
+
 Route::get('/features', 'FeatureController@index');
-Route::get('/subscription-plans', 'SubscriptionPlansController@index');
+
+
+Route::post('create-subscription', 'SubscriptionController@store');
+
 Route::get('/property-category', 'PropertyCategoryController@index');
+
 Route::get('/category', 'CategoryController@index');
 Route::get('/blog-categories', 'BlogCategoryController@index');
+
 Route::get('/blogs', 'BlogController@index');
 Route::get('/search', 'PropertyController@getSearchResults');
+
 Route::get('/users', 'Api\AuthController@users');
 Route::post('/create-category', 'CategoryController@store');
+
 Route::get('/manage', 'Api\AuthController@manageAdmin');
 Route::get('/toggle-active','Api\AuthController@toggleActive');
+Route::get('/account','Api\AuthController@account');
+
+Route::get('plans', 'SubscriptionPlansController@index');
 
 Route::group(['middleware' => 'auth:api'], function(){
-
+    
 });
 
 
@@ -131,3 +145,6 @@ Route::delete('blog/{id}', 'BlogController@destroy');
 //property Request Api Controller Routes
 Route::get('/property-requests', 'PropertyRequestController@index');
 Route::delete('property-request/{id}', 'PropertyRequestController@destroy');
+
+//Subscription Api Controller Routes
+Route::get('subscriptions', 'SubscriptionController@index');

@@ -14,8 +14,8 @@ class SubscriptionPlansController extends Controller
      */
     public function index()
     {
-        $subscriptions = SubscriptionPlans::all();
-        return response()->json(['subscriptions' => $subscriptions], 200);
+        $plans = SubscriptionPlans::all();
+        return response()->json(['plans' => $plans], 200);
     }
 
     /**
@@ -45,10 +45,10 @@ class SubscriptionPlansController extends Controller
             'max_featured_ad_listings' => 'required',
         ]);
 
-        $subscription = SubscriptionPlans::create($request->all());
+        $plan = SubscriptionPlans::create($request->all());
         return response()->json([
             'message' => 'Subscription Plan Created',
-            'subscription' => $subscription,
+            'plan' => $plan,
         ], 200);
     }
 
@@ -72,8 +72,8 @@ class SubscriptionPlansController extends Controller
     public function edit($id)
     {
         if (SubscriptionPlans::where('id', $id)->exists()) {
-            $subscriptionDetails = SubscriptionPlans::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
-            return response($subscriptionDetails, 200);
+            $planDetails = SubscriptionPlans::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
+            return response($planDetails, 200);
           } else {
             return response()->json([
               "message" => "Subscription Plan not found"
@@ -91,17 +91,17 @@ class SubscriptionPlansController extends Controller
     public function update(Request $request, $id)
     {
         if (SubscriptionPlans::where('id', $id)->exists()) {
-            $subscription = SubscriptionPlans::find($id);
-            $subscription->name = is_null($request->name) ? $subscription->name : $request->name;
-            $subscription->price = is_null($request->price) ? $subscription->price : $request->price;
-            $subscription->duration = is_null($request->duration) ? $subscription->duration : $request->duration;
-            $subscription->maximum_listings = is_null($request->maximum_listings) ? $subscription->maximum_listings : $request->maximum_listings;
-            $subscription->maximum_premium_listings = is_null($request->maximum_premium_listings) ? $subscription->maximum_premium_listings : $request->maximum_premium_listings;
-            $subscription->max_featured_ad_listings = is_null($request->max_featured_ad_listings) ? $subscription->max_featured_ad_listings : $request->max_featured_ad_listings;
-            $subscription->save();
+            $plan = SubscriptionPlans::find($id);
+            $plan->name = is_null($request->name) ? $plan->name : $request->name;
+            $plan->price = is_null($request->price) ? $plan->price : $request->price;
+            $plan->duration = is_null($request->duration) ? $plan->duration : $request->duration;
+            $plan->maximum_listings = is_null($request->maximum_listings) ? $plan->maximum_listings : $request->maximum_listings;
+            $plan->maximum_premium_listings = is_null($request->maximum_premium_listings) ? $plan->maximum_premium_listings : $request->maximum_premium_listings;
+            $plan->max_featured_ad_listings = is_null($request->max_featured_ad_listings) ? $plan->max_featured_ad_listings : $request->max_featured_ad_listings;
+            $plan->save();
 
             return response()->json([
-                "message" => "Subscriptions Plan updated successfully"
+                "message" => "plans Plan updated successfully"
             ], 200);
             } else {
             return response()->json([
@@ -120,8 +120,8 @@ class SubscriptionPlansController extends Controller
     public function destroy($id)
     {
         if(SubscriptionPlans::where('id', $id)->exists()) {
-            $subscription = SubscriptionPlans::find($id);
-            $subscription->delete();
+            $plan = SubscriptionPlans::find($id);
+            $plan->delete();
 
             return response()->json([
               "message" => "Subscription Plan deleted"

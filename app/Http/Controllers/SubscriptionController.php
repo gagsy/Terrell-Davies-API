@@ -14,7 +14,8 @@ class SubscriptionController extends Controller
      */
     public function index()
     {
-        //
+        $subscriptions = Subscription::all();
+        return response()->json(['subscriptions' => $subscriptions], 200);
     }
 
     /**
@@ -35,7 +36,16 @@ class SubscriptionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'user_id' => 'required',
+            'subscription_plan_id' => 'required',
+        ]);
+
+        $subscription = Subscription::create($request->all());
+        return response()->json([
+            'message' => 'Subscription Created',
+            'subscription' => $subscription,
+        ], 200);
     }
 
     /**
