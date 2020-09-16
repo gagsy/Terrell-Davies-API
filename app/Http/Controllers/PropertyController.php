@@ -14,11 +14,14 @@ class PropertyController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response 
+     * @return \Illuminate\Http\Response
+     *
+     *
      */
+
     public function index()
     {
-        $properties = Property::all();
+        $properties = Property::paginate(5);
         // $propertytypes = PropertyType::get();
         // $propertycats = Propertycategory::get();
         return response()->json(['properties' => $properties], 200);
@@ -43,8 +46,8 @@ class PropertyController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'prperty_cat_id' => '',
-            'prperty_type_id' => '',
+            'property_cat_id' => '',
+            'property_type_id' => '',
             'title' => 'required',
             'description' => 'required',
             'state' => 'required',
@@ -159,8 +162,8 @@ class PropertyController extends Controller
 
 
             $properties->update([
-                'prperty_cat_id' => $data['prperty_cat_id'],
-                'prperty_type_id' => $data['prperty_type_id'],
+                'property_cat_id' => $data['prperty_cat_id'],
+                'property_type_id' => $data['prperty_type_id'],
                 'title'=>$data['title'],
                 'description'=>$data['description'],
                 'state' => $data['state'],

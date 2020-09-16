@@ -15,8 +15,8 @@ class CreatePropertiesTable extends Migration
     {   Schema::disableForeignKeyConstraints();
         Schema::create('properties', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignId('prperty_cat_id')->constrained('property_categories')->onDelete('cascade');
-            $table->foreignId('prperty_type_id')->constrained('property_types')->onDelete('cascade');
+            $table->foreignId('property_cat_id')->constrained('property_categories')->onDelete('cascade');
+            $table->foreignId('property_type_id')->constrained('property_types')->onDelete('cascade');
             $table->string('title');
             $table->longText('description');
             $table->string('state');
