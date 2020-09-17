@@ -38,7 +38,6 @@ class BlogCategoryController extends Controller
     {
         $data = $request->validate([
             'name' => 'required',
-            'description' => 'required',
             'url' => 'required',
         ]);
 

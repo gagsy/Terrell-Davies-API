@@ -126,4 +126,11 @@ class AuthController extends Controller
         $admin = User::where(['userType'=> 'admin'])->first();
         return response()->json(['admin'=> $admin], 200);
     }
+
+    //User Accounts
+    public function updateAccount(Request $request, $id){
+        $user_id = Auth::user()->id;
+        $userDetails = User::find($user_id);
+        return response()->json(['userDetails'=>$userDetails], 200);
+    }
 }
