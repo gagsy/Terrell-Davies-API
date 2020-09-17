@@ -20,8 +20,8 @@ class PropertyController extends Controller
      */
 
     public function index()
-    {
-        $properties = Property::paginate(5);
+    {   
+        $properties = Property::all();
         // $propertytypes = PropertyType::get();
         // $propertycats = Propertycategory::get();
         return response()->json(['properties' => $properties], 200);
