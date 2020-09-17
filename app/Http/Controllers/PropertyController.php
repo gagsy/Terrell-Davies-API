@@ -20,11 +20,14 @@ class PropertyController extends Controller
      */
 
     public function index()
-    {   
-        $properties = Property::all();
-        // $propertytypes = PropertyType::get();
-        // $propertycats = Propertycategory::get();
-        return response()->json(['properties' => $properties], 200);
+    {
+        // $properties = Property::all();
+        // // $propertytypes = PropertyType::get();
+        // // $propertycats = Propertycategory::get();
+        // return response()->json(['properties' => $properties], 200);
+
+        $properties = Property::paginate(5);
+        return $properties;
     }
 
     /**
@@ -220,7 +223,15 @@ class PropertyController extends Controller
     public function getsearchResults(Request $request) {
         $data = $request->get('data');
 
-        $properties = Property::where('title', 'like', "%{$data}%")->get();
+        $properties = Property::where('title', 'like', "%{$data}%")
+                        ->orWhere('bathroom', 'like', "%{$data}%")
+                        ->orWhere('budget', 'like', "%{$data}%")
+                        ->orWhere('state', 'like', "%{$data}%")
+                        ->orWhere('agent', 'like', "%{$data}%")
+                        ->orWhere('locality', 'like', "%{$data}%")
+                        ->orWhere('property_cat_id', 'like', "%{$data}%")
+                        ->orWhere('property_type_id', 'like', "%{$data}%")
+                        ->get();
 
         return response()->json([
             'data' => $properties

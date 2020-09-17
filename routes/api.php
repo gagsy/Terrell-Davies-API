@@ -36,7 +36,7 @@ Route::get('/property-locations', 'PropertyLocationController@index');
 Route::get('/property-features', 'PropertyFeatureController@index');
 
 Route::get('/properties', 'PropertyController@index');
-//Route::get('properties/{page?}', 'PropertyController@index');
+Route::get('properties/{page?}', 'PropertyController@index');
 
 Route::get('/locations', 'LocationController@index');
 
@@ -52,6 +52,7 @@ Route::get('/category', 'CategoryController@index');
 Route::get('/blog-categories', 'BlogCategoryController@index');
 
 Route::get('/blogs', 'BlogController@index');
+
 Route::get('/search', 'PropertyController@getSearchResults');
 
 Route::get('/users', 'Api\AuthController@users');
@@ -64,7 +65,7 @@ Route::get('/account','Api\AuthController@account');
 Route::get('/plans', 'SubscriptionPlansController@index');
 
 Route::group(['middleware' => 'auth:api'], function(){
-    
+
 });
 
 
