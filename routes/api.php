@@ -151,7 +151,7 @@ Route::delete('property-request/{id}', 'PropertyRequestController@destroy');
 Route::get('subscriptions', 'SubscriptionController@index');
 
 //CMS Contact
-Route::get('/contact', 'CmsController@contact');
-Route::post('/add-map-url', 'CmsController@addMap');
-Route::get('/add-map-url/{id}', 'CmsController@editMap');
-Route::put('/add-map-url/{id}', 'CmsController@updateMap');
+Route::get('/contacts', 'CmsController@contact');
+Route::post('/contact', 'CmsController@addMap');
+Route::get('/contact/{id}', 'CmsController@editMap');
+Route::put('/contact/{id}', 'CmsController@updateMap');

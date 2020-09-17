@@ -9,22 +9,22 @@ class CmsController extends Controller
 {
     public function contact(){
         
-        $contact = Contact::all();
+        $contacts = Contact::all();
         return response()-> json ([
-            'contact' => $contact
+            'contacts' => $contacts
         ], 200);
     }
     public function addMap(Request $request){
         $data = $request->validate([
             'map_url' => 'required'
         ]);
-        $contact_map = Contact::create($data);
-        return response()-> json(['contact_map' => $contact_map], 200);
+        $contact = Contact::create($data);
+        return response()-> json(['contact' => $contact], 200);
     }
     public function editMap($id){
         if (Contact::where('id', $id)->exists()) {
-            $contact_map = Contact::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
-            return response($contact_map, 200);
+            $contact = Contact::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
+            return response($contact, 200);
           } else {
             return response()->json([
               "message" => "Contact map not found",
@@ -34,8 +34,8 @@ class CmsController extends Controller
 
     public function updateMap(Request $request, $id){
         if (Contact::where('id', $id)->exists()) {
-            $contact_map = Contact::findOrFail($id);
-            $contact_map->update($request->all());
+            $contact = Contact::findOrFail($id);
+            $contact->update($request->all());
 
             return response()->json([
                 "message" => "Contact map updated successfully",
