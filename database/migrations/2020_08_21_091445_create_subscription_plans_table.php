@@ -16,7 +16,7 @@ class CreateSubscriptionPlansTable extends Migration
         Schema::create('subscription_plans', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->float('price', 5);
+            $table->float('price', 8,2);
             $table->string('duration');
             $table->string('maximum_listings');
             $table->string('maximum_premium_listings');

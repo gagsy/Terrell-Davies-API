@@ -25,7 +25,7 @@ class PropertyController extends Controller
         // // $propertytypes = PropertyType::get();
         // // $propertycats = Propertycategory::get();
         // return response()->json(['properties' => $properties], 200);
-
+        
         $properties = Property::paginate(5);
         return $properties;
     }
@@ -236,5 +236,11 @@ class PropertyController extends Controller
         return response()->json([
             'data' => $properties
         ]);
+    }
+    public function propertyCount(){
+        $propertyCount = Property::count();
+        return response()-> json([
+            'propertyCount' => $propertyCount
+        ], 200);
     }
 }

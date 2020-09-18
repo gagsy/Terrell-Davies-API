@@ -61,7 +61,7 @@ Route::post('/create-category', 'CategoryController@store');
 Route::get('/manage', 'Api\AuthController@manageAdmin');
 Route::get('/toggle-active','Api\AuthController@toggleActive');
 Route::get('/account','Api\AuthController@account');
-
+Route::get('/property-count','PropertyController@propertyCount');
 Route::get('/plans', 'SubscriptionPlansController@index');
 
 Route::group(['middleware' => 'auth:api'], function(){
