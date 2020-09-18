@@ -48,9 +48,11 @@ Route::post('create-subscription', 'SubscriptionController@store');
 Route::get('/property-category', 'PropertyCategoryController@index');
 
 Route::get('/category', 'CategoryController@index');
+
 Route::get('/blog-categories', 'BlogCategoryController@index');
 
 Route::get('/blogs', 'BlogController@index');
+
 Route::get('/search', 'PropertyController@getSearchResults');
 
 Route::get('/users', 'Api\AuthController@users');
@@ -59,11 +61,11 @@ Route::post('/create-category', 'CategoryController@store');
 Route::get('/manage', 'Api\AuthController@manageAdmin');
 Route::get('/toggle-active','Api\AuthController@toggleActive');
 Route::get('/account','Api\AuthController@account');
-
-Route::get('plans', 'SubscriptionPlansController@index');
+Route::get('/property-count','PropertyController@propertyCount');
+Route::get('/plans', 'SubscriptionPlansController@index');
 
 Route::group(['middleware' => 'auth:api'], function(){
-    
+
 });
 
 
@@ -131,7 +133,7 @@ Route::put('/category/{id}', 'CategoryController@update');
 Route::delete('category/{id}', 'CategoryController@destroy');
 
 //Blog Category Api Controller Routes
-Route::post('/create-blog-category', 'BlogCategoryController@store');
+Route::post('/blog-category', 'BlogCategoryController@store');
 Route::get('/blog-category/{id}', 'BlogCategoryController@edit');
 Route::put('/blog-category/{id}', 'BlogCategoryController@update');
 Route::delete('blog-category/{id}', 'BlogCategoryController@destroy');
@@ -148,3 +150,9 @@ Route::delete('property-request/{id}', 'PropertyRequestController@destroy');
 
 //Subscription Api Controller Routes
 Route::get('subscriptions', 'SubscriptionController@index');
+
+//CMS Contact
+Route::get('/contacts', 'CmsController@contact');
+Route::post('/contact', 'CmsController@addMap');
+Route::get('/contact/{id}', 'CmsController@editMap');
+Route::put('/contact/{id}', 'CmsController@updateMap');
