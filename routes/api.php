@@ -59,7 +59,7 @@ Route::get('/users', 'Api\AuthController@users');
 Route::post('/create-category', 'CategoryController@store');
 
 Route::get('/manage', 'Api\AuthController@manageAdmin');
-Route::get('/toggle-active','Api\AuthController@toggleActive');
+Route::post('/toggle-active','Api\AuthController@toggleUser');
 Route::get('/account','Api\AuthController@account');
 Route::get('/property-count','PropertyController@propertyCount');
 Route::get('/plans', 'SubscriptionPlansController@index');

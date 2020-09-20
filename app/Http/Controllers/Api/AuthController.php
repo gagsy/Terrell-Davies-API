@@ -105,7 +105,7 @@ class AuthController extends Controller
         return response()->json(['state' => 0], 401);
     }
     public function users()
-    {   
+    {    
         $userCount = User::count();
         $users = User::all()->except('1');
         return response()->json(['users' => $users,'userCount' => $userCount], 200);
