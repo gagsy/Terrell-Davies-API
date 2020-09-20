@@ -70,7 +70,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 
 
 
-Route::put('/toggle-user', 'ApiAuthController@toggleUser');
+Route::put('/toggle-user', 'Api\AuthController@toggleUser');
 Route::get('/user-detail', 'Api\AuthController@userDetail');
 //Type Api Controller Routes
 Route::post('/create-type', 'TypeController@store');
