@@ -20,7 +20,11 @@ class PaymentController extends Controller
      */
     public function redirectToGateway()
     {
-        return Paystack::getAuthorizationUrl()->redirectNow();
+        try{
+            return Paystack::getAuthorizationUrl()->redirectNow();
+        }catch(\Exception $e) {
+            return Redirect::back()->withMessage(['msg'=>'The paystack token has expired. Please refresh the page and try again.', 'type'=>'error']);
+        }
     }
 
     /**
@@ -30,41 +34,16 @@ class PaymentController extends Controller
     public function handleGatewayCallback()
     {
         $paymentDetails = Paystack::getPaymentData();
-        // if($paymentDetails['data']['status'] == 'success')
-        // {
-        //     dd($paymentDetails);
-        //     //return redirect()-back()->with('flash_message_success','Subscription Done Successfully');
-        // }else{
-        //     //return redirect()-back()->with('flash_message_success','Subcription not Successful');
-        // }
-
-        $getID = Subscription::orderBy('id', 'desc')->first();
-        if ($getID === NULL) {
-            $lastID = 0;
-        } else {
-            $lastID = $getID->id;
-        }
-        $newID = $lastID + 1;
-        $date = date('ymds');
-        $subscripionID = 'WG' . $date . $newID;
-        Session::forget('subscription');
-        Subscription::create([
-            'name' => \Auth::User()->first_name . ' ' . \Auth::User()->last_name,
-            'subscription_plan_id' => $paymentDetails['data']['subscription_plan_id'],
-            'user_id' => \Auth::User()->id,
-            'amount' => $paymentDetails['data']['metadata']['amount'],
-            'reference_code' => $paymentDetails['data']['reference']
-        ]);
 
         $subscription= new Subscription();
         $subscription->user_id = 1;
         $subscription->subscription_plan_id = $paymentDetails['data']['subscription_plan_id'];
-        //$subscription->reference= $paymentDetails['data']['reference'];
-        //$subscription->email= Auth::user()->email;
-        //$subscription->amount= $paymentDetails['data']['amount'];
-        $subscription->payment_status= $paymentDetails['data']['payment_status'];
-        //$subscription->payment_date=$paymentDetails['data']['transaction_date'];
+        dd($paymentDetails['data']['subscription_plan_id']);
+        $subscription->payment_method = 'Paystack';
+        $subscription->reference= $paymentDetails['data']['reference'];
+        $subscription->amount= $paymentDetails['data']['amount'];
         $subscription->save();
+
         return redirect()-back();
 
         //dd($paymentDetails);
