@@ -147,6 +147,8 @@ Route::delete('blog/{id}', 'BlogController@destroy');
 //property Request Api Controller Routes
 Route::get('/property-requests', 'PropertyRequestController@index');
 Route::delete('property-request/{id}', 'PropertyRequestController@destroy');
+Route::get('/request-count', 'PropertyRequestController@countRequest');
+Route::get('/request-notify', 'PropertyRequestController@notifyRequest');
 
 //Subscription Api Controller Routes
 Route::get('subscriptions', 'SubscriptionController@index');

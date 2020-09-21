@@ -16,7 +16,6 @@ class CreatePropertyRequestsTable extends Migration
         Schema::create('property_requests', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('user_type');
             $table->string('email');
             $table->string('phone');
             $table->string('category');
