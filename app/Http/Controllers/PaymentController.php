@@ -37,8 +37,8 @@ class PaymentController extends Controller
 
         $subscription= new Subscription();
         $subscription->user_id = 1;
-        $subscription->subscription_plan_id = $paymentDetails['data']['subscription_plan_id'];
-        dd($paymentDetails['data']['subscription_plan_id']);
+        $subscription->plan_id = $paymentDetails['data']['plan_id'];
+        //dd($paymentDetails['data']['plan_id']);
         $subscription->payment_method = 'Paystack';
         $subscription->reference= $paymentDetails['data']['reference'];
         $subscription->amount= $paymentDetails['data']['amount'];

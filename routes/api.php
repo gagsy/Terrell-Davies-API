@@ -62,7 +62,19 @@ Route::get('/manage', 'Api\AuthController@manageAdmin');
 Route::post('/toggle-active','Api\AuthController@toggleUser');
 Route::get('/account','Api\AuthController@account');
 Route::get('/property-count','PropertyController@propertyCount');
-Route::get('/plans', 'SubscriptionPlansController@index');
+
+Route::get('/plans', 'PlanController@index');
+Route::post('/plan', 'PlanController@store');
+Route::get('/plan/{id}', 'PlanController@show');
+Route::delete('plan/{id}', 'PlanController@destroy');
+Route::put('plan/{id}', 'PlanController@update');
+Route::get('plan/{id}', 'PlanController@edit');
+
+//Subscribe
+Route::post('/subscribe', 'PaymentController@redirectToGateway')->name('pay');
+Route::get('/payment/callback', 'PaymentController@handleGatewayCallback');
+Route::get('/subscriptions', 'SubscriptionController@index');
+
 
 Route::group(['middleware' => 'auth:api'], function(){
 

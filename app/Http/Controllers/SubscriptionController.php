@@ -36,16 +36,7 @@ class SubscriptionController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'user_id' => 'required',
-            'subscription_plan_id' => 'required',
-        ]);
-
-        $subscription = Subscription::create($request->all());
-        return response()->json([
-            'message' => 'Subscription Created',
-            'subscription' => $subscription,
-        ], 200);
+       
     }
 
     /**

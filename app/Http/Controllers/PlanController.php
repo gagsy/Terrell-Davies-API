@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\SubscriptionPlans;
 use Illuminate\Http\Request;
+use App\Plan;
 
-class SubscriptionPlansController extends Controller
+class PlanController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class SubscriptionPlansController extends Controller
      */
     public function index()
     {
-        $plans = SubscriptionPlans::all();
-        return response()->json(['plans' => $plans], 200);
+        $plans = Plan::all();
+        return response()->json([ 'plans' => $plans], 200);
     }
 
     /**
@@ -45,7 +45,7 @@ class SubscriptionPlansController extends Controller
             'max_featured_ad_listings' => 'required',
         ]);
 
-        $plan = SubscriptionPlans::create($request->all());
+        $plan = Plan::create($request->all());
         return response()->json([
             'message' => 'Subscription Plan Created',
             'plan' => $plan,
@@ -55,28 +55,29 @@ class SubscriptionPlansController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\SubscriptionPlans  $subscriptionPlans
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(SubscriptionPlans $id)
+    public function show($id)
     {
-        //
+        $plan=Plans::where('id', $id)->first();
+        return response()->json(['plan' => $plan], 200);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\SubscriptionPlans  $subscriptionPlans
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        if (SubscriptionPlans::where('id', $id)->exists()) {
-            $planDetails = SubscriptionPlans::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
+        if (Plan::where('id', $id)->exists()) {
+            $planDetails = Plan::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
             return response($planDetails, 200);
           } else {
             return response()->json([
-              "message" => "Subscription Plan not found"
+              "message" => "Plan not found"
             ], 404);
           }
     }
@@ -85,13 +86,13 @@ class SubscriptionPlansController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\SubscriptionPlans  $subscriptionPlans
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        if (SubscriptionPlans::where('id', $id)->exists()) {
-            $plan = SubscriptionPlans::find($id);
+        if (Plan::where('id', $id)->exists()) {
+            $plan = Plan::find($id);
             $plan->name = is_null($request->name) ? $plan->name : $request->name;
             $plan->price = is_null($request->price) ? $plan->price : $request->price;
             $plan->duration = is_null($request->duration) ? $plan->duration : $request->duration;
@@ -114,22 +115,22 @@ class SubscriptionPlansController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\SubscriptionPlans  $subscriptionPlans
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        if(SubscriptionPlans::where('id', $id)->exists()) {
-            $plan = SubscriptionPlans::find($id);
-            $plan->delete();
+        if(Plan::where('id', $id)->exists()) {
+        $plan = Plan::find($id);
+        $plan->delete();
 
-            return response()->json([
-              "message" => "Subscription Plan deleted"
-            ], 202);
-          } else {
-            return response()->json([
-              "message" => "Subscription Plans not found"
-            ], 404);
-        }
+        return response()->json([
+          "message" => "Plan deleted"
+        ], 202);
+      } else {
+        return response()->json([
+          "message" => "Plans not found"
+        ], 404);
+    }
     }
 }
