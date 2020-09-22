@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\SubscriptionPlans;
 
-class webController extends Controller
+class WebController extends Controller
 {
     /**
      * Display a listing of the resource.

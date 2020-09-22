@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'webController@index');
+Route::get('/', 'WebController@index');
 Route::get('/planInfo/{id}', 'WebController@plan')->name('plan');
 
 Auth::routes();
