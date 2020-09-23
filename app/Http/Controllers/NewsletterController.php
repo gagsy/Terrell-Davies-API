@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Newsletter;
 use Illuminate\Http\Request;
-use App\Plan;
 
-class WebController extends Controller
+class NewsletterController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,13 +14,8 @@ class WebController extends Controller
      */
     public function index()
     {
-        $plans = Plan::get();
-        return view('welcome',compact('plans'));
-    }
-
-    public function plan($id){
-        $plan=Plan::where('id', $id)->first();
-        return view('plan', compact('plan'));
+        $data = Newsletter::all();
+        return response()->json(['data' => $data], 200);
     }
 
     /**
@@ -41,16 +36,27 @@ class WebController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'email' => 'required|email'
+        ]);
+
+        $check = Newsletter::where('email',$data['email'])->count();
+
+        if($check > 0){
+            return response()->json(['msg' => 'You already subscribed.Thanks!']);
+        }
+        Newsletter::create($data);
+        //Mail::to($data['email'])->send(new NewsLetter($data));
+        return response()->json(['msg' => 'Subscribed successfully!']);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Newsletter  $newsletter
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Newsletter $newsletter)
     {
         //
     }
@@ -58,10 +64,10 @@ class WebController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Newsletter  $newsletter
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Newsletter $newsletter)
     {
         //
     }
@@ -70,10 +76,10 @@ class WebController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Newsletter  $newsletter
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Newsletter $newsletter)
     {
         //
     }
@@ -81,10 +87,10 @@ class WebController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Newsletter  $newsletter
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Newsletter $newsletter)
     {
         //
     }

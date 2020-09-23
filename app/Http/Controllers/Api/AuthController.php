@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Validator;
 use Hash;
 use App\User;
+use App\Subscription;
 use Auth;
+use Illuminate\Support\Facades\Password;
 
 class AuthController extends Controller
 {
@@ -105,7 +107,7 @@ class AuthController extends Controller
         return response()->json(['state' => 0], 401);
     }
     public function users()
-    {    
+    {
         $userCount = User::count();
         $users = User::all()->except('1');
         return response()->json(['users' => $users,'userCount' => $userCount], 200);
@@ -120,7 +122,7 @@ class AuthController extends Controller
             return response()->json([
                 "message" => "User status changed",
             ], 200);
-            
+
     }
     public function manageAdmin(){
         $admin = User::where(['userType'=> 'admin'])->first();
@@ -132,5 +134,38 @@ class AuthController extends Controller
         $user_id = Auth::user()->id;
         $userDetails = User::find($user_id);
         return response()->json(['userDetails'=>$userDetails], 200);
+    }
+
+    public function forgot() {
+        $credentials = request()->validate(['email' => 'required|email']);
+
+        Password::sendResetLink($credentials);
+
+        return response()->json(["msg" => 'Reset password link sent on your email id.'], 200);
+    }
+
+    public function reset() {
+        $credentials = request()->validate([
+            'email' => 'required|email',
+            'token' => 'required|string',
+            'password' => 'required|string|confirmed'
+        ]);
+
+        $reset_password_status = Password::reset($credentials, function ($user, $password) {
+            $user->password = $password;
+            $user->save();
+        });
+
+        if ($reset_password_status == Password::INVALID_TOKEN) {
+            return response()->json(["msg" => "Invalid token provided"], 400);
+        }
+
+        return response()->json(["msg" => "Password has been successfully changed"], 200);
+    }
+
+    public function sub_history(){
+        $user = Auth::User();
+        $histories = Subscription::where('user_id' , $user->id)->get();
+        return response()->json(['data' => $histories], 200);
     }
 }
