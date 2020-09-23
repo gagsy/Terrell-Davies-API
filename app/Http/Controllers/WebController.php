@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Subscription;
 use Illuminate\Http\Request;
+use App\SubscriptionPlans;
 
-class SubscriptionController extends Controller
+class WebController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,13 @@ class SubscriptionController extends Controller
      */
     public function index()
     {
-        $subscriptions = Subscription::all();
-        return response()->json(['subscriptions' => $subscriptions], 200);
+        $plans = SubscriptionPlans::get();
+        return view('welcome',compact('plans'));
+    }
+
+    public function plan($id){
+        $plan=SubscriptionPlans::where('id', $id)->first();
+        return view('plan', compact('plan'));
     }
 
     /**
@@ -36,16 +41,16 @@ class SubscriptionController extends Controller
      */
     public function store(Request $request)
     {
-       
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Subscription  $subscription
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Subscription $subscription)
+    public function show($id)
     {
         //
     }
@@ -53,10 +58,10 @@ class SubscriptionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Subscription  $subscription
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Subscription $subscription)
+    public function edit($id)
     {
         //
     }
@@ -65,10 +70,10 @@ class SubscriptionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Subscription  $subscription
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Subscription $subscription)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -76,10 +81,10 @@ class SubscriptionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Subscription  $subscription
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Subscription $subscription)
+    public function destroy($id)
     {
         //
     }

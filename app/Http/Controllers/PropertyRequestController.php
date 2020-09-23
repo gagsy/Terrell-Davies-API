@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\PropertyRequest;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class PropertyRequestController extends Controller
 {
@@ -13,9 +14,10 @@ class PropertyRequestController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {   
+       $requestCount = PropertyRequest::whereDate('created_at', Carbon::today())->count();
         $requests = PropertyRequest::all();
-        return response()->json(['requests' => $requests], 200);
+        return response()->json(['requests' => $requests, "requestCount" => $requestCount ], 200);
     }
 
     /**
@@ -37,8 +39,7 @@ class PropertyRequestController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'user_type' => 'required',
+            'name' => 'required', 
             'email' => 'required',
             'phone' => 'required',
             'category' => 'required',
@@ -119,5 +120,17 @@ class PropertyRequestController extends Controller
               "message" => "Property Request not found",
             ], 404);
           }
+    }
+    public function countRequest(){
+      $requestCount = PropertyRequest::whereDate('created_at', Carbon::today())->count();
+      return response()->json([
+        "requestCount" => $requestCount
+      ], 200);
+    }
+    public function notifyRequest(){
+      $notifyRequest = PropertyRequest::whereDate('created_at', Carbon::today())->get();
+      return response()->json([
+        "notifyRequest" => $notifyRequest,
+      ], 200);
     }
 }

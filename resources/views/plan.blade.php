@@ -82,20 +82,47 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Plans
+                    {{ $plan->name }}
                 </div>
+                @if (Session::has('flash_message_error'))
+                    <div class="alert alert-error alert-block">
+                        <button type="button" class="close" data-dismiss="alert">x</button>
+                            <strong>{!! session('flash_message_error') !!}</strong>
+                    </div>
+                @endif
+                @if (Session::has('flash_message_success'))
+                    <div class="alert alert-success alert-block">
+                        <button type="button" class="close" data-dismiss="alert">x</button>
+                            <strong>{!! session('flash_message_success') !!}</strong>
+                    </div>
+                @endif
 
                 <form method="POST" action="{{ route('pay') }}" accept-charset="UTF-8" class="form-horizontal" role="form">
                     <div class="row" style="margin-bottom:40px;">
                       <div class="col-md-8 col-md-offset-2">
                         <p>
-                            @foreach ($plans as $plan)
                             <div>
-                                <a href="{{ route('plan',['id'=>$plan->id])}}">{{ $plan->name}}</a><br><br>
-                                <b><label>Plan-Price:-</label></b>₦{{ $plan->price }}<br><br>
-                                <hr>
+                                Name:{{ $plan->name}}<br>
+                                Duration:{{ $plan->duration}}<br>
+                                ₦ {{ $plan->price }}
                             </div>
-                            @endforeach
+                        </p>
+                        <input type="hidden" name="email" value="topeolotu75@gmail.com"> {{-- required --}}
+                        <input type="hidden" name="subscription_plan_id" value="{{ $plan->id }}">
+                        <input type="hidden" name="amount" value="{{ $plan->price * 100 }}"> {{-- required in kobo --}}
+                        <input type="hidden" name="quantity" value="1">
+                        <input type="hidden" name="currency" value="NGN">
+                        <input type="hidden" name="metadata" value="{{ json_encode($array = ['key_name' => 'value',]) }}" > {{-- For other necessary things you want to add to your payload. it is optional though --}}
+                        <input type="hidden" name="reference" value="{{ Paystack::genTranxRef() }}"> {{-- required --}}
+                        {{ csrf_field() }} {{-- works only when using laravel 5.1, 5.2 --}}
+
+                         <input type="hidden" name="_token" value="{{ csrf_token() }}"> {{-- employ this in place of csrf_field only in laravel 5.0 --}}
+
+
+                        <p>
+                          <button class="btn btn-success btn-lg btn-block" type="submit" value="Pay Now!">
+                          <i class="fa fa-plus-circle fa-lg"></i> Subscribe Now!
+                          </button>
                         </p>
                       </div>
                     </div>

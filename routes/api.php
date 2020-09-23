@@ -59,10 +59,22 @@ Route::get('/users', 'Api\AuthController@users');
 Route::post('/create-category', 'CategoryController@store');
 
 Route::get('/manage', 'Api\AuthController@manageAdmin');
-Route::get('/toggle-active','Api\AuthController@toggleActive');
+Route::post('/toggle-active','Api\AuthController@toggleUser');
 Route::get('/account','Api\AuthController@account');
 Route::get('/property-count','PropertyController@propertyCount');
-Route::get('/plans', 'SubscriptionPlansController@index');
+
+Route::get('/plans', 'PlanController@index');
+Route::post('/plan', 'PlanController@store');
+Route::get('/plan/{id}', 'PlanController@show');
+Route::delete('plan/{id}', 'PlanController@destroy');
+Route::put('plan/{id}', 'PlanController@update');
+Route::get('plan/{id}', 'PlanController@edit');
+
+//Subscribe
+Route::post('/subscribe', 'PaymentController@redirectToGateway')->name('pay');
+Route::get('/payment/callback', 'PaymentController@handleGatewayCallback');
+Route::get('/subscriptions', 'SubscriptionController@index');
+
 
 Route::group(['middleware' => 'auth:api'], function(){
 
@@ -70,7 +82,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 
 
 
-Route::put('/toggle-user', 'ApiAuthController@toggleUser');
+Route::put('/toggle-user', 'Api\AuthController@toggleUser');
 Route::get('/user-detail', 'Api\AuthController@userDetail');
 //Type Api Controller Routes
 Route::post('/create-type', 'TypeController@store');
@@ -147,6 +159,8 @@ Route::delete('blog/{id}', 'BlogController@destroy');
 //property Request Api Controller Routes
 Route::get('/property-requests', 'PropertyRequestController@index');
 Route::delete('property-request/{id}', 'PropertyRequestController@destroy');
+Route::get('/request-count', 'PropertyRequestController@countRequest');
+Route::get('/request-notify', 'PropertyRequestController@notifyRequest');
 
 //Subscription Api Controller Routes
 Route::get('subscriptions', 'SubscriptionController@index');

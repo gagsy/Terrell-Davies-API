@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Subscription;
+use App\Payment;
 use App\Http\Controllers\Controller;
 use Paystack;
+use Session;
 
 class PaymentController extends Controller
 {
@@ -18,7 +20,11 @@ class PaymentController extends Controller
      */
     public function redirectToGateway()
     {
-        return Paystack::getAuthorizationUrl()->redirectNow();
+        try{
+            return Paystack::getAuthorizationUrl()->redirectNow();
+        }catch(\Exception $e) {
+            return Redirect::back()->withMessage(['msg'=>'The paystack token has expired. Please refresh the page and try again.', 'type'=>'error']);
+        }
     }
 
     /**
@@ -27,25 +33,17 @@ class PaymentController extends Controller
      */
     public function handleGatewayCallback()
     {
-        //$paymentDetails = Paystack::getPaymentData();
-        $subscriptionDetails = Paystack::getAllPlans();
+        $paymentDetails = Paystack::getPaymentData();
 
-        if($subscription['data']['status'] == 'success')
-        {
-            flash('Subscription Done Successfully');
-        }else{
-            flash('Subcription not Successful');
-        }
-
-        $subscription= new Subscription;
-        $subscription->user_id = Auth::user()->id;
-        $subscription->subscription_plan_id = $subscriptionDetails['data']['subscription_plan_id'];
-        $subscription->reference= $subscriptionDetails['data']['reference'];
-        $subscription->email= Auth::user()->email;
-        $subscription->amount= $subscriptionDetails['data']['amount'];
-        $subscription->status= $subscriptionDetails['data']['status'];
-        $subscription->payment_date=$subscriptionDetails['data']['transaction_date'];
+        $subscription= new Subscription();
+        $subscription->user_id = 1;
+        $subscription->plan_id = $paymentDetails['data']['plan_id'];
+        //dd($paymentDetails['data']['plan_id']);
+        $subscription->payment_method = 'Paystack';
+        $subscription->reference= $paymentDetails['data']['reference'];
+        $subscription->amount= $paymentDetails['data']['amount'];
         $subscription->save();
+
         return redirect()-back();
 
         //dd($paymentDetails);
