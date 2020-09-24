@@ -12,7 +12,7 @@ class CreatePropertyCategoriesTable extends Migration
      * @return void
      */
     public function up()
-    {   Schema::disableForeignKeyConstraints();
+    {   Schema::enableForeignKeyConstraints();
         Schema::create('property_categories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
