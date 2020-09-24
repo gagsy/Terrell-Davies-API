@@ -185,3 +185,6 @@ Route::get('/sub-history','Api\AuthController@sub_history');
 // Newsletter Subscription Api Routes
 Route::get('/sub-newsletter','NewsletterController@index');
 Route::post('/create-newsletter','NewsletterController@store');
+
+Route::get('/galleries', 'PropertyGalleryController@index');
+Route::post('/upload', 'PropertyGalleryController@store');
