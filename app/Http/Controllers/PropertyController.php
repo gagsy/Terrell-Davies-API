@@ -25,7 +25,7 @@ class PropertyController extends Controller
         // // $propertytypes = PropertyType::get();
         // // $propertycats = Propertycategory::get();
         // return response()->json(['properties' => $properties], 200);
-        
+
         $properties = Property::paginate(5);
         return $properties;
     }

@@ -14,7 +14,7 @@ class SubscriptionplansSeeder extends Seeder
         $faker = Faker\Factory::create();
 
         for($i = 0; $i < 50; $i++) {
-            App\SubscriptionPlans::create([
+            App\Plan::create([
                 'name' => $faker->name,
                 'price' => $faker->randomFloat(3, 887, 888),
                 'duration' => $faker->randomDigit,

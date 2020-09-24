@@ -20,7 +20,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/pay', 'PaymentController@redirectToGateway')->name('pay');
-Route::get('/payment/callback', 'PaymentController@handleGatewayCallback'); 
+Route::get('/payment/callback', 'PaymentController@handleGatewayCallback');
 
 //Admin Route
 Route::get('/admin/{path?}','AdminController@index');

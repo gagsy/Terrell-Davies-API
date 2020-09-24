@@ -108,7 +108,7 @@
                             </div>
                         </p>
                         <input type="hidden" name="email" value="topeolotu75@gmail.com"> {{-- required --}}
-                        <input type="hidden" name="subscription_plan_id" value="{{ $plan->id }}">
+                        <input type="hidden" name="plan_id" value="{{ $plan->id }}">
                         <input type="hidden" name="amount" value="{{ $plan->price * 100 }}"> {{-- required in kobo --}}
                         <input type="hidden" name="quantity" value="1">
                         <input type="hidden" name="currency" value="NGN">
