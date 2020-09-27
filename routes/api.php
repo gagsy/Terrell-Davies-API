@@ -20,6 +20,10 @@ Route::post('register', 'Api\AuthController@register')->name('register');
 
 Route::get('check-auth', 'Api\AuthController@checkAuth')->name('logout');
 
+Route::post('password/email', 'Api\AuthController@forgot');
+
+Route::post('password/reset', 'ForgotPasswordController@reset');
+
 Route::get('logout', 'Api\AuthController@logout')->name('logout');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
@@ -74,6 +78,8 @@ Route::get('plan/{id}', 'PlanController@edit');
 Route::post('/subscribe', 'PaymentController@redirectToGateway')->name('pay');
 Route::get('/payment/callback', 'PaymentController@handleGatewayCallback');
 Route::get('/subscriptions', 'SubscriptionController@index');
+
+
 
 
 Route::group(['middleware' => 'auth:api'], function(){
@@ -170,3 +176,15 @@ Route::get('/contacts', 'CmsController@contact');
 Route::post('/contact', 'CmsController@addMap');
 Route::get('/contact/{id}', 'CmsController@editMap');
 Route::put('/contact/{id}', 'CmsController@updateMap');
+
+Route::post('/sendMail','ContactFormController@store');
+
+//Subscription History Api Routes
+Route::get('/sub-history','Api\AuthController@sub_history');
+
+// Newsletter Subscription Api Routes
+Route::get('/sub-newsletter','NewsletterController@index');
+Route::post('/create-newsletter','NewsletterController@store');
+
+Route::get('/galleries', 'PropertyGalleryController@index');
+Route::post('/upload', 'PropertyGalleryController@store');

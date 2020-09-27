@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Subscription;
+use App\Plan;
 use App\Payment;
 use App\Http\Controllers\Controller;
 use Paystack;
