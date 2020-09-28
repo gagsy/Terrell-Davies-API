@@ -85,7 +85,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (Category::where('id', $id)->exists()) {
+        if (Category::where('id', $id)->exists()) { 
             $category = Category::findOrFail($id);
             $category->update($request->all());
 

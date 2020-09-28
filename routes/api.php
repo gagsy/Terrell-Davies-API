@@ -63,7 +63,9 @@ Route::get('/users', 'Api\AuthController@users');
 Route::post('/create-category', 'CategoryController@store');
 
 Route::get('/manage', 'Api\AuthController@manageAdmin');
-Route::post('/toggle-active','Api\AuthController@toggleUser');
+
+Route::post('/toggle-active/{id}','Api\AuthController@toggleUser');
+
 Route::get('/account','Api\AuthController@account');
 Route::get('/property-count','PropertyController@propertyCount');
 
@@ -87,7 +89,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 });
 
 
-
+Route::put('/admin-profile-update', 'Api\AuthController@adminUpdate');
 Route::put('/toggle-user', 'Api\AuthController@toggleUser');
 Route::get('/user-detail', 'Api\AuthController@userDetail');
 //Type Api Controller Routes
