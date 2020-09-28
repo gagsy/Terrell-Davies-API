@@ -62,7 +62,7 @@ class FeatureController extends Controller
             return response()->json([
               "message" => "Feature not found",
             ], 404);
-          }
+        }
     }
 
     /**

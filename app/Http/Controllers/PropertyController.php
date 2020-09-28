@@ -53,20 +53,20 @@ class PropertyController extends Controller
             'property_type_id' => '',
             'title' => 'required',
             'description' => 'required',
-            'state' => 'required',
-            'market_status' => 'required',
+            // 'state' => 'required',
+            // 'market_status' => 'required',
             'locality' => 'required',
             'budget' => 'required',
-            'featuredImage' => 'required|image',
-            'galleryImage' => 'required|image',
-            'agent' => 'required',
+            // 'featuredImage' => 'required|image',
+            // 'galleryImage' => 'required|image',
+            // 'agent' => 'required',
             'feature' => 'required',
             'bedroom' => 'required',
             'bathroom' => 'required',
             'garage' => 'required',
             'toilet' => 'required',
             'totalarea' => 'required',
-            'video_link' => 'required',
+            // 'video_link' => 'required',
             'metaDescription' => 'required',
         ]);
 
@@ -86,7 +86,7 @@ class PropertyController extends Controller
 
             $data['galleryImage'] = $image_filename1;
 
-            $property = Property::create($data);
+            $property = Property::create();
             return response()->json([
                 'message' => 'Type Created',
                 'property' => $property,

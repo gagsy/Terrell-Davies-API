@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePropertyCategoriesTable extends Migration
+class CreateTermsConditionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,10 @@ class CreatePropertyCategoriesTable extends Migration
      * @return void
      */
     public function up()
-    {   Schema::disableForeignKeyConstraints();
-        Schema::create('property_categories', function (Blueprint $table) {
+    {
+        Schema::create('terms_conditions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
-            $table->foreignId('property_id')->constrained('properties')->onDelete('cascade');
+            $table->text('description');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ class CreatePropertyCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('property_categories');
+        Schema::dropIfExists('terms_conditions');
     }
 }

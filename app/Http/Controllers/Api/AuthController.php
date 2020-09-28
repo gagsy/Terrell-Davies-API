@@ -16,6 +16,20 @@ class AuthController extends Controller
     public function login(Request $request)
     {
 
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'isActivated'=> 'active'])) {
+             $user = $request->user();
+             $data['token'] = $user->createToken('MyApp')->accessToken;
+             $data['name']  = $user->name;
+             $data['userType'] = $user->userType;
+             return response()->json($data, 200);
+         }
+
+       return response()->json(['error'=>'Unauthorized'], 401,);
+    }
+
+    public function AdminLogin(Request $request)
+    {
+
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'userType' => 'admin', 'isActivated'=> 'active'])) {
              $user = $request->user();
              $data['token'] = $user->createToken('MyApp')->accessToken;
@@ -25,6 +39,30 @@ class AuthController extends Controller
          }
 
        return response()->json(['error'=>'Unauthorized'], 401,);
+    }
+    public function adminUpdate(Request $request, $id=null){
+        $user_id = Auth::user()->id;
+        //$user = Auth::user();
+        $user->name = $request['name'];
+        $user->address = $request['address'];
+        $user->locality = $request['locality'];
+        $user->state = $request['state'];
+        $user->country = $request['country'];
+        $user->phone = $request['phone'];
+        $user->company_name = $request['company_name'];
+        $user->save();
+
+        $affected_row = $user->save();
+
+        if (!empty($affected_row)) {
+             return response()->json([
+                'message' => 'Profile Updated',
+            ], 200);
+        } else {
+              return response()->json([
+                 "message" => "Operation Failed",
+               ], 404);
+            }
     }
 
     public function updateProfile(){

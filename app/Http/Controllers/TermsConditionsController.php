@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
+use App\TermsConditions;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class TermsConditionsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-        return response()->json(['categories' => $categories], 200);
+        $terms = TermsConditions::all();
+        return response()->json(['terms' => $terms], 200);
     }
 
     /**
@@ -37,23 +37,23 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'description' => 'required'
         ]);
 
-        $category = Category::create($request->all());
+        $term = TermsConditions::create($request->all());
         return response()->json([
-            'message' => 'Category Created',
-            'category' => $category,
+            'message' => 'Terms and Conditions Created',
+            'term' => $term,
         ], 200);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Category  $category
+     * @param  \App\TermsConditions  $termsConditions
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show(TermsConditions $termsConditions)
     {
         //
     }
@@ -61,17 +61,17 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Category  $category
+     * @param  \App\TermsConditions  $termsConditions
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    { 
-        if (Category::where('id', $id)->exists()) {
-            $category = Category::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
-            return response($category, 200);
+    {
+        if (TermsConditions::where('id', $id)->exists()) {
+            $term = TermsConditions::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
+            return response($term, 200);
           } else {
             return response()->json([
-              "message" => "Category not found",
+              "message" => "Terms and Conditions not found",
             ], 404);
         }
     }
@@ -80,21 +80,21 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Category  $category
+     * @param  \App\TermsConditions  $termsConditions
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        if (Category::where('id', $id)->exists()) { 
-            $category = Category::findOrFail($id);
-            $category->update($request->all());
+        if (TermsConditions::where('id', $id)->exists()) {
+            $term = TermsConditions::findOrFail($id);
+            $term->update($request->all());
 
             return response()->json([
-                "message" => "Category updated successfully",
+                "message" => "Terms and Conditions updated successfully",
             ], 200);
             } else {
             return response()->json([
-                "message" => "Category not found",
+                "message" => "Record not found",
             ], 404);
 
         }
@@ -103,24 +103,22 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Category  $category
+     * @param  \App\TermsConditions  $termsConditions
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
     {
-        if(Category::where('id', $id)->exists()) { 
-            $category = Category::findOrFail($id);
-            $category->delete();
+        if(TermsConditions::where('id', $id)->exists()) {
+            $term = TermsConditions::findOrFail($id);
+            $term->delete();
 
             return response()->json([
-              "message" => "Category deleted",
-
+              "message" => "record deleted",
             ], 202);
           } else {
             return response()->json([
-              "message" => "Category not found",
-
+              "message" => "record not found",
             ], 404);
-        }
+          }
     }
 }
