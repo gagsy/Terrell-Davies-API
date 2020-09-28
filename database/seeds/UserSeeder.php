@@ -42,7 +42,7 @@ class UserSeeder extends Seeder
                 'password' => bcrypt('password'),
                 'phone' => $faker->phoneNumber,
                 'userType' => 'individual',
-                'isActivated' => 'yes',
+                'isActivated' => 'active',
             ]);
         }
     }

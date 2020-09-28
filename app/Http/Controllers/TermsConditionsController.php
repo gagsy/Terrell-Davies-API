@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Feature;
+use App\TermsConditions;
 use Illuminate\Http\Request;
 
-class FeatureController extends Controller
+class TermsConditionsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class FeatureController extends Controller
      */
     public function index()
     {
-        $features = Feature::all();
-        return response()->json(['features' => $features], 200);
+        $terms = TermsConditions::all();
+        return response()->json(['terms' => $terms], 200);
     }
 
     /**
@@ -37,60 +37,60 @@ class FeatureController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required'
+            'description' => 'required'
         ]);
 
-        $feature = Feature::create($request->all());
+        $term = TermsConditions::create($request->all());
         return response()->json([
-            'message' => 'Feature Created',
-            'feature' => $feature,
+            'message' => 'Terms and Conditions Created',
+            'term' => $term,
         ], 200);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Feature  $feature
+     * @param  \App\TermsConditions  $termsConditions
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(TermsConditions $termsConditions)
     {
-        if (Feature::where('id', $id)->exists()) {
-            $feature = Feature::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
-            return response($feature, 200);
-          } else {
-            return response()->json([
-              "message" => "Feature not found",
-            ], 404);
-        }
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Feature  $feature
+     * @param  \App\TermsConditions  $termsConditions
      * @return \Illuminate\Http\Response
      */
-    public function edit(Feature $feature)
+    public function edit($id)
     {
-        //
+        if (TermsConditions::where('id', $id)->exists()) {
+            $term = TermsConditions::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
+            return response($term, 200);
+          } else {
+            return response()->json([
+              "message" => "Terms and Conditions not found",
+            ], 404);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Feature  $feature
+     * @param  \App\TermsConditions  $termsConditions
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        if (Feature::where('id', $id)->exists()) {
-            $feature = Feature::findOrFail($id);
-            $feature->update($request->all());
+        if (TermsConditions::where('id', $id)->exists()) {
+            $term = TermsConditions::findOrFail($id);
+            $term->update($request->all());
 
             return response()->json([
-                "message" => "Feature updated successfully",
+                "message" => "Terms and Conditions updated successfully",
             ], 200);
             } else {
             return response()->json([
@@ -103,14 +103,14 @@ class FeatureController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Feature  $feature
+     * @param  \App\TermsConditions  $termsConditions
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
     {
-        if(Feature::where('id', $id)->exists()) {
-            $feature = Feature::findOrFail($id);
-            $feature->delete();
+        if(TermsConditions::where('id', $id)->exists()) {
+            $term = TermsConditions::findOrFail($id);
+            $term->delete();
 
             return response()->json([
               "message" => "record deleted",

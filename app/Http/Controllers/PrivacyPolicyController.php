@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Feature;
+use App\PrivacyPolicy;
 use Illuminate\Http\Request;
 
-class FeatureController extends Controller
+class PrivacyPolicyController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class FeatureController extends Controller
      */
     public function index()
     {
-        $features = Feature::all();
-        return response()->json(['features' => $features], 200);
+        $data = PrivacyPolicy::all();
+        return response()->json(['data' => $data], 200);
     }
 
     /**
@@ -37,60 +37,60 @@ class FeatureController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required'
+            'description' => 'required'
         ]);
 
-        $feature = Feature::create($request->all());
+        $privacy = PrivacyPolicy::create($request->all());
         return response()->json([
-            'message' => 'Feature Created',
-            'feature' => $feature,
+            'message' => 'Privacy Policy Created',
+            'privacy' => $privacy,
         ], 200);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Feature  $feature
+     * @param  \App\PrivacyPolicy  $privacyPolicy
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(PrivacyPolicy $privacyPolicy)
     {
-        if (Feature::where('id', $id)->exists()) {
-            $feature = Feature::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
-            return response($feature, 200);
-          } else {
-            return response()->json([
-              "message" => "Feature not found",
-            ], 404);
-        }
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Feature  $feature
+     * @param  \App\PrivacyPolicy  $privacyPolicy
      * @return \Illuminate\Http\Response
      */
-    public function edit(Feature $feature)
+    public function edit($id)
     {
-        //
+        if (PrivacyPolicy::where('id', $id)->exists()) {
+            $privacy = PrivacyPolicy::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
+            return response($privacy, 200);
+          } else {
+            return response()->json([
+              "message" => "Privacy Policy not found",
+            ], 404);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Feature  $feature
+     * @param  \App\PrivacyPolicy  $privacyPolicy
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        if (Feature::where('id', $id)->exists()) {
-            $feature = Feature::findOrFail($id);
-            $feature->update($request->all());
+        if (PrivacyPolicy::where('id', $id)->exists()) {
+            $privacy = PrivacyPolicy::findOrFail($id);
+            $privacy->update($request->all());
 
             return response()->json([
-                "message" => "Feature updated successfully",
+                "message" => "Privacy Policy updated successfully",
             ], 200);
             } else {
             return response()->json([
@@ -103,14 +103,14 @@ class FeatureController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Feature  $feature
+     * @param  \App\PrivacyPolicy  $privacyPolicy
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
     {
-        if(Feature::where('id', $id)->exists()) {
-            $feature = Feature::findOrFail($id);
-            $feature->delete();
+        if(PrivacyPolicy::where('id', $id)->exists()) {
+            $privacy = PrivacyPolicy::findOrFail($id);
+            $privacy->delete();
 
             return response()->json([
               "message" => "record deleted",
