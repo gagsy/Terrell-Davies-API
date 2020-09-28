@@ -57,6 +57,12 @@ Route::get('/blog-categories', 'BlogCategoryController@index');
 
 Route::get('/blogs', 'BlogController@index');
 
+Route::get('/about', 'AboutUsController@index');
+
+Route::get('/policy', 'PrivacyPolicyController@index');
+
+Route::get('/terms', 'TermsConditionsController@index');
+
 Route::get('/search', 'PropertyController@getSearchResults');
 
 Route::get('/users', 'Api\AuthController@users');
@@ -188,3 +194,18 @@ Route::post('/create-newsletter','NewsletterController@store');
 
 Route::get('/galleries', 'PropertyGalleryController@index');
 Route::post('/upload', 'PropertyGalleryController@store');
+
+Route::post('/about/create', 'AboutUsController@store');
+Route::get('/about/{id}', 'AboutUsController@edit');
+Route::put('/about/{id}', 'AboutUsController@update');
+Route::delete('about/{id}', 'AboutUsController@destroy');
+
+Route::post('/terms/create', 'TermsConditionsController@store');
+Route::get('/term/{id}', 'TermsConditionsController@edit');
+Route::put('/term/{id}', 'TermsConditionsController@update');
+Route::delete('term/{id}', 'TermsConditionsController@destroy');
+
+Route::post('/policy/create', 'PrivacyPolicyController@store');
+Route::get('/policy/{id}', 'PrivacyPolicyController@edit');
+Route::put('/policy/{id}', 'PrivacyPolicyController@update');
+Route::delete('policy/{id}', 'PrivacyPolicyController@destroy');
