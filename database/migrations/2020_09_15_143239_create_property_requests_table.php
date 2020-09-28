@@ -19,6 +19,7 @@ class CreatePropertyRequestsTable extends Migration
             $table->string('email');
             $table->string('phone');
             $table->string('category');
+            $table->string('user_type');
             $table->string('type');
             $table->string('state');
             $table->string('locality');

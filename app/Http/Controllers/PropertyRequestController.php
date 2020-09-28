@@ -14,7 +14,7 @@ class PropertyRequestController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   
+    {
        $requestCount = PropertyRequest::whereDate('created_at', Carbon::today())->count();
         $requests = PropertyRequest::all();
         return response()->json(['requests' => $requests, "requestCount" => $requestCount ], 200);
@@ -39,11 +39,12 @@ class PropertyRequestController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required', 
+            'name' => 'required',
             'email' => 'required',
             'phone' => 'required',
             'category' => 'required',
             'type' => 'required',
+            'user_type' => 'required',
             'state' => 'required',
             'locality' => 'required',
             'area' => 'required',
