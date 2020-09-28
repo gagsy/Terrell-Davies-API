@@ -39,38 +39,34 @@ class PropertyGalleryController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'property_id' => '',
-            'image' => 'required|image',
+        $this->validate($request, [
+            'property_id' => 'required',
+            'image' => 'required|image|max:1999'
         ]);
-        if ( ! is_dir(public_path('/Gallery_images'))) {
-            mkdir(public_path('/Gallery_images'), 0777);
+
+        // Handle multiple file upload
+        $images = $request->file('image');
+        foreach($images as $key => $image) {
+            if ($request->hasFile('image')[$key] && $request->file('image')[$key]->isValid()) {
+                // store image to directory.
+                $path = $request->image[$key]->store('public/Gallery_images/');
+                $path = basename($path);
+
+                // store image to database.
+                $gallery = new PropertyGallery();
+                $gallery->property_id = $request->input('property_id');
+                $gallery->image = $path;
+                $gallery->save();
+                return response()->json([
+                    'message' => 'Property Gallery Created',
+                    'gallery' => $gallery,
+                ], 200);
+            } else {
+                return response()->json([
+                    'message' => 'An error occured',
+                ], 400);
+            }
         }
-
-        $images = Collection::wrap(request()->file('image'));
-
-        $images->each(function($image   ){
-            $basename = Str::random();
-            $original = $basename . '.' . $image->getClientOriginalExtension();
-            // $thumbnail = $basename . '_thumb.' . $image->getClientOriginalExtension();
-
-            // Image::make($image)
-            //     ->fit(250, 250)
-            //     ->save(public_path('/Gallery_images'), $thumbnail);
-
-
-            $image->move(public_path('/Gallery_images'), $original);
-
-            $gallery = PropertyGallery::create([
-                'property_id' => 1,
-                'image' => '/Gallery_images/' . $original,
-            ]);
-
-            return response()->json([
-                'message' => 'Property Gallery Created',
-            ], 200);
-
-        });
     }
 
     /**

@@ -38,6 +38,10 @@ class Property extends Model
 		return $this->belongsTo(PropertyType::class);
     }
 
+    public function iamges(){
+        return $this->hasMany('App\PropertyGallery', 'property_id', 'id');
+    }
+
     // public static function scopeSearch($query, $searchTerm)
     // {
     //     return $query->where('title', 'like', '%' .$searchTerm. '%')
