@@ -89,7 +89,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 });
 
 
-Route::put('/admin-profile-update', 'Api\AuthController@adminUpdate');
+Route::post('/admin-profile-update', 'Api\AuthController@adminUpdate');
 Route::put('/toggle-user', 'Api\AuthController@toggleUser');
 Route::get('/user-detail', 'Api\AuthController@userDetail');
 //Type Api Controller Routes
