@@ -66,7 +66,7 @@ class PropertyController extends Controller
             'garage' => 'required',
             'toilet' => 'required',
             'totalarea' => 'required',
-            // 'video_link' => 'required',
+            'video_link' => '',
             'metaDescription' => 'required',
         ]);
 

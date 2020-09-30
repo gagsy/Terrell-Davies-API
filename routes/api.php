@@ -72,7 +72,8 @@ Route::post('/create-category', 'CategoryController@store');
 
 Route::get('/manage', 'Api\AuthController@manageAdmin');
 
-Route::post('/toggle-active/{id}','Api\AuthController@toggleUser');
+Route::post('/disable-user/{id}','Api\AuthController@disableUser');
+Route::post('/enable-user/{id}','Api\AuthController@enableUser');
 
 Route::get('/account','Api\AuthController@account');
 Route::get('/property-count','PropertyController@propertyCount');
