@@ -122,13 +122,17 @@ Route::delete('property-locations/{id}', 'PropertyLocationController@destroy');
 Route::post('/create-property-features', 'PropertyFeatureController@store');
 Route::get('/property-features/{id}', 'PropertyFeatureController@show');
 Route::put('/property-features/{id}', 'PropertyFeatureController@update');
-Route::delete('property-features/{id}', 'PropertyFeatureController@destroy');
+Route::delete('property-features/{id}', 'PropertyFcreate-properteatureController@destroy');
 
 //Property Api Controller Routes
 Route::post('/create-property', 'PropertyController@store');
 Route::get('/properties/{id}', 'PropertyController@edit');
 Route::put('/properties/{id}', 'PropertyController@update');
 Route::delete('properties/{id}', 'PropertyController@destroy');
+
+//Pproperty Gallery Images
+Route::get('/galleries', 'PropertyGalleryController@index');
+Route::post('/upload', 'PropertyGalleryController@store');
 
 //Location Api Controller Routes
 Route::post('/create-locations', 'LocationController@store');
@@ -196,19 +200,21 @@ Route::get('/sub-history','Api\AuthController@sub_history');
 Route::get('/sub-newsletter','NewsletterController@index');
 Route::post('/create-newsletter','NewsletterController@store');
 
-Route::get('/galleries', 'PropertyGalleryController@index');
-Route::post('/upload', 'PropertyGalleryController@store');
 
+
+//About Page
 Route::post('/about/create', 'AboutUsController@store');
 Route::get('/about/{id}', 'AboutUsController@edit');
 Route::put('/about/{id}', 'AboutUsController@update');
 Route::delete('about/{id}', 'AboutUsController@destroy');
 
+//Terms
 Route::post('/terms/create', 'TermsConditionsController@store');
 Route::get('/term/{id}', 'TermsConditionsController@edit');
 Route::put('/term/{id}', 'TermsConditionsController@update');
 Route::delete('term/{id}', 'TermsConditionsController@destroy');
 
+//Privacy Policy
 Route::post('/policy/create', 'PrivacyPolicyController@store');
 Route::get('/policy/{id}', 'PrivacyPolicyController@edit');
 Route::put('/policy/{id}', 'PrivacyPolicyController@update');
