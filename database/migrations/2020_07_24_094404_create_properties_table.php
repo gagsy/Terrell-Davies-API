@@ -21,7 +21,7 @@ class CreatePropertiesTable extends Migration
             $table->longText('description');
             $table->string('state');
             $table->string('market_status');
-            $table->string('locality');
+            $table->string('locality'); 
             $table->float('budget', 8, 2);
             $table->string('featuredImage');
             $table->string('galleryImage');
