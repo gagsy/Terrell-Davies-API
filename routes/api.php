@@ -104,23 +104,6 @@ Route::get('/types/{id}', 'TypeController@show');
 Route::put('/types/{id}', 'TypeController@update');
 Route::delete('types/{id}', 'TypeController@destroy');
 
-//PropertyType Api Controller Routes
-Route::post('/create-property-type', 'PropertyTypeController@store');
-Route::get('/property-type/{id}', 'PropertyTypeController@show');
-Route::put('/property-type/{id}', 'PropertyTypeController@update');
-Route::delete('property-type/{id}', 'PropertyTypeController@destroy');
-
-//PropertyLocation Api Controller Routes
-Route::post('/create-property-locations', 'PropertyLocationController@store');
-Route::get('/property-locations/{id}', 'PropertyLocationController@show');
-Route::put('/property-locations/{id}', 'PropertyLocationController@update');
-Route::delete('property-locations/{id}', 'PropertyLocationController@destroy');
-
-//PropertyFeature Api Controller Routes
-Route::post('/create-property-features', 'PropertyFeatureController@store');
-Route::get('/property-features/{id}', 'PropertyFeatureController@show');
-Route::put('/property-features/{id}', 'PropertyFeatureController@update');
-Route::delete('property-features/{id}', 'PropertyFeatureController@destroy');
 
 //Property Api Controller Routes
 Route::post('/create-property', 'PropertyController@store');
@@ -146,14 +129,7 @@ Route::get('/subscription-plans/{id}', 'SubscriptionPlansController@edit');
 Route::put('/subscription-plans/{id}', 'SubscriptionPlansController@update');
 Route::delete('subscription-planFs/{id}', 'SubscriptionPlansController@destroy');
 
-//PropertyCategory Api Controller Routes
-Route::post('/create-property-category', 'PropertyCategoryController@store');
-Route::get('/property-category/{id}', 'PropertyCategoryController@edit');
-Route::put('/property-category/{id}', 'PropertyCategoryController@update');
-Route::delete('property-category/{id}', 'PropertyCategoryController@destroy');
-
 //Category Api Controller Routes
-
 Route::get('/category/{id}', 'CategoryController@edit');
 Route::put('/category/{id}', 'CategoryController@update');
 Route::delete('category/{id}', 'CategoryController@destroy');
