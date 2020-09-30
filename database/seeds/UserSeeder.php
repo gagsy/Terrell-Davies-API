@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('admin'),
             'phone' => '08165983685',
             'userType' => 'admin',
-            'isActivated' => 'active',
+            'isActivated' => 'Active',
 
 
         ]);
@@ -42,7 +42,7 @@ class UserSeeder extends Seeder
                 'password' => bcrypt('password'),
                 'phone' => $faker->phoneNumber,
                 'userType' => 'individual',
-                'isActivated' => 'active',
+                'isActivated' => 'Active',
             ]);
         }
     }

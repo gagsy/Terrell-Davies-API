@@ -72,7 +72,8 @@ Route::post('/create-category', 'CategoryController@store');
 
 Route::get('/manage', 'Api\AuthController@manageAdmin');
 
-Route::post('/toggle-active/{id}','Api\AuthController@toggleUser');
+Route::post('/disable-user/{id}','Api\AuthController@disableUser');
+Route::post('/enable-user/{id}','Api\AuthController@enableUser');
 
 Route::get('/account','Api\AuthController@account');
 Route::get('/property-count','PropertyController@propertyCount');
@@ -150,7 +151,7 @@ Route::delete('features/{id}', 'FeatureController@destroy');
 Route::post('/create-subscription-plan', 'SubscriptionPlansController@store');
 Route::get('/subscription-plans/{id}', 'SubscriptionPlansController@edit');
 Route::put('/subscription-plans/{id}', 'SubscriptionPlansController@update');
-Route::delete('subscription-plans/{id}', 'SubscriptionPlansController@destroy');
+Route::delete('subscription-planFs/{id}', 'SubscriptionPlansController@destroy');
 
 //PropertyCategory Api Controller Routes
 Route::post('/create-property-category', 'PropertyCategoryController@store');

@@ -16,7 +16,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'isActivated'=> 'active'])) {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'isActivated'=> 'Active'])) {
              $user = $request->user();
              $data['token'] = $user->createToken('MyApp')->accessToken;
              $data['name']  = $user->name;
@@ -150,18 +150,30 @@ class AuthController extends Controller
         $users = User::all()->except('1');
         return response()->json(['users' => $users,'userCount' => $userCount], 200);
     }
-    public function toggleUser(Request $request, $id){
+    public function disableUser(Request $request, $id){
 
              \Log::info($request->all());
             $user = User::find($request->id);
-            $user->isActivated = $request->isActivated;
-            $user->save();
+            User::where('id', $id)->update(array('isActivated' => 'Inactive'));
+          
 
             return response()->json([
-                "message" => "User status changed",
+                "message" => "User is disabled",
             ], 200);
 
     }
+    public function enableUser(Request $request, $id){
+
+        \Log::info($request->all());
+       $user = User::find($request->id);
+       User::where('id', $id)->update(array('isActivated' => 'Active'));
+ 
+
+       return response()->json([
+           "message" => "User is enabled",
+       ], 200);
+
+}
     public function manageAdmin(){
         $admin = User::where(['userType'=> 'admin'])->first();
         return response()->json(['admin'=> $admin], 200);

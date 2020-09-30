@@ -66,7 +66,7 @@ class PropertyController extends Controller
             'garage' => 'required',
             'toilet' => 'required',
             'totalarea' => 'required',
-            // 'video_link' => 'required',
+            'video_link' => '',
             'metaDescription' => 'required',
         ]);
 
@@ -88,7 +88,7 @@ class PropertyController extends Controller
 
             $property = Property::create();
             return response()->json([
-                'message' => 'Type Created',
+                'message' => 'Property Created',
                 'property' => $property,
             ], 200);
         }
