@@ -88,7 +88,7 @@ class PropertyController extends Controller
 
             $property = Property::create();
             return response()->json([
-                'message' => 'Type Created',
+                'message' => 'Property Created',
                 'property' => $property,
             ], 200);
         }
