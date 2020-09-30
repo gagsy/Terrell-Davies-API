@@ -53,7 +53,6 @@ class PropertyController extends Controller
         $data = $request->validate([
             'cat_id' => '',
             'type_id' => '',
-            'feature_id' => '',
             'location_id' => '',
             'title' => 'required',
             'description' => 'required',
@@ -172,7 +171,6 @@ class PropertyController extends Controller
                 'cat_id' => $data['cat_id'],
                 'type_id' => $data['type_id'],
                 'location_id' => $data['location_id'],
-                'feature_id' => $data['feature_id'],
                 'title'=>$data['title'],
                 'description'=>$data['description'],
                 'state' => $data['state'],
@@ -235,7 +233,6 @@ class PropertyController extends Controller
                         ->orWhere('state', 'like', "%{$data}%")
                         ->orWhere('agent', 'like', "%{$data}%")
                         ->orWhere('locality', 'like', "%{$data}%")
-                        ->orWhere('property_cat_id', 'like', "%{$data}%")
                         ->orWhere('type_id', 'like', "%{$data}%")
                         ->orWhere('cat_id', 'like', "%{$data}%")
                         ->orWhere('location_id', 'like', "%{$data}%")

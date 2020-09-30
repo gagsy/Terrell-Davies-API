@@ -18,12 +18,11 @@ class CreatePropertiesTable extends Migration
             $table->foreignId('cat_id')->constrained('categories')->onDelete('cascade');
             $table->foreignId('type_id')->constrained('types')->onDelete('cascade');
             $table->foreignId('location_id')->constrained('locations')->onDelete('cascade');
-            $table->foreignId('feature_id')->constrained('features')->onDelete('cascade');
             $table->string('title');
             $table->longText('description');
             $table->string('state');
             $table->string('market_status');
-            $table->string('locality'); 
+            $table->string('locality');
             $table->float('budget', 8, 2);
             $table->string('featuredImage');
             $table->string('galleryImage');
