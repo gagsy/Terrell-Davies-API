@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Property;
-use App\PropertyType;
-use App\PropertyCategory;
+use App\Location;
+use App\Feature;
+use App\Category;
+use App\Type;
 use App\User;
 
 use Illuminate\Http\Request;
@@ -49,8 +51,9 @@ class PropertyController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'property_cat_id' => '',
-            'property_type_id' => '',
+            'cat_id' => '',
+            'type_id' => '',
+            'location_id' => '',
             'title' => 'required',
             'description' => 'required',
             'state' => 'required',
@@ -165,8 +168,9 @@ class PropertyController extends Controller
 
 
             $properties->update([
-                'property_cat_id' => $data['prperty_cat_id'],
-                'property_type_id' => $data['prperty_type_id'],
+                'cat_id' => $data['cat_id'],
+                'type_id' => $data['type_id'],
+                'location_id' => $data['location_id'],
                 'title'=>$data['title'],
                 'description'=>$data['description'],
                 'state' => $data['state'],
@@ -229,8 +233,9 @@ class PropertyController extends Controller
                         ->orWhere('state', 'like', "%{$data}%")
                         ->orWhere('agent', 'like', "%{$data}%")
                         ->orWhere('locality', 'like', "%{$data}%")
-                        ->orWhere('property_cat_id', 'like', "%{$data}%")
-                        ->orWhere('property_type_id', 'like', "%{$data}%")
+                        ->orWhere('type_id', 'like', "%{$data}%")
+                        ->orWhere('cat_id', 'like', "%{$data}%")
+                        ->orWhere('location_id', 'like', "%{$data}%")
                         ->get();
 
         return response()->json([

@@ -15,13 +15,14 @@ class CreatePropertiesTable extends Migration
     {   Schema::disableForeignKeyConstraints();
         Schema::create('properties', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignId('property_cat_id')->constrained('property_categories')->onDelete('cascade');
-            $table->foreignId('property_type_id')->constrained('property_types')->onDelete('cascade');
+            $table->foreignId('cat_id')->constrained('categories')->onDelete('cascade');
+            $table->foreignId('type_id')->constrained('types')->onDelete('cascade');
+            $table->foreignId('location_id')->constrained('locations')->onDelete('cascade');
             $table->string('title');
             $table->longText('description');
             $table->string('state');
             $table->string('market_status');
-            $table->string('locality'); 
+            $table->string('locality');
             $table->float('budget', 8, 2);
             $table->string('featuredImage');
             $table->string('galleryImage');
