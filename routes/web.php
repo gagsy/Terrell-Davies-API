@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/', function () {
+    return view('welcome');
+});
+
+
 Route::get('/plans', 'WebController@index');
 Route::get('/planInfo/{id}', 'WebController@plan')->name('plan');
 
