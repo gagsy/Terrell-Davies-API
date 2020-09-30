@@ -144,7 +144,7 @@ Route::delete('features/{id}', 'FeatureController@destroy');
 Route::post('/create-subscription-plan', 'SubscriptionPlansController@store');
 Route::get('/subscription-plans/{id}', 'SubscriptionPlansController@edit');
 Route::put('/subscription-plans/{id}', 'SubscriptionPlansController@update');
-Route::delete('subscription-plans/{id}', 'SubscriptionPlansController@destroy');
+Route::delete('subscription-planFs/{id}', 'SubscriptionPlansController@destroy');
 
 //PropertyCategory Api Controller Routes
 Route::post('/create-property-category', 'PropertyCategoryController@store');
