@@ -85,21 +85,7 @@
                     Plans
                 </div>
 
-                <form method="POST" action="{{ route('pay') }}" accept-charset="UTF-8" class="form-horizontal" role="form">
-                    <div class="row" style="margin-bottom:40px;">
-                      <div class="col-md-8 col-md-offset-2">
-                        <p>
-                            @foreach ($plans as $plan)
-                            <div>
-                                <a href="{{ route('plan',['id'=>$plan->id])}}">{{ $plan->name}}</a><br><br>
-                                <b><label>Plan-Price:-</label></b>₦{{ $plan->price }}<br><br>
-                                <hr>
-                            </div>
-                            @endforeach
-                        </p>
-                      </div>
-                    </div>
-            </form>
+                
             </div>
         </div>
     </body>
