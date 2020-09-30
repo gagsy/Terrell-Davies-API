@@ -12,6 +12,7 @@ class PropertyRequest extends Model
         'email',
         'phone',
         'category',
+        'user_type',
         'type',
         'state',
         'locality',
