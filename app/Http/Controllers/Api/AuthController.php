@@ -110,6 +110,18 @@ class AuthController extends Controller
       $success['token'] =  $user->createToken('MyApp')-> accessToken;
       $success['name'] =  $user->name;
       $success['userType'] = $user->userType;
+      $success['address'] = $user->address;
+      $success['phone'] = $user->phone;
+      $success['company_name'] = $user->company_name;
+      $success['locality'] = $user->locality;
+      $success['state'] = $user->state;
+      $success['country'] = $user->country;
+      $success['mobile'] = $user->mobile;
+      $success['services'] = $user->services;
+      $success['facebook_profile'] = $user->facebook_profile;
+      $success['twitter_profile'] = $user->twitter_profile;
+      $success['linkedin_profile'] = $user->linkedin_profile;
+      $success['socialType'] = $user->socialType;
 
       return response()->json(['success'=>$success], 200);
     }
@@ -155,7 +167,7 @@ class AuthController extends Controller
              \Log::info($request->all());
             $user = User::find($request->id);
             User::where('id', $id)->update(array('isActivated' => 'Inactive'));
-          
+
 
             return response()->json([
                 "message" => "User is disabled",
@@ -167,7 +179,7 @@ class AuthController extends Controller
         \Log::info($request->all());
        $user = User::find($request->id);
        User::where('id', $id)->update(array('isActivated' => 'Active'));
- 
+
 
        return response()->json([
            "message" => "User is enabled",
