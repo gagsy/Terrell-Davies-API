@@ -123,17 +123,7 @@ class AuthController extends Controller
       $success['name'] =  $user->name;
       $success['userType'] = $user->userType;
       $success['address'] = $user->address;
-      $success['phone'] = $user->phone;
-      $success['company_name'] = $user->company_name;
-      $success['locality'] = $user->locality;
-      $success['state'] = $user->state;
-      $success['country'] = $user->country;
-      $success['mobile'] = $user->mobile;
-      $success['services'] = $user->services;
-      $success['facebook_profile'] = $user->facebook_profile;
-      $success['twitter_profile'] = $user->twitter_profile;
-      $success['linkedin_profile'] = $user->linkedin_profile;
-      $success['socialType'] = $user->socialType;
+      
 
       return response()->json(['success'=>$success], 200);
     }
