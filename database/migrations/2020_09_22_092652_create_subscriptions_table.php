@@ -15,8 +15,8 @@ class CreateSubscriptionsTable extends Migration
     {   Schema::disableForeignKeyConstraints();
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('user_id')->onDelete('cascade');
-            $table->foreignId('plan_id')->constrained('plan_id')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('plan_id')->constrained('plans')->onDelete('cascade');
             $table->string('reference');
             $table->double('amount', 10,2);
             $table->string('payment_method')->nullable();
