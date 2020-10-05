@@ -33,6 +33,7 @@ class AuthController extends Controller
              $data['twitter_profile'] = $user->twitter_profile;
              $data['linkedin_profile'] = $user->linkedin_profile;
              $data['socialType'] = $user->socialType;
+             $data['avatar'] = $user->avatar;
              return response()->json($data, 200);
          }
 
