@@ -9,6 +9,7 @@ use Hash;
 use App\User;
 use App\Subscription;
 use Auth;
+use Image;
 use Illuminate\Support\Facades\Password;
 
 class AuthController extends Controller
@@ -16,24 +17,10 @@ class AuthController extends Controller
     public function login(Request $request)
     {
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'isActivated'=> 'Active'])) {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
              $user = $request->user();
              $data['token'] = $user->createToken('MyApp')->accessToken;
              $data['name']  = $user->name;
-             $data['userType'] = $user->userType;
-             return response()->json($data, 200);
-         }
-
-       return response()->json(['error'=>'Unauthorized'], 401,);
-    }
-
-    public function AdminLogin(Request $request)
-    {
-
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'userType' => 'admin', 'isActivated'=> 'active'])) {
-             $user = $request->user();
-             $data['token'] = $user->createToken('MyApp')->accessToken;
-             $data['name'] =  $user->name;
              $data['userType'] = $user->userType;
              $data['address'] = $user->address;
              $data['phone'] = $user->phone;
@@ -41,12 +28,28 @@ class AuthController extends Controller
              $data['locality'] = $user->locality;
              $data['state'] = $user->state;
              $data['country'] = $user->country;
-             $data['mobile'] = $user->mobile;
+             $data['phone'] = $user->phone;
              $data['services'] = $user->services;
              $data['facebook_profile'] = $user->facebook_profile;
              $data['twitter_profile'] = $user->twitter_profile;
              $data['linkedin_profile'] = $user->linkedin_profile;
              $data['socialType'] = $user->socialType;
+             $data['avatar'] = $user->avatar;
+             return response()->json($data, 200);
+         }
+
+       return response()->json(['error'=>'Unauthorized'], 401);
+    }
+
+    public function AdminLogin(Request $request)
+    {
+
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'userType' => 'admin'])) {
+             $user = $request->user();
+             $data['token'] = $user->createToken('MyApp')->accessToken;
+             $data['name'] =  $user->name;
+             $data['userType'] = $user->userType;
+
              return response()->json($data, 200);
          }
 
@@ -77,28 +80,33 @@ class AuthController extends Controller
             }
     }
 
-    public function updateProfile(){
-        $user = Auth::user();
-        $user->fname = $request['fname'];
-        $user->lname = $request['lname'];
-        $user->email = $request['email'];
-            // $user->address = $request['address'];
-        $user->phone = $request['phone'];
-        $user->avatar = $avatarPath;
-        $user->save();
+    public function updateProfile(Request $request){
+        if($request->all()){
+            $avatar = $request->file('avatar');
+            $filename = time() . '.' . $avatar->getClientOriginalExtension();
+            Image::make($avatar)->resize(300,300)->save( public_path('/Avatar_images/' . $filename) );
+            $avatarPath = '/Avatar_images/'.$filename;
 
-        $affected_row = $user->save();
+            $user = Auth::user();
+            $user->name = $request['name'];
+            //$user->email = $request['email'];
+            //$user->address = $request['address'];
+            $user->phone = $request['phone'];
+            $user->avatar = $filename;
+            $user->save();
 
-        if (!empty($affected_row)) {
-             return response()->json([
-                'message' => 'Profile Updated',
-            ], 200);
-        } else {
-              return response()->json([
-                 "message" => "Operation Failed",
-               ], 404);
+            $affected_row = $user->save();
+
+            if (!empty($affected_row)) {
+                return response()->json([
+                   'message' => 'Profile Updated',
+               ], 200);
+           } else {
+                 return response()->json([
+                    "message" => "Operation Failed",
+                  ], 404);
             }
-
+        }
     }
 
     public function register(Request $request)
@@ -123,17 +131,7 @@ class AuthController extends Controller
       $success['name'] =  $user->name;
       $success['userType'] = $user->userType;
       $success['address'] = $user->address;
-      $success['phone'] = $user->phone;
-      $success['company_name'] = $user->company_name;
-      $success['locality'] = $user->locality;
-      $success['state'] = $user->state;
-      $success['country'] = $user->country;
-      $success['mobile'] = $user->mobile;
-      $success['services'] = $user->services;
-      $success['facebook_profile'] = $user->facebook_profile;
-      $success['twitter_profile'] = $user->twitter_profile;
-      $success['linkedin_profile'] = $user->linkedin_profile;
-      $success['socialType'] = $user->socialType;
+
 
       return response()->json(['success'=>$success], 200);
     }

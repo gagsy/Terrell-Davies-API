@@ -40,6 +40,7 @@ class BlogController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
+            'category_id' => 'required',
             'title' => 'required',
             'content' => 'required',
             'url' => 'required',

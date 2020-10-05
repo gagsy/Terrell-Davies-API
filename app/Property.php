@@ -7,18 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 class Property extends Model
 {
     protected $fillable = [
-        'property_cat_id',
-        'property_type_id',
+        'cat_id',
+        'type_id',
+        'location_id',
         'title',
         'description',
         'state',
-        'market-status',
+        'market_status',
         'locality',
         'budget',
         'featuredImage',
         'galleryImage',
         'agent',
-        'feature',
+        'features',
         'bedroom',
         'bathroom',
         'garage',
@@ -28,17 +29,22 @@ class Property extends Model
         'metaDescription'
     ];
 
-    public function property_cat()
-	{
-		return $this->belongsTo(PropertyCategory::class);
-    }
+    // public function property_cat()
+	// {
+	// 	return $this->belongsTo(Category::class);
+    // }
 
-    public function property_type()
-	{
-		return $this->belongsTo(PropertyType::class);
-    }
+    // public function property_type()
+	// {
+	// 	return $this->belongsTo(Type::class);
+    // }
 
-    public function iamges(){
+    // public function property_loc()
+	// {
+	// 	return $this->belongsTo(Location::class);
+    // }
+
+    public function images(){
         return $this->hasMany('App\PropertyGallery', 'property_id', 'id');
     }
 

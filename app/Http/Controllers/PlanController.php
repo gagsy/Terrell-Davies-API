@@ -44,7 +44,7 @@ class PlanController extends Controller
             'maximum_premium_listings' => 'required',
             'max_featured_ad_listings' => 'required',
         ]);
-       
+
         $plan = Plan::create($request->all());
         return response()->json([
             'message' => 'Subscription Plan Created',
