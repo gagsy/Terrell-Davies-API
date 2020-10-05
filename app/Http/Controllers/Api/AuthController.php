@@ -16,24 +16,10 @@ class AuthController extends Controller
     public function login(Request $request)
     {
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'isActivated'=> 'Active'])) {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
              $user = $request->user();
              $data['token'] = $user->createToken('MyApp')->accessToken;
              $data['name']  = $user->name;
-             $data['userType'] = $user->userType;
-             return response()->json($data, 200);
-         }
-
-       return response()->json(['error'=>'Unauthorized'], 401,);
-    }
-
-    public function AdminLogin(Request $request)
-    {
-
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'userType' => 'admin', 'isActivated'=> 'active'])) {
-             $user = $request->user();
-             $data['token'] = $user->createToken('MyApp')->accessToken;
-             $data['name'] =  $user->name;
              $data['userType'] = $user->userType;
              $data['address'] = $user->address;
              $data['phone'] = $user->phone;
@@ -47,6 +33,21 @@ class AuthController extends Controller
              $data['twitter_profile'] = $user->twitter_profile;
              $data['linkedin_profile'] = $user->linkedin_profile;
              $data['socialType'] = $user->socialType;
+             return response()->json($data, 200);
+         }
+
+       return response()->json(['error'=>'Unauthorized'], 401);
+    }
+
+    public function AdminLogin(Request $request)
+    {
+
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'userType' => 'admin'])) {
+             $user = $request->user();
+             $data['token'] = $user->createToken('MyApp')->accessToken;
+             $data['name'] =  $user->name;
+             $data['userType'] = $user->userType;
+
              return response()->json($data, 200);
          }
 
@@ -79,9 +80,7 @@ class AuthController extends Controller
 
     public function updateProfile(){
         $user = Auth::user();
-        $user->fname = $request['fname'];
-        $user->lname = $request['lname'];
-        $user->email = $request['email'];
+        $user->name = $request['name'];
             // $user->address = $request['address'];
         $user->phone = $request['phone'];
         $user->avatar = $avatarPath;
@@ -123,7 +122,7 @@ class AuthController extends Controller
       $success['name'] =  $user->name;
       $success['userType'] = $user->userType;
       $success['address'] = $user->address;
-      
+
 
       return response()->json(['success'=>$success], 200);
     }

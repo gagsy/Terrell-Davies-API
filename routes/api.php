@@ -107,6 +107,8 @@ Route::get('/types/{id}', 'TypeController@show');
 Route::put('/types/{id}', 'TypeController@update');
 Route::delete('types/{id}', 'TypeController@destroy');
 
+Route::post('/profile-update', 'Api\AuthController@updateProfile');
+
 
 //Property Api Controller Routes
 Route::post('/create-property', 'PropertyController@store');

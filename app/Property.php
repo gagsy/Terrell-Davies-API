@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Property extends Model
 {
     protected $fillable = [
-        'property_cat_id',
-        'property_type_id',
+        'cat_id',
+        'type_id',
+        'location_id',
         'title',
         'description',
         'state',
@@ -30,15 +31,20 @@ class Property extends Model
 
     public function property_cat()
 	{
-		return $this->belongsTo(PropertyCategory::class);
+		return $this->belongsTo(Category::class);
     }
 
     public function property_type()
 	{
-		return $this->belongsTo(PropertyType::class);
+		return $this->belongsTo(Type::class);
     }
 
-    public function iamges(){
+    public function property_loc()
+	{
+		return $this->belongsTo(Location::class);
+    }
+
+    public function images(){
         return $this->hasMany('App\PropertyGallery', 'property_id', 'id');
     }
 
