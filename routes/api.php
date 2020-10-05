@@ -48,9 +48,6 @@ Route::get('/locations', 'LocationController@index');
 
 Route::get('/features', 'FeatureController@index');
 
-
-Route::post('create-subscription', 'SubscriptionController@store');
-
 Route::get('/property-category', 'PropertyCategoryController@index');
 
 Route::get('/category', 'CategoryController@index');
@@ -79,7 +76,7 @@ Route::get('/account','Api\AuthController@account');
 Route::get('/property-count','PropertyController@propertyCount');
 
 Route::get('/plans', 'PlanController@index');
-Route::post('/plan', 'PlanController@store');
+Route::post('/plan/create', 'PlanController@store');
 Route::get('/plan/{id}', 'PlanController@show');
 Route::delete('plan/{id}', 'PlanController@destroy');
 Route::put('plan/{id}', 'PlanController@update');
@@ -102,7 +99,7 @@ Route::post('/admin-profile-update', 'Api\AuthController@adminUpdate');
 Route::put('/toggle-user', 'Api\AuthController@toggleUser');
 Route::get('/user-detail', 'Api\AuthController@userDetail');
 //Type Api Controller Routes
-Route::post('/create-type', 'TypeController@store');
+Route::post('/type/create', 'TypeController@store');
 Route::get('/types/{id}', 'TypeController@show');
 Route::put('/types/{id}', 'TypeController@update');
 Route::delete('types/{id}', 'TypeController@destroy');
@@ -111,7 +108,7 @@ Route::post('/profile-update', 'Api\AuthController@updateProfile');
 
 
 //Property Api Controller Routes
-Route::post('/create-property', 'PropertyController@store');
+Route::post('/property/create', 'PropertyController@store');
 Route::get('/properties/{id}', 'PropertyController@edit');
 Route::put('/properties/{id}', 'PropertyController@update');
 Route::delete('properties/{id}', 'PropertyController@destroy');
@@ -121,13 +118,13 @@ Route::get('/galleries', 'PropertyGalleryController@index');
 Route::post('/upload', 'PropertyGalleryController@store');
 
 //Location Api Controller Routes
-Route::post('/create-locations', 'LocationController@store');
+Route::post('/location/create', 'LocationController@store');
 Route::get('/locations/{id}', 'LocationController@show');
 Route::put('/locations/{id}', 'LocationController@update');
 Route::delete('locations/{id}', 'LocationController@destroy');
 
 //Feature Api Controller Routes
-Route::post('/create-features', 'FeatureController@store');
+Route::post('/feature/create', 'FeatureController@store');
 Route::get('/features/{id}', 'FeatureController@show');
 Route::put('/features/{id}', 'FeatureController@update');
 Route::delete('features/{id}', 'FeatureController@destroy');

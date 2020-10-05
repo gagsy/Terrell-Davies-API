@@ -13,13 +13,13 @@ class Property extends Model
         'title',
         'description',
         'state',
-        'market-status',
+        'market_status',
         'locality',
         'budget',
         'featuredImage',
         'galleryImage',
         'agent',
-        'feature',
+        'features',
         'bedroom',
         'bathroom',
         'garage',
@@ -29,20 +29,20 @@ class Property extends Model
         'metaDescription'
     ];
 
-    public function property_cat()
-	{
-		return $this->belongsTo(Category::class);
-    }
+    // public function property_cat()
+	// {
+	// 	return $this->belongsTo(Category::class);
+    // }
 
-    public function property_type()
-	{
-		return $this->belongsTo(Type::class);
-    }
+    // public function property_type()
+	// {
+	// 	return $this->belongsTo(Type::class);
+    // }
 
-    public function property_loc()
-	{
-		return $this->belongsTo(Location::class);
-    }
+    // public function property_loc()
+	// {
+	// 	return $this->belongsTo(Location::class);
+    // }
 
     public function images(){
         return $this->hasMany('App\PropertyGallery', 'property_id', 'id');

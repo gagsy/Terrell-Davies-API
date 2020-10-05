@@ -9,6 +9,7 @@ use Hash;
 use App\User;
 use App\Subscription;
 use Auth;
+use Image;
 use Illuminate\Support\Facades\Password;
 
 class AuthController extends Controller
@@ -27,7 +28,7 @@ class AuthController extends Controller
              $data['locality'] = $user->locality;
              $data['state'] = $user->state;
              $data['country'] = $user->country;
-             $data['mobile'] = $user->mobile;
+             $data['phone'] = $user->phone;
              $data['services'] = $user->services;
              $data['facebook_profile'] = $user->facebook_profile;
              $data['twitter_profile'] = $user->twitter_profile;
@@ -79,26 +80,33 @@ class AuthController extends Controller
             }
     }
 
-    public function updateProfile(){
-        $user = Auth::user();
-        $user->name = $request['name'];
-            // $user->address = $request['address'];
-        $user->phone = $request['phone'];
-        $user->avatar = $avatarPath;
-        $user->save();
+    public function updateProfile(Request $request){
+        if($request->all()){
+            $avatar = $request->file('avatar');
+            $filename = time() . '.' . $avatar->getClientOriginalExtension();
+            Image::make($avatar)->resize(300,300)->save( public_path('/Avatar_images/' . $filename) );
+            $avatarPath = '/Avatar_images/'.$filename;
 
-        $affected_row = $user->save();
+            $user = Auth::user();
+            $user->name = $request['name'];
+            //$user->email = $request['email'];
+            //$user->address = $request['address'];
+            $user->phone = $request['phone'];
+            $user->avatar = $filename;
+            $user->save();
 
-        if (!empty($affected_row)) {
-             return response()->json([
-                'message' => 'Profile Updated',
-            ], 200);
-        } else {
-              return response()->json([
-                 "message" => "Operation Failed",
-               ], 404);
+            $affected_row = $user->save();
+
+            if (!empty($affected_row)) {
+                return response()->json([
+                   'message' => 'Profile Updated',
+               ], 200);
+           } else {
+                 return response()->json([
+                    "message" => "Operation Failed",
+                  ], 404);
             }
-
+        }
     }
 
     public function register(Request $request)

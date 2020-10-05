@@ -8,7 +8,10 @@ use App\Feature;
 use App\Category;
 use App\Type;
 use App\User;
-
+use DB;
+use Image;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 
 class PropertyController extends Controller
@@ -51,17 +54,17 @@ class PropertyController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'cat_id' => '',
-            'type_id' => '',
-            'location_id' => '',
+            'cat_id' => 'required',
+            'type_id' => 'required',
+            'location_id' => 'required',
             'title' => 'required',
             'description' => 'required',
             'state' => 'required',
             'market_status' => 'required',
             'locality' => 'required',
             'budget' => 'required',
-            'featuredImage' => 'required|image',
-            'galleryImage' => 'required|image',
+            'featuredImage' => 'required',
+            'galleryImage' => 'required',
             'agent' => 'required',
             'features' => 'required',
             'bedroom' => 'required',
@@ -72,6 +75,8 @@ class PropertyController extends Controller
             'video_link' => '',
             'metaDescription' => 'required',
         ]);
+
+        DB::beginTransaction();
 
         try{
 
@@ -84,23 +89,25 @@ class PropertyController extends Controller
 
             $galleryImage = $request->file('image');
             $image_filename1 = time().'.'.$galleryImage->getClientOriginalExtension();
-            $image_path = public_path('/Gallery_images');
-            $galleryImage->move($image_path,$image_filename1);
+            $image_path1 = public_path('/Gallery_images');
+            $galleryImage->move($image_path1,$image_filename1);
 
             $data['galleryImage'] = $image_filename1;
-
-            $property = Property::create();
-            return response()->json([
-                'message' => 'Property Created',
-                'property' => $property,
-            ], 200);
         }
-        catch(Exception $e){
+        catch(\Exception $e){
+            DB::rollback();
+            dump($e->getMessage());
             return response()->json([
                 'message' => 'An error occured',
                 'property' => $property,
             ], 400);
         }
+
+        $property = Property::create($data);
+            return response()->json([
+                'message' => 'Property Created',
+                'property' => $property,
+            ], 200);
     }
 
     /**
