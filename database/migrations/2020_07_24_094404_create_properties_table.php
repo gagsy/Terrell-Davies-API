@@ -28,7 +28,6 @@ class CreatePropertiesTable extends Migration
             $table->string('locality');
             $table->float('budget', 8, 2);
             $table->string('featuredImage');
-            $table->string('galleryImage');
             $table->string('bedroom');
             $table->string('bathroom');
             $table->string('toilet');

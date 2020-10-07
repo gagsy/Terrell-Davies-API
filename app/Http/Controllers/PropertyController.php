@@ -67,12 +67,10 @@ class PropertyController extends Controller
             'locality' => 'required',
             'budget' => 'required',
             'featuredImage' => 'required',
-            'galleryImage' => 'required',
             'bedroom' => 'required',
             'bathroom' => 'required',
             'toilet' => 'required',
             'video_link' => '',
-            'metaDescription' => 'required',
             'status' => 'required',
             'feature' => 'required'
         ]);
@@ -87,13 +85,6 @@ class PropertyController extends Controller
             $featuredImage->move($image_path,$image_filename);
 
             $data['featuredImage'] = $image_filename;
-
-            $galleryImage = $request->file('image');
-            $image_filename1 = time().'.'.$galleryImage->getClientOriginalExtension();
-            $image_path1 = public_path('/Gallery_images');
-            $galleryImage->move($image_path1,$image_filename1);
-
-            $data['galleryImage'] = $image_filename1;
         }
         catch(\Exception $e){
             DB::rollback();
@@ -160,13 +151,6 @@ class PropertyController extends Controller
                 $featuredImage->move($image_path,$image_filename);
 
                 $data['featuredImage'] = $image_filename;
-
-                $galleryImage = $request->file('image');
-                $image_filename1 = time().'.'.$galleryImage->getClientOriginalExtension();
-                $image_path = public_path('/Gallery_images');
-                $galleryImage->move($image_path,$image_filename1);
-
-                $data['galleryImage'] = $image_filename1;
             }
             catch(Exception $e){
                 return response()->json([
@@ -189,11 +173,10 @@ class PropertyController extends Controller
                 'locality' => $data['locality'],
                 'budget' => $data['budget'],
                 'featuredImage' => $image_filename,
-                'galleryImage'=>$image_filename1,
                 'bedroom' => $data['bedroom'],
                 'bathroom' => $data['bathroom'],
                 'toilet' => $data['toilet'],
-                'video_link' => $data['video-link'],
+                'video_link' => $data['video_link'],
                 'status' => $data['status'],
                 'feature' => $data['feature'],
             ]);
