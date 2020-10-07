@@ -15,9 +15,10 @@ class PropertySeeder extends Seeder
 
         for($i = 0; $i < 50; $i++) {
             App\Property::create([
-                'cat_id' => $faker->randomDigit,
-                'type_id' => $faker->randomDigit,
-                'location_id' => $faker->randomDigit,
+                'category' => $faker->name,
+                'type' => $faker->name,
+                'location' => $faker->name,
+                'user_type' => $faker->name,
                 'title' => $faker->sentence,
                 'description' => $faker->text,
                 'state' => $faker->sentence,
@@ -35,6 +36,7 @@ class PropertySeeder extends Seeder
                 'totalarea' => $faker->sentence,
                 'video_link' => $faker->url,
                 'metaDescription' => $faker->text,
+                'status' => 'Publish',
             ]);
         }
     }

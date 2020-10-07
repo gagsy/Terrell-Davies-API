@@ -195,3 +195,4 @@ Route::post('/policy/create', 'PrivacyPolicyController@store');
 Route::get('/policy/{id}', 'PrivacyPolicyController@edit');
 Route::put('/policy/{id}', 'PrivacyPolicyController@update');
 Route::delete('policy/{id}', 'PrivacyPolicyController@destroy');
+

@@ -54,26 +54,27 @@ class PropertyController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'cat_id' => 'required',
-            'type_id' => 'required',
-            'location_id' => 'required',
+            'category' => 'required',
+            'type' => 'required',
+            'location' => 'required',
             'title' => 'required',
             'description' => 'required',
             'state' => 'required',
+            'area' => 'required',
+            'total_area' => 'required',
             'market_status' => 'required',
+            'parking' => 'required',
             'locality' => 'required',
             'budget' => 'required',
             'featuredImage' => 'required',
             'galleryImage' => 'required',
-            'agent' => 'required',
-            'features' => 'required',
             'bedroom' => 'required',
             'bathroom' => 'required',
-            'garage' => 'required',
             'toilet' => 'required',
-            'totalarea' => 'required',
             'video_link' => '',
             'metaDescription' => 'required',
+            'status' => 'required',
+            'feature' => 'required'
         ]);
 
         DB::beginTransaction();
@@ -175,26 +176,26 @@ class PropertyController extends Controller
 
 
             $properties->update([
-                'cat_id' => $data['cat_id'],
-                'type_id' => $data['type_id'],
-                'location_id' => $data['location_id'],
+                'category' => $data['category'],
+                'type' => $data['type'],
+                'location' => $data['location'],
                 'title'=>$data['title'],
                 'description'=>$data['description'],
                 'state' => $data['state'],
+                'area' => $data['area'],
+                'total_area' => $data['total_area'],
                 'market_status' => $data['market-status'],
+                'parking' => $data['parking'],
                 'locality' => $data['locality'],
                 'budget' => $data['budget'],
                 'featuredImage' => $image_filename,
                 'galleryImage'=>$image_filename1,
-                'agent' => $data['agent'],
-                'feature' => $data['feature'],
                 'bedroom' => $data['bedroom'],
                 'bathroom' => $data['bathroom'],
-                'garage' => $data['garage'],
                 'toilet' => $data['toilet'],
-                'totalarea' => $data['totalarea'],
                 'video_link' => $data['video-link'],
-                'metaDescription' => $data['metaDescription'],
+                'status' => $data['status'],
+                'feature' => $data['feature'],
             ]);
 
             return response()->json([
@@ -238,11 +239,10 @@ class PropertyController extends Controller
                         ->orWhere('bathroom', 'like', "%{$data}%")
                         ->orWhere('budget', 'like', "%{$data}%")
                         ->orWhere('state', 'like', "%{$data}%")
-                        ->orWhere('agent', 'like', "%{$data}%")
                         ->orWhere('locality', 'like', "%{$data}%")
-                        ->orWhere('type_id', 'like', "%{$data}%")
-                        ->orWhere('cat_id', 'like', "%{$data}%")
-                        ->orWhere('location_id', 'like', "%{$data}%")
+                        ->orWhere('type', 'like', "%{$data}%")
+                        ->orWhere('category', 'like', "%{$data}%")
+                        ->orWhere('location', 'like', "%{$data}%")
                         ->get();
 
         return response()->json([

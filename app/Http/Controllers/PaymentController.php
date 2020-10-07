@@ -28,6 +28,8 @@ class PaymentController extends Controller
         }
     }
 
+    
+
     /**
      * Obtain Paystack payment information
      * @return void
