@@ -43,11 +43,11 @@ class NewsletterController extends Controller
         $check = Newsletter::where('email',$data['email'])->count();
 
         if($check > 0){
-            return response()->json(['msg' => 'You already subscribed.Thanks!']);
+            return response()->json(['msg' => 'You already subscribed.Thanks!'], 401);
         }
         Newsletter::create($data);
         //Mail::to($data['email'])->send(new NewsLetter($data));
-        return response()->json(['msg' => 'Subscribed successfully!']);
+        return response()->json(['msg' => 'Subscribed successfully!'], 200);
     }
 
     /**

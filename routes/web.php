@@ -24,8 +24,8 @@ Route::get('/planInfo/{id}', 'WebController@plan')->name('plan');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::post('/pay', 'PaymentController@redirectToGateway')->name('pay');
-Route::get('/payment/callback', 'PaymentController@handleGatewayCallback');
+// Route::post('/pay', 'PaymentController@redirectToGateway')->name('pay');
+// Route::get('/payment/callback', 'PaymentController@handleGatewayCallback');
 
 //Rave
 Route::post('/pay', 'RaveController@initialize')->name('pay');
