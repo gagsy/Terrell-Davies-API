@@ -12,30 +12,30 @@ class CreatePropertiesTable extends Migration
      * @return void
      */
     public function up()
-    {   Schema::disableForeignKeyConstraints();
+    {
         Schema::create('properties', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignId('cat_id')->constrained('categories')->onDelete('cascade');
-            $table->foreignId('type_id')->constrained('types')->onDelete('cascade');
-            $table->foreignId('location_id')->constrained('locations')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('category');
+            $table->string('type');
+            $table->string('location');
             $table->string('title');
             $table->longText('description');
             $table->string('state');
+            $table->string('area');
+            $table->string('total_area');
             $table->string('market_status');
+            $table->string('parking');
             $table->string('locality');
             $table->float('budget', 8, 2);
             $table->string('featuredImage');
             $table->string('galleryImage');
-            $table->string('features');
             $table->string('bedroom');
             $table->string('bathroom');
-            $table->string('garage');
             $table->string('toilet');
-            $table->string('totalarea');
             $table->string('video_link')->nullable();
+            $table->enum('status',['Publish','Unpublish']);
+            $table->enum('feature',['Serviced','Furnished']);
             $table->integer('views')->nullable();
-            $table->longText('metaDescription');
             $table->tinyInteger('visible')->default(1);
             $table->timestamps();
         });

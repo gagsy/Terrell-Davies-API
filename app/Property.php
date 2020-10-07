@@ -7,26 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 class Property extends Model
 {
     protected $fillable = [
-        'cat_id',
-        'type_id',
-        'location_id',
+        'category',
+        'type',
+        'location',
         'title',
         'description',
-        'state',
+        'area',
+        'total_area',
         'market_status',
+        'parking',
         'locality',
         'budget',
         'featuredImage',
         'galleryImage',
-        'agent',
-        'features',
         'bedroom',
         'bathroom',
-        'garage',
         'toilet',
-        'totalarea',
         'video-link',
-        'metaDescription'
+        'status',
+        'feature'
     ];
 
     // public function property_cat()
