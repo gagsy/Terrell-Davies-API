@@ -65,7 +65,7 @@ class PropertyController extends Controller
             'budget' => 'required',
             'featuredImage' => 'required',
             'galleryImage' => 'required',
-            'agent' => 'required',
+            'user_id' => 'required',
             'features' => 'required',
             'bedroom' => 'required',
             'bathroom' => 'required',
@@ -79,6 +79,8 @@ class PropertyController extends Controller
         DB::beginTransaction();
 
         try{
+            $data['user_id'] = Auth::user()->id;
+
 
             $featuredImage = $request->file('image');
             $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
@@ -178,6 +180,7 @@ class PropertyController extends Controller
                 'cat_id' => $data['cat_id'],
                 'type_id' => $data['type_id'],
                 'location_id' => $data['location_id'],
+                'user_id' => Auth::user()->id,
                 'title'=>$data['title'],
                 'description'=>$data['description'],
                 'state' => $data['state'],
@@ -186,7 +189,6 @@ class PropertyController extends Controller
                 'budget' => $data['budget'],
                 'featuredImage' => $image_filename,
                 'galleryImage'=>$image_filename1,
-                'agent' => $data['agent'],
                 'feature' => $data['feature'],
                 'bedroom' => $data['bedroom'],
                 'bathroom' => $data['bathroom'],
@@ -238,7 +240,7 @@ class PropertyController extends Controller
                         ->orWhere('bathroom', 'like', "%{$data}%")
                         ->orWhere('budget', 'like', "%{$data}%")
                         ->orWhere('state', 'like', "%{$data}%")
-                        ->orWhere('agent', 'like', "%{$data}%")
+                        ->orWhere('user_id', 'like', "%{$data}%")
                         ->orWhere('locality', 'like', "%{$data}%")
                         ->orWhere('type_id', 'like', "%{$data}%")
                         ->orWhere('cat_id', 'like', "%{$data}%")
