@@ -12,13 +12,14 @@ class Property extends Model
         'location',
         'title',
         'description',
+        'state',
         'area',
         'total_area',
         'market_status',
         'parking',
         'locality',
         'budget',
-        'featuredImage',
+        'image',
         'bedroom',
         'bathroom',
         'toilet',
@@ -40,6 +41,9 @@ class Property extends Model
     public function images(){
         return $this->hasMany('App\PropertyGallery', 'property_id', 'id');
     }
+
+    protected $casts = [ 'image' => 'array' ];
+
 
     // public static function scopeSearch($query, $searchTerm)
     // {
