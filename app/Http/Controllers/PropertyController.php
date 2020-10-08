@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Property;
 use App\Location;
-use App\Feature;
 use App\Category;
 use App\Type;
 use App\User;
@@ -27,8 +26,8 @@ class PropertyController extends Controller
     public function index()
     {
         // $properties = Property::all();
-        // // $propertytypes = PropertyType::get();
-        // // $propertycats = Propertycategory::get();
+        // // $propertytype_ids = Propertytype_id::get();
+        // // $propertycats = Propertycategory_id::get();
         // return response()->json(['properties' => $properties], 200);
 
         $properties = Property::paginate(5);
@@ -54,8 +53,8 @@ class PropertyController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'category' => 'required',
-            'type' => 'required',
+            'cat_id' => 'required',
+            'type_id' => 'required',
             'location' => 'required',
             'title' => 'required',
             'description' => 'required',
@@ -66,13 +65,11 @@ class PropertyController extends Controller
             'parking' => 'required',
             'locality' => 'required',
             'budget' => 'required',
-            'featuredImage' => 'required',
-            'galleryImage' => 'required',
+            'image' => 'required',
             'bedroom' => 'required',
             'bathroom' => 'required',
             'toilet' => 'required',
             'video_link' => '',
-            'metaDescription' => 'required',
             'status' => 'required',
             'feature' => 'required'
         ]);
@@ -81,19 +78,12 @@ class PropertyController extends Controller
 
         try{
 
-            $featuredImage = $request->file('image');
-            $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
+            $image = $request->file('image');
+            $image_filename = time().'.'.$image->getClientOriginalExtension();
             $image_path = public_path('/FeaturedProperty_images');
-            $featuredImage->move($image_path,$image_filename);
+            $image->move($image_path,$image_filename);
 
-            $data['featuredImage'] = $image_filename;
-
-            $galleryImage = $request->file('image');
-            $image_filename1 = time().'.'.$galleryImage->getClientOriginalExtension();
-            $image_path1 = public_path('/Gallery_images');
-            $galleryImage->move($image_path1,$image_filename1);
-
-            $data['galleryImage'] = $image_filename1;
+            $data['image'] = $image_filename;
         }
         catch(\Exception $e){
             DB::rollback();
@@ -154,19 +144,12 @@ class PropertyController extends Controller
             $data = $request->all();
             try{
 
-                $featuredImage = $request->file('image');
-                $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
+                $image = $request->file('image');
+                $image_filename = time().'.'.$image->getClientOriginalExtension();
                 $image_path = public_path('/FeaturedProperty_images');
-                $featuredImage->move($image_path,$image_filename);
+                $image->move($image_path,$image_filename);
 
-                $data['featuredImage'] = $image_filename;
-
-                $galleryImage = $request->file('image');
-                $image_filename1 = time().'.'.$galleryImage->getClientOriginalExtension();
-                $image_path = public_path('/Gallery_images');
-                $galleryImage->move($image_path,$image_filename1);
-
-                $data['galleryImage'] = $image_filename1;
+                $data['image'] = $image_filename;
             }
             catch(Exception $e){
                 return response()->json([
@@ -176,8 +159,8 @@ class PropertyController extends Controller
 
 
             $properties->update([
-                'category' => $data['category'],
-                'type' => $data['type'],
+                'category_id' => $data['category_id'],
+                'type_id' => $data['type_id'],
                 'location' => $data['location'],
                 'title'=>$data['title'],
                 'description'=>$data['description'],
@@ -188,12 +171,11 @@ class PropertyController extends Controller
                 'parking' => $data['parking'],
                 'locality' => $data['locality'],
                 'budget' => $data['budget'],
-                'featuredImage' => $image_filename,
-                'galleryImage'=>$image_filename1,
+                'image' => $image_filename,
                 'bedroom' => $data['bedroom'],
                 'bathroom' => $data['bathroom'],
                 'toilet' => $data['toilet'],
-                'video_link' => $data['video-link'],
+                'video_link' => $data['video_link'],
                 'status' => $data['status'],
                 'feature' => $data['feature'],
             ]);
@@ -240,8 +222,8 @@ class PropertyController extends Controller
                         ->orWhere('budget', 'like', "%{$data}%")
                         ->orWhere('state', 'like', "%{$data}%")
                         ->orWhere('locality', 'like', "%{$data}%")
-                        ->orWhere('type', 'like', "%{$data}%")
-                        ->orWhere('category', 'like', "%{$data}%")
+                        ->orWhere('type_id', 'like', "%{$data}%")
+                        ->orWhere('category_id', 'like', "%{$data}%")
                         ->orWhere('location', 'like', "%{$data}%")
                         ->get();
 

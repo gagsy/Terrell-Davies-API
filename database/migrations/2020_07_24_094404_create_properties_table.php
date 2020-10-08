@@ -15,8 +15,8 @@ class CreatePropertiesTable extends Migration
     {
         Schema::create('properties', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('category');
-            $table->string('type');
+            $table->unsignedBigInteger('category_id')->index();
+            $table->unsignedBigInteger('type_id')->index();
             $table->string('location');
             $table->string('title');
             $table->longText('description');
@@ -27,8 +27,7 @@ class CreatePropertiesTable extends Migration
             $table->string('parking');
             $table->string('locality');
             $table->float('budget', 8, 2);
-            $table->string('featuredImage');
-            $table->string('galleryImage');
+            $table->string('image');
             $table->string('bedroom');
             $table->string('bathroom');
             $table->string('toilet');
@@ -37,6 +36,8 @@ class CreatePropertiesTable extends Migration
             $table->enum('feature',['Serviced','Furnished']);
             $table->integer('views')->nullable();
             $table->tinyInteger('visible')->default(1);
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('type_id')->references('id')->on('types')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -41,7 +41,7 @@ class CategoryController extends Controller
         ]);
 
         $category = Category::create($request->all());
-        return response()->json([
+        return response()->json([   
             'message' => 'Category Created',
             'category' => $category,
         ], 200);
@@ -65,7 +65,7 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    { 
+    {
         if (Category::where('id', $id)->exists()) {
             $category = Category::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
             return response($category, 200);
@@ -85,7 +85,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (Category::where('id', $id)->exists()) { 
+        if (Category::where('id', $id)->exists()) {
             $category = Category::findOrFail($id);
             $category->update($request->all());
 
@@ -108,7 +108,7 @@ class CategoryController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        if(Category::where('id', $id)->exists()) { 
+        if(Category::where('id', $id)->exists()) {
             $category = Category::findOrFail($id);
             $category->delete();
 
