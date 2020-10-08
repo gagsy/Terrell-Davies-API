@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Property extends Model
 {
     protected $fillable = [
-        'category',
-        'type',
+        'category_id',
+        'type_id',
         'location',
         'title',
         'description',
@@ -27,20 +27,15 @@ class Property extends Model
         'feature'
     ];
 
-    // public function property_cat()
-	// {
-	// 	return $this->belongsTo(Category::class);
-    // }
+    public function category()
+	{
+		return $this->belongsTo(Category::class);
+    }
 
-    // public function property_type()
-	// {
-	// 	return $this->belongsTo(Type::class);
-    // }
-
-    // public function property_loc()
-	// {
-	// 	return $this->belongsTo(Location::class);
-    // }
+    public function type()
+	{
+		return $this->belongsTo(Type::class);
+    }
 
     public function images(){
         return $this->hasMany('App\PropertyGallery', 'property_id', 'id');
