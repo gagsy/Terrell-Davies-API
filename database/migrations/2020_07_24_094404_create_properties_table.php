@@ -12,7 +12,7 @@ class CreatePropertiesTable extends Migration
      * @return void
      */
     public function up()
-    {   
+    {   Schema::disableForeignKeyConstraints();
         Schema::create('properties', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('category_id');
