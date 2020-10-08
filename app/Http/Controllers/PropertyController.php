@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Property;
-use App\Location;
 use App\Category;
 use App\Type;
 use App\User;
@@ -25,13 +24,13 @@ class PropertyController extends Controller
 
     public function index()
     {
-        // $properties = Property::all();
+        // $property = Property::all();
         // // $propertytype_ids = Propertytype_id::get();
         // // $propertycats = Propertycategory_id::get();
-        // return response()->json(['properties' => $properties], 200);
+        // return response()->json(['property' => $property], 200);
 
-        $properties = Property::paginate(5);
-        return $properties;
+        $property = Property::paginate(5);
+        return $property;
     }
 
     /**
@@ -53,7 +52,7 @@ class PropertyController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'cat_id' => 'required',
+            'category_id' => 'required',
             'type_id' => 'required',
             'location' => 'required',
             'title' => 'required',
@@ -66,6 +65,7 @@ class PropertyController extends Controller
             'locality' => 'required',
             'budget' => 'required',
             'image' => 'required',
+            'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:3048',
             'bedroom' => 'required',
             'bathroom' => 'required',
             'toilet' => 'required',
@@ -78,19 +78,20 @@ class PropertyController extends Controller
 
         try{
 
-            $image = $request->file('image');
-            $image_filename = time().'.'.$image->getClientOriginalExtension();
+            $featuredImage = $request->file('image');
+            $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
             $image_path = public_path('/FeaturedProperty_images');
-            $image->move($image_path,$image_filename);
+            $featuredImage->move($image_path,$image_filename);
 
             $data['image'] = $image_filename;
+
+
         }
         catch(\Exception $e){
             DB::rollback();
             dump($e->getMessage());
             return response()->json([
                 'message' => 'An error occured',
-                'property' => $property,
             ], 400);
         }
 
@@ -139,15 +140,15 @@ class PropertyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $properties = Property::findorfail($id);
+        $property = Property::findorfail($id);
         if ($request->isMethod('post')) {
             $data = $request->all();
             try{
 
-                $image = $request->file('image');
-                $image_filename = time().'.'.$image->getClientOriginalExtension();
+                $featuredImage = $request->file('image');
+                $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
                 $image_path = public_path('/FeaturedProperty_images');
-                $image->move($image_path,$image_filename);
+                $featuredImage->move($image_path,$image_filename);
 
                 $data['image'] = $image_filename;
             }
@@ -158,7 +159,7 @@ class PropertyController extends Controller
             }
 
 
-            $properties->update([
+            $property->update([
                 'category_id' => $data['category_id'],
                 'type_id' => $data['type_id'],
                 'location' => $data['location'],
@@ -195,8 +196,8 @@ class PropertyController extends Controller
     public function destroy(Request $request, $id)
     {
         if(Property::where('id', $id)->exists()) {
-            $properties = Property::findorFail($id);
-            $properties->delete();
+            $property = Property::findorFail($id);
+            $property->delete();
 
             return response()->json([
               "message" => "record deleted",
@@ -210,14 +211,14 @@ class PropertyController extends Controller
 
     public function search(Request $request){
         // $searchTerm = $request->input('searchTerm');
-        // $properties = Property::data($searchTerm)->get();
-        // return response()->json(['properties' => $properties], 200);
+        // $property = Property::data($searchTerm)->get();
+        // return response()->json(['property' => $property], 200);
     }
 
     public function getsearchResults(Request $request) {
         $data = $request->get('data');
 
-        $properties = Property::where('title', 'like', "%{$data}%")
+        $property = Property::where('title', 'like', "%{$data}%")
                         ->orWhere('bathroom', 'like', "%{$data}%")
                         ->orWhere('budget', 'like', "%{$data}%")
                         ->orWhere('state', 'like', "%{$data}%")
@@ -228,7 +229,7 @@ class PropertyController extends Controller
                         ->get();
 
         return response()->json([
-            'data' => $properties
+            'data' => $property
         ]);
     }
     public function propertyCount(){

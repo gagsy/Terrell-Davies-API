@@ -109,9 +109,9 @@ Route::post('/profile-update', 'Api\AuthController@updateProfile');
 
 //Property Api Controller Routes
 Route::post('/property/create', 'PropertyController@store');
-Route::get('/properties/{id}', 'PropertyController@edit');
-Route::put('/properties/{id}', 'PropertyController@update');
-Route::delete('properties/{id}', 'PropertyController@destroy');
+Route::get('/property/{id}', 'PropertyController@edit');
+Route::put('/property/{id}', 'PropertyController@update');
+Route::delete('property/{id}', 'PropertyController@destroy');
 
 //Pproperty Gallery Images
 Route::get('/galleries', 'PropertyGalleryController@index');
