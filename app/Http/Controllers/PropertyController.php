@@ -51,7 +51,55 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $data = $request->validate([
+            'category_id' => 'required',
+            'type_id' => 'required',
+            'location' => 'required',
+            'title' => 'required',
+            'description' => 'required',
+            'state' => 'required',
+            'area' => 'required',
+            'total_area' => 'required',
+            'market_status' => 'required',
+            'parking' => 'required',
+            'locality' => 'required',
+            'budget' => 'required',
+            'image' => 'required',
+            'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:3048',
+            'bedroom' => 'required',
+            'bathroom' => 'required',
+            'toilet' => 'required',
+            'video_link' => '',
+            'status' => 'required',
+            'feature' => 'required'
+        ]);
+
+        DB::beginTransaction();
+
+        try{
+
+            $featuredImage = $request->file('image');
+            $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
+            $image_path = public_path('/FeaturedProperty_images');
+            $featuredImage->move($image_path,$image_filename);
+
+            $data['image'] = $image_filename;
+
+
+        }
+        catch(\Exception $e){
+            DB::rollback();
+            dump($e->getMessage());
+            return response()->json([
+                'message' => 'An error occured',
+            ], 400);
+        }
+
+        $property = Property::create($data);
+            return response()->json([
+                'message' => 'Property Created',
+                'property' => $property,
+            ], 200);
     }
 
     /**
