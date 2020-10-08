@@ -18,8 +18,6 @@ class UserSeeder extends Seeder
             'phone' => '08165983685',
             'userType' => 'admin',
             'isActivated' => 'Active',
-
-
         ]);
         // $faker = Faker\Factory::create();
 

@@ -80,7 +80,7 @@ class PropertyController extends Controller
 
             $featuredImage = $request->file('image');
             $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
-            $image_path = public_path('/FeaturedProperty_images');
+            $image_path = public_path('/images');
             $featuredImage->move($image_path,$image_filename);
 
             $data['image'] = $image_filename;

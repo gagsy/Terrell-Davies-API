@@ -38,7 +38,7 @@ class Property extends Model
 		return $this->belongsTo(Type::class);
     }
 
-    public function images(){
+    public function image(){
         return $this->hasMany('App\PropertyGallery', 'property_id', 'id');
     }
 
