@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\PropertyCategory;
-use App\Category;
-use App\Property;
+use App\PropertyLocation;
 use Illuminate\Http\Request;
 
-class PropertyCategoryController extends Controller
+class PropertyLocationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +14,8 @@ class PropertyCategoryController extends Controller
      */
     public function index()
     {
-        $propertycats = PropertyCategory::all();
-        return response()->json(['propertycats' => $propertycats], 200);
+        $data = PropertyLocation::all();
+        return response()->json(['data' => $data], 200);
     }
 
     /**
@@ -39,24 +37,24 @@ class PropertyCategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'category_id' => 'required',
+            'location_id' => 'required',
             'property_id' => 'required',
         ]);
 
-        $propertycat = PropertyCategory::create($request->all());
+        $data = PropertyLocation::create($request->all());
         return response()->json([
-            'message' => 'Property Category Created',
-            'propertycat' => $propertycat,
+            'message' => 'Property Location Created',
+            'data' => $data,
         ], 200);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\PropertyCategory  $propertyCategory
+     * @param  \App\PropertyLocation  $propertyLocation
      * @return \Illuminate\Http\Response
      */
-    public function show(PropertyCategory $propertyCategory)
+    public function show(PropertyLocation $propertyLocation)
     {
         //
     }
@@ -64,17 +62,17 @@ class PropertyCategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\PropertyCategory  $propertyCategory
+     * @param  \App\PropertyLocation  $propertyLocation
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        if (PropertyCategory::where('id', $id)->exists()) {
-            $propertycatDetails = PropertyCategory::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
-            return response($propertycatDetails, 200);
+        if (PropertyLocation::where('id', $id)->exists()) {
+            $data = PropertyLocation::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
+            return response($data, 200);
           } else {
             return response()->json([
-              "message" => "Property Category not found"
+              "message" => "Property Location not found"
             ], 404);
           }
     }
@@ -83,21 +81,21 @@ class PropertyCategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\PropertyCategory  $propertyCategory
+     * @param  \App\PropertyLocation  $propertyLocation
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        if (PropertyCategory::where('id', $id)->exists()) {
-            $propertycat = PropertyCategory::findorFail($id);
-            $propertycat->update($request->all());
+        if (PropertyLocation::where('id', $id)->exists()) {
+            $data = PropertyLocation::findorFail($id);
+            $data->update($request->all());
 
             return response()->json([
-                "message" => "Property Category updated successfully"
+                "message" => "Property Location updated successfully"
             ], 200);
             } else {
             return response()->json([
-                "message" => "Property Category not found"
+                "message" => "Property Location not found"
             ], 404);
 
         }
@@ -106,21 +104,21 @@ class PropertyCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\PropertyCategory  $propertyCategory
+     * @param  \App\PropertyLocation  $propertyLocation
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
     {
-        if(PropertyCategory::where('id', $id)->exists()) {
-            $propertycat = PropertyCategory::findorFail($id);
-            $propertycat->delete();
+        if(PropertyLocation::where('id', $id)->exists()) {
+            $data = PropertyLocation::findorFail($id);
+            $data->delete();
 
             return response()->json([
-              "message" => "Property Category deleted"
+              "message" => "Property Location deleted"
             ], 202);
           } else {
             return response()->json([
-              "message" => "Property Category not found"
+              "message" => "Property Location not found"
             ], 404);
         }
     }
