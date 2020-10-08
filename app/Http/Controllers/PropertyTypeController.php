@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\PropertyCategory;
-use App\Category;
-use App\Property;
+use App\PropertyType;
 use Illuminate\Http\Request;
 
-class PropertyCategoryController extends Controller
+class PropertyTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +14,8 @@ class PropertyCategoryController extends Controller
      */
     public function index()
     {
-        $propertycats = PropertyCategory::all();
-        return response()->json(['propertycats' => $propertycats], 200);
+        $propertytypes = PropertyType::all();
+        return response()->json(['propertytypes' => $propertytypes], 200);
     }
 
     /**
@@ -39,24 +37,24 @@ class PropertyCategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'category_id' => 'required',
+            'type_id' => 'required',
             'property_id' => 'required',
         ]);
 
-        $propertycat = PropertyCategory::create($request->all());
+        $propertytype = PropertyType::create($request->all());
         return response()->json([
-            'message' => 'Property Category Created',
-            'propertycat' => $propertycat,
+            'message' => 'Property Type Created',
+            'propertytype' => $propertytype,
         ], 200);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\PropertyCategory  $propertyCategory
+     * @param  \App\PropertyType  $propertyType
      * @return \Illuminate\Http\Response
      */
-    public function show(PropertyCategory $propertyCategory)
+    public function show(PropertyType $propertyType)
     {
         //
     }
@@ -64,17 +62,17 @@ class PropertyCategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\PropertyCategory  $propertyCategory
+     * @param  \App\PropertyType  $propertyType
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        if (PropertyCategory::where('id', $id)->exists()) {
-            $propertycatDetails = PropertyCategory::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
-            return response($propertycatDetails, 200);
+        if (PropertyType::where('id', $id)->exists()) {
+            $propertytypeDetails = PropertyType::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
+            return response($propertytypeDetails, 200);
           } else {
             return response()->json([
-              "message" => "Property Category not found"
+              "message" => "Property Type not found"
             ], 404);
           }
     }
@@ -83,21 +81,21 @@ class PropertyCategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\PropertyCategory  $propertyCategory
+     * @param  \App\PropertyType  $propertyType
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        if (PropertyCategory::where('id', $id)->exists()) {
-            $propertycat = PropertyCategory::findorFail($id);
-            $propertycat->update($request->all());
+        if (PropertyType::where('id', $id)->exists()) {
+            $propertytype = PropertyType::findorFail($id);
+            $propertytype->update($request->all());
 
             return response()->json([
-                "message" => "Property Category updated successfully"
+                "message" => "Property Type updated successfully"
             ], 200);
             } else {
             return response()->json([
-                "message" => "Property Category not found"
+                "message" => "Property Type not found"
             ], 404);
 
         }
@@ -106,21 +104,21 @@ class PropertyCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\PropertyCategory  $propertyCategory
+     * @param  \App\PropertyType  $propertyType
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
     {
-        if(PropertyCategory::where('id', $id)->exists()) {
-            $propertycat = PropertyCategory::findorFail($id);
-            $propertycat->delete();
+        if(PropertyType::where('id', $id)->exists()) {
+            $propertytype = PropertyType::findorFail($id);
+            $propertytype->delete();
 
             return response()->json([
-              "message" => "Property Category deleted"
+              "message" => "Property Type deleted"
             ], 202);
           } else {
             return response()->json([
-              "message" => "Property Category not found"
+              "message" => "Property Type not found"
             ], 404);
         }
     }

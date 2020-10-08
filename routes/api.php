@@ -60,6 +60,12 @@ Route::get('/about', 'AboutUsController@index');
 
 Route::get('/policy', 'PrivacyPolicyController@index');
 
+Route::get('/property-cats', 'PropertyCategoryController@index');
+
+Route::get('/property-types', 'PropertyTypeController@index');
+
+Route::get('/property-locations', 'PropertyLocationController@index');
+
 Route::get('/terms', 'TermsConditionsController@index');
 
 Route::get('/search', 'PropertyController@getSearchResults');
@@ -113,9 +119,23 @@ Route::get('/property/{id}', 'PropertyController@edit');
 Route::put('/property/{id}', 'PropertyController@update');
 Route::delete('property/{id}', 'PropertyController@destroy');
 
-//Pproperty Gallery Images
-Route::get('/galleries', 'PropertyGalleryController@index');
-Route::post('/upload', 'PropertyGalleryController@store');
+//Property Category Controller Routes
+Route::post('/propertyCat/create', 'PropertyCategoryController@store');
+Route::post('/propertyCat/{id}', 'PropertyCategoryController@edit');
+Route::put('/propertyCat/{id}', 'PropertyCategoryController@update');
+Route::delete('/propertyCat/{id}', 'PropertyCategoryController@destroy');
+
+//Property Type Controller Routes
+Route::post('/propertyType/create', 'PropertyTypeController@store');
+Route::post('/propertyType/{id}', 'PropertyTypeController@edit');
+Route::put('/propertyType/{id}', 'PropertyTypeController@update');
+Route::delete('/propertyType/{id}', 'PropertyTypeController@destroy');
+
+//Property Location Controller Routes
+Route::post('/propertyLoc/create', 'PropertyLocationController@store');
+Route::post('/propertyLoc/{id}', 'PropertyLocationController@edit');
+Route::put('/propertyLoc/{id}', 'PropertyLocationController@update');
+Route::delete('/propertyLoc/{id}', 'PropertyLocationController@destroy');
 
 //Location Api Controller Routes
 Route::post('/location/create', 'LocationController@store');
