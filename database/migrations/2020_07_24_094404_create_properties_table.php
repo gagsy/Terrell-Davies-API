@@ -12,11 +12,11 @@ class CreatePropertiesTable extends Migration
      * @return void
      */
     public function up()
-    {
+    {   
         Schema::create('properties', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('category_id')->index();
-            $table->unsignedBigInteger('type_id')->index();
+            $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('type_id');
             $table->string('location');
             $table->string('title');
             $table->longText('description');
