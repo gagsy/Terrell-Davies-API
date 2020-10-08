@@ -85,11 +85,11 @@
                     Plans
                 </div>
 
-                {{--  @foreach ($plans as $plan)
+                @foreach ($plans as $plan)
                 <div>
                     <a href="{{ route('plan',['id'=>$plan->id])}}">{{ $plan->name }}</a>
                 </div>
-                @endforeach  --}}
+                @endforeach
             </div>
         </div>
     </body>
