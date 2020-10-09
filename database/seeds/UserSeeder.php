@@ -11,14 +11,17 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $user = \App\User::create([
+        $user = \App\User::create(
+            [
             'name' => 'Terrell Davies',
             'email' => 'admin@terrelldavies.com',
             'password' => bcrypt('admin'),
             'phone' => '08165983685',
             'userType' => 'admin',
             'isActivated' => 'Active',
-        ]);
+        ],
+    
+    );
         // $faker = Faker\Factory::create();
 
         // for($i = 0; $i < 50; $i++) {

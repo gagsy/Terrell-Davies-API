@@ -15,8 +15,9 @@ class CreatePropertiesTable extends Migration
     {   Schema::disableForeignKeyConstraints();
         Schema::create('properties', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('type_id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('category_id')->index();
+            $table->unsignedBigInteger('type_id')->index();
             $table->string('location');
             $table->string('title');
             $table->longText('description');
@@ -37,6 +38,10 @@ class CreatePropertiesTable extends Migration
             $table->integer('views')->nullable();
             $table->tinyInteger('visible')->default(1);
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('user_id')
+            ->references('id')
+            ->on('users')
+            ->onDelete('cascade');
             $table->foreign('type_id')->references('id')->on('types')->onDelete('cascade');
             $table->timestamps();
         });

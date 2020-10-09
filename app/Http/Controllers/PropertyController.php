@@ -7,6 +7,7 @@ use App\Category;
 use App\Type;
 use App\User;
 use DB;
+use Auth;
 use Image;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\File;
@@ -49,8 +50,10 @@ class PropertyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request, $id=null)
+    {   
+
+        
         $data = $request->validate([
             'category_id' => 'required',
             'type_id' => 'required',
@@ -73,27 +76,28 @@ class PropertyController extends Controller
             'status' => 'required',
             'feature' => 'required'
         ]);
+        $user_id = Auth::user()->user_id;
 
         DB::beginTransaction();
 
-        try{
+        // try{
 
-            $featuredImage = $request->file('image');
-            $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
-            $image_path = public_path('/images');
-            $featuredImage->move($image_path,$image_filename);
+        //     $featuredImage = $request->file('image');
+        //     $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
+        //     $image_path = public_path('/images');
+        //     $featuredImage->move($image_path,$image_filename);
 
-            $data['image'] = $image_filename;
+        //     $data['image'] = $image_filename;
 
 
-        }
-        catch(\Exception $e){
-            DB::rollback();
-            dump($e->getMessage());
-            return response()->json([
-                'message' => 'An error occured',
-            ], 400);
-        }
+        // }
+        // catch(\Exception $e){
+        //     DB::rollback();
+        //     dump($e->getMessage());
+        //     return response()->json([
+        //         'message' => 'An error occured',
+        //     ], 400);
+        // }
 
         $property = Property::create($data);
             return response()->json([

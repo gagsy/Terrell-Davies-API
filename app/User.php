@@ -2,14 +2,17 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Model implements AuthenticatableContract
 {
-    use Notifiable,  HasApiTokens;
+    use Notifiable, HasApiTokens, Authenticatable;
+
 
     /**
      * The attributes that are mass assignable.
@@ -37,4 +40,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function properties(){
+        return $this->hasMany('\App\Property');
+    }
 }
