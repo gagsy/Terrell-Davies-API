@@ -12,7 +12,8 @@ class CreatePropertiesTable extends Migration
      * @return void
      */
     public function up()
-    {
+    {   
+        Schema::disableForeignKeyConstraints();
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->index();
@@ -45,6 +46,7 @@ class CreatePropertiesTable extends Migration
             $table->foreign('type_id')->references('id')->on('types')->onDelete('cascade');
             $table->timestamps();
         });
+        Schema::enableForeignKeyConstraints();
     }
 
     /**
