@@ -19,7 +19,7 @@ class CreatePropertiesTable extends Migration
             $table->unsignedBigInteger('user_id')->index();
             $table->unsignedBigInteger('category_id')->index();
             $table->unsignedBigInteger('type_id')->index();
-            $table->string('location');
+            $table->unsignedBigInteger('location_id')->index();
             $table->string('title');
             $table->longText('description');
             $table->string('state');
@@ -42,6 +42,10 @@ class CreatePropertiesTable extends Migration
             $table->foreign('user_id')
             ->references('id')
             ->on('users')
+            ->onDelete('cascade');
+            $table->foreign('location_id')
+            ->references('id')
+            ->on('locations')
             ->onDelete('cascade');
             $table->foreign('type_id')->references('id')->on('types')->onDelete('cascade');
             $table->timestamps();

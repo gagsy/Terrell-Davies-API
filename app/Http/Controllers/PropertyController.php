@@ -58,7 +58,7 @@ class PropertyController extends Controller
             'user_id' => 'required',
             'category_id' => 'required',
             'type_id' => 'required',
-            'location' => 'required',
+            'location_id' => 'required',
             'title' => 'required',
             'description' => 'required',
             'state' => 'required',
@@ -169,7 +169,7 @@ class PropertyController extends Controller
             $property->update([
                 'category_id' => $data['category_id'],
                 'type_id' => $data['type_id'],
-                'location' => $data['location'],
+                'location_id' => $data['location_id'],
                 'title'=>$data['title'],
                 'description'=>$data['description'],
                 'state' => $data['state'],
@@ -232,7 +232,7 @@ class PropertyController extends Controller
                         ->orWhere('locality', 'like', "%{$data}%")
                         ->orWhere('type_id', 'like', "%{$data}%")
                         ->orWhere('category_id', 'like', "%{$data}%")
-                        ->orWhere('location', 'like', "%{$data}%")
+                        ->orWhere('location_id', 'like', "%{$data}%")
                         ->get();
 
         return response()->json([
