@@ -10,13 +10,10 @@ use App\User;
 use App\Subscription;
 use Auth;
 use Image;
-use Illuminate\Foundation\Auth\VerifiesEmails;
-use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Password;
 
 class AuthController extends Controller
 {
-    use VerifiesEmails;
     public function login(Request $request)
     {
 
@@ -38,44 +35,10 @@ class AuthController extends Controller
              $data['linkedin_profile'] = $user->linkedin_profile;
              $data['socialType'] = $user->socialType;
              $data['avatar'] = $user->avatar;
-             $data['message'] = "Login Successful";
-             if($user->email_verified_at !== NULL){
-                return response()->json($data, 200);
-             }else{
-                return response()->json(['error'=>'Please Verify Email'], 401);
-            }
-        }else{
-            return response()->json(['error'=>'Unauthorized'], 401);
-        }
-    }
+             return response()->json($data, 200);
+         }
 
-    public function register(Request $request)
-    {
-
-      $validator = Validator::make($request->all(), [
-        'name' => 'required',
-        'email' => 'required|email|unique:users',
-        'password' => 'required|min:8|',
-        'phone' => 'required|unique:users',
-        'userType' => 'required'
-      ]);
-
-      if ($validator->fails()) {
-          return response()->json(['error'=>$validator->errors()], 401);
-      }
-
-      $user = $request->all();
-      $user['password'] = Hash::make($user['password']);
-      $user = User::create($user);
-      $user->sendApiEmailVerificationNotification();
-      $success['message'] = 'Please confirm yourself by clicking on verify user button sent to you on your email';
-      $success['token'] =  $user->createToken('MyApp')-> accessToken;
-      $success['name'] =  $user->name;
-      $success['userType'] = $user->userType;
-      $success['address'] = $user->address;
-
-
-      return response()->json(['success'=>$success], 200);
+       return response()->json(['error'=>'Unauthorized'], 401);
     }
 
     public function AdminLogin(Request $request)
@@ -144,6 +107,32 @@ class AuthController extends Controller
                   ], 404);
             }
         }
+    }
+
+    public function register(Request $request)
+    {
+
+      $validator = Validator::make($request->all(), [
+        'name' => 'required',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|min:8|',
+        'userType' => 'required'
+      ]);
+
+      if ($validator->fails()) {
+          return response()->json(['error'=>$validator->errors()], 401);
+      }
+
+      $user = $request->all();
+      $user['password'] = Hash::make($user['password']);
+      $user = User::create($user);
+      $success['token'] =  $user->createToken('MyApp')-> accessToken;
+      $success['name'] =  $user->name;
+      $success['userType'] = $user->userType;
+      $success['address'] = $user->address;
+
+
+      return response()->json(['success'=>$success], 200);
     }
 
     public function userDetail()

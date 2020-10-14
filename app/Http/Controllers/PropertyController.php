@@ -100,6 +100,7 @@ class PropertyController extends Controller
                     'user_id' => auth('api')->user()->id,
                     'category_id' => $request->category_id,
                     'type_id' => $request->type_id,
+                    'location_id' => $request->location_id,
                     'location' => $request->location,
                     'title' => $request->title,
                     'description' => $request->description,
@@ -272,6 +273,20 @@ class PropertyController extends Controller
             return response()->json(404);
         }
 
+        // Search for a Property based on their bathroom.
+        if ($request->has('bathroom')) {
+            $property->where('bathroom', $request->input('bathroom'));
+        } else{
+            return response()->json(404);
+        }
+
+        // Search for a Property based on their budget.
+        if ($request->has('budget')) {
+            $property->where('budget', $request->input('budget'));
+        } else{
+            return response()->json(404);
+        }
+
         // Search for a Property based on their state.
         if ($request->has('state')) {
             $property->where('state', $request->input('state'));
@@ -279,10 +294,31 @@ class PropertyController extends Controller
             return response()->json(404);
         }
 
+        // Search for a Property based on their agent.
+        if ($request->has('user_id')) {
+            $property->where('user_id', $request->input('user_id'));
+        } else{
+            return response()->json(404);
+        }
+
         // Search for a Property based on their locality.
         if ($request->has('locality')) {
             $property->where('locality', $request->input('locality'));
         }else{
+            return response()->json(404);
+        }
+
+        // Search for a Property based on their Category.
+        if ($request->has('category_id')) {
+            $property->where('category_id', $request->input('category_id'));
+        } else{
+            return response()->json(404);
+        }
+
+        // Search for a Property based on their  Type.
+        if ($request->has('type_id')) {
+            $property->where('type_id', $request->input('type_id'));
+        } else{
             return response()->json(404);
         }
 
