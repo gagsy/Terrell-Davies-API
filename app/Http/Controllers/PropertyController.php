@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Property;
 use App\Category;
+use App\Location;
 use App\Type;
 use App\User;
 use DB;
@@ -25,6 +26,13 @@ class PropertyController extends Controller
      */
 
     public function index()
+    {
+        $property = Property::all();
+
+        return response()->json(['property' => $property], 200);
+    }
+
+    public function paginate()
     {
         // $property = Property::all();
         // // $propertytype_ids = Propertytype_id::get();
@@ -57,7 +65,7 @@ class PropertyController extends Controller
             'user_id' => 'required',
             'category_id' => 'required',
             'type_id' => 'required',
-            'location_id' => 'required',
+            'location_id' => 'nullable',
             'title' => 'required',
             'description' => 'required',
             'state' => 'required',
@@ -92,6 +100,7 @@ class PropertyController extends Controller
                     'user_id' => auth('api')->user()->id,
                     'category_id' => $request->category_id,
                     'type_id' => $request->type_id,
+                    'location_id' => $request->location_id,
                     'location' => $request->location,
                     'title' => $request->title,
                     'description' => $request->description,
@@ -246,13 +255,44 @@ class PropertyController extends Controller
                         ->orWhere('locality', 'like', "%{$data}%")
                         ->orWhere('type_id', 'like', "%{$data}%")
                         ->orWhere('category_id', 'like', "%{$data}%")
-                        ->orWhere('location_id', 'like', "%{$data}%")
+                        // ->orWhere('location_id', 'like', "%{$data}%")
                         ->get();
 
         return response()->json([
             'data' => $property
         ]);
     }
+
+    public function filter(Request $request, Property $property)
+    {
+        $property = $property->newQuery();
+        // Search for a Property based on their title.
+        if ($request->has('title')) {
+            $property->where('title', $request->input('title'));
+        } else{
+            return response()->json(404);
+        }
+
+        // Search for a Property based on their state.
+        if ($request->has('state')) {
+            $property->where('state', $request->input('state'));
+        }else{
+            return response()->json(404);
+        }
+
+        // Search for a Property based on their locality.
+        if ($request->has('locality')) {
+            $property->where('locality', $request->input('locality'));
+        }else{
+            return response()->json(404);
+        }
+
+        // Continue for all of the filters.
+
+        // Get the results and return them.
+        return $property->get();
+    }
+
     public function propertyCount(){
         $propertyCount = Property::count();
         return response()-> json([

@@ -18,6 +18,8 @@ class CreatePlansTable extends Migration
             $table->string('name');
             $table->double('price', 10 ,2);
             $table->string('duration');
+            $table->string('discount_month1')->nullable();
+            $table->string('discount_month2')->nullable();
             $table->string('maximum_listings');
             $table->string('maximum_premium_listings');
             $table->string('max_featured_ad_listings');

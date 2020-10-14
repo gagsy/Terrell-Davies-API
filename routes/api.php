@@ -47,7 +47,7 @@ Route::get('/property-locations', 'PropertyLocationController@index');
 Route::get('/property-features', 'PropertyFeatureController@index');
 
 Route::get('/properties', 'PropertyController@index');
-Route::get('properties/{page?}', 'PropertyController@index');
+Route::get('properties/{page?}', 'PropertyController@paginate');
 
 Route::get('/locations', 'LocationController@index');
 
@@ -73,7 +73,9 @@ Route::get('/property-locations', 'PropertyLocationController@index');
 
 Route::get('/terms', 'TermsConditionsController@index');
 
-Route::get('/search', 'PropertyController@getSearchResults');
+// Route::get('/search', 'PropertyController@getSearchResults');
+
+Route::get('/search', "PropertyController@filter");
 
 Route::get('/users', 'Api\AuthController@users');
 Route::post('/create-category', 'CategoryController@store');
