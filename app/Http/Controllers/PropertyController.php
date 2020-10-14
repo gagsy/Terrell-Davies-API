@@ -100,7 +100,6 @@ class PropertyController extends Controller
                     'user_id' => auth('api')->user()->id,
                     'category_id' => $request->category_id,
                     'type_id' => $request->type_id,
-                    'location_id' => $request->location_id,
                     'location' => $request->location,
                     'title' => $request->title,
                     'description' => $request->description,
