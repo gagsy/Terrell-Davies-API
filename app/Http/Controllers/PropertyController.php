@@ -181,6 +181,11 @@ class PropertyController extends Controller
                 $picture->move($image_path,$image_filename);
 
                 $data['image'] = $image_filename;
+
+                $image_path1 = public_path('FeaturedProperty_images/'.$property->image);
+                if(File::exists($image_path1)) {
+                    File::delete($image_path1);
+                }
             }
             catch(Exception $e){
                 return response()->json([

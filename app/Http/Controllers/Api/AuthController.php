@@ -10,6 +10,7 @@ use App\User;
 use App\Subscription;
 use Input;
 use Auth;
+use Illuminate\Support\Facades\File;
 use Image;
 use Illuminate\Support\Facades\Password;
 
@@ -85,12 +86,17 @@ class AuthController extends Controller
         $user_id = Auth::user()->id;
         $users = User::find($user_id);
         $request->validate([
-            'avatar' => 'required|image|max:4096',
+            'avatar' => 'nullable|image|max:4096',
         ]);
         $avatar = $request->file('avatar');
         $filename = time() . '.' . $avatar->getClientOriginalExtension();
         $image_path = public_path('/Avatar_images');
         $avatar->move($image_path,$filename);
+
+        $image_path1 = public_path('Avatar_images/'.$users->avatar);
+        if(File::exists($image_path1)) {
+            File::delete($image_path1);
+        }
 
 
         $users->name = $request->name;
