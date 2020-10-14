@@ -8,6 +8,7 @@ use Validator;
 use Hash;
 use App\User;
 use App\Subscription;
+use Input;
 use Auth;
 use Image;
 use Illuminate\Support\Facades\Password;
@@ -56,8 +57,8 @@ class AuthController extends Controller
        return response()->json(['error'=>'Unauthorized'], 401,);
     }
     public function adminUpdate(Request $request, $id=null){
-        $user_id = Auth::user()->id;
-        //$user = Auth::user();
+        $user_id = auth('api')->user()->id;
+        $user = User::find($user_id);
         $user->name = $request['name'];
         $user->address = $request['address'];
         $user->locality = $request['locality'];
@@ -80,33 +81,53 @@ class AuthController extends Controller
             }
     }
 
-    public function updateProfile(Request $request){
-        if($request->all()){
-            $avatar = $request->file('avatar');
-            $filename = time() . '.' . $avatar->getClientOriginalExtension();
-            Image::make($avatar)->resize(300,300)->save( public_path('/Avatar_images/' . $filename) );
-            $avatarPath = '/Avatar_images/'.$filename;
+    public function updateProfile(Request $request, $id=null){
+        $user_id = Auth::user()->id;
+        $users = User::find($user_id);
+        $request->validate([
+            'avatar' => 'required|image|max:4096',
+        ]);
+        $avatar = $request->file('avatar');
+        $filename = time() . '.' . $avatar->getClientOriginalExtension();
+        $image_path = public_path('/Avatar_images');
+        $avatar->move($image_path,$filename);
 
-            $user = Auth::user();
-            $user->name = $request['name'];
-            //$user->email = $request['email'];
-            //$user->address = $request['address'];
-            $user->phone = $request['phone'];
-            $user->avatar = $filename;
-            $user->save();
 
-            $affected_row = $user->save();
+        $users->name = $request->name;
+        $users->address = $request->address;
+        $users->locality = $request->locality;
+        $users->state = $request->state;
+        $users->country = $request->country;
+        $users->phone = $request->phone;
+        $users->company_name = $request->company_name;
+        $users->userType = $request->userType;
+        $users->services = $request->services;
+        $users->facebook_profile = $request->facebook_profile;
+        $users->twitter_profile = $request->twitter_profile;
+        $users->linkedin_profile = $request->linkedin_profile;
+        $users->socialType = $request->socialType;
+        $users->avatar = $filename;
+        $users->save();
 
-            if (!empty($affected_row)) {
-                return response()->json([
-                   'message' => 'Profile Updated',
-               ], 200);
-           } else {
-                 return response()->json([
-                    "message" => "Operation Failed",
-                  ], 404);
-            }
-        }
+        $data[] = [
+            'id'=>$users->id,
+            'name'=>$users->name,
+            'address' => $users->address,
+            'locality' => $users->locality,
+            'state' => $users->state,
+            'country' => $users->country,
+            'phone' => $users->phone,
+            'company_name' => $users->company_name,
+            'userType' => $users->userType,
+            'services' => $users->services,
+            'facebook_profile' => $users->facebook_profile,
+            'twitter_profile' => $users->twitter_profile,
+            'linkedin_profile' => $users->linkedin_profile,
+            'socialType' => $users->socialType,
+            'avatar'=>$users->avatar,
+            'status'=>200,
+        ];
+        return response()->json($data);
     }
 
     public function register(Request $request)
@@ -137,9 +158,10 @@ class AuthController extends Controller
 
     public function userDetail()
     {
-        $user = Auth::user();
+        $user_id = auth('api')->user()->id;
+        $userDetails = User::find($user_id);
 
-        return response()->json(['user' => $user], 200);
+        return response()->json(['data' => $userDetails], 200);
     }
 
     public function logout(Request $request)

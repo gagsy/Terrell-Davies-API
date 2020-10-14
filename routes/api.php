@@ -43,10 +43,13 @@ Route::get('/types', 'TypeController@index');
 Route::post('/submit-request', 'PropertyRequestController@store');
 
 Route::get('/property-type', 'PropertyTypeController@index');
+
 Route::get('/property-locations', 'PropertyLocationController@index');
+
 Route::get('/property-features', 'PropertyFeatureController@index');
 
 Route::get('/properties', 'PropertyController@index');
+
 Route::get('properties/{page?}', 'PropertyController@paginate');
 
 Route::get('/locations', 'LocationController@index');
@@ -106,19 +109,25 @@ Route::get('/subscriptions', 'SubscriptionController@index');
 Route::group(['middleware' => 'auth:api'], function(){
     //Property Api Controller Routes
     Route::post('/property/create', 'PropertyController@store');
+
+    Route::get('/user-detail', 'Api\AuthController@userDetail');
+
+    Route::post('/profile-update', 'Api\AuthController@updateProfile');
+
+    Route::post('/admin-profile-update', 'Api\AuthController@adminUpdate');
 });
 
 
-Route::post('/admin-profile-update', 'Api\AuthController@adminUpdate');
+
 Route::put('/toggle-user', 'Api\AuthController@toggleUser');
-Route::get('/user-detail', 'Api\AuthController@userDetail');
+
 //Type Api Controller Routes
 Route::post('/type/create', 'TypeController@store');
 Route::get('/types/{id}', 'TypeController@show');
 Route::put('/types/{id}', 'TypeController@update');
 Route::delete('types/{id}', 'TypeController@destroy');
 
-Route::post('/profile-update', 'Api\AuthController@updateProfile');
+
 
 
 
