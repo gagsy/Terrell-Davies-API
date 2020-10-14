@@ -20,16 +20,21 @@ Route::post('/admin-login', 'Api\AuthController@AdminLogin');
 
 Route::post('register', 'Api\AuthController@register')->name('register');
 
-Route::get('check-auth', 'Api\AuthController@checkAuth')->name('logout');
+Route::get('email/verify/{id}', 'VerificationApiController@verify')->name('verificationapi.verify');
+
+Route::get('email/resend', 'VerificationApiController@resend')->name('verificationapi.resend');
 
 Route::post('password/email', 'Api\AuthController@forgot');
 
 Route::post('password/reset', 'ForgotPasswordController@reset');
 
+
+
 Route::get('logout', 'Api\AuthController@logout')->name('logout');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+
 });
 
 Route::get('/types', 'TypeController@index');
@@ -42,7 +47,7 @@ Route::get('/property-locations', 'PropertyLocationController@index');
 Route::get('/property-features', 'PropertyFeatureController@index');
 
 Route::get('/properties', 'PropertyController@index');
-Route::get('properties/{page?}', 'PropertyController@index');
+Route::get('properties/{page?}', 'PropertyController@paginate');
 
 Route::get('/locations', 'LocationController@index');
 
@@ -68,7 +73,9 @@ Route::get('/property-locations', 'PropertyLocationController@index');
 
 Route::get('/terms', 'TermsConditionsController@index');
 
-Route::get('/search', 'PropertyController@getSearchResults');
+// Route::get('/search', 'PropertyController@getSearchResults');
+
+Route::get('/search', "PropertyController@filter");
 
 Route::get('/users', 'Api\AuthController@users');
 Route::post('/create-category', 'CategoryController@store');
@@ -97,7 +104,8 @@ Route::get('/subscriptions', 'SubscriptionController@index');
 
 
 Route::group(['middleware' => 'auth:api'], function(){
-
+    //Property Api Controller Routes
+    Route::post('/property/create', 'PropertyController@store');
 });
 
 
@@ -113,8 +121,7 @@ Route::delete('types/{id}', 'TypeController@destroy');
 Route::post('/profile-update', 'Api\AuthController@updateProfile');
 
 
-//Property Api Controller Routes
-Route::post('/property/create', 'PropertyController@store');
+
 Route::get('/property/{id}', 'PropertyController@edit');
 Route::put('/property/{id}', 'PropertyController@update');
 Route::delete('property/{id}', 'PropertyController@destroy');

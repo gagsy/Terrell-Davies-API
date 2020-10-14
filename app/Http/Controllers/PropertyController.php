@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Property;
 use App\Category;
+use App\Location;
 use App\Type;
 use App\User;
 use DB;
 use Auth;
 use Image;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
@@ -24,6 +26,13 @@ class PropertyController extends Controller
      */
 
     public function index()
+    {
+        $property = Property::all();
+
+        return response()->json(['property' => $property], 200);
+    }
+
+    public function paginate()
     {
         // $property = Property::all();
         // // $propertytype_ids = Propertytype_id::get();
@@ -50,15 +59,13 @@ class PropertyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $id = null)
+    public function store(Request $request)
     {
-
-
-        $data = $request->validate([
+        $request->validate([
             'user_id' => 'required',
             'category_id' => 'required',
             'type_id' => 'required',
-            'location_id' => 'required',
+            'location_id' => 'nullable',
             'title' => 'required',
             'description' => 'required',
             'state' => 'required',
@@ -73,40 +80,56 @@ class PropertyController extends Controller
             'bedroom' => 'required',
             'bathroom' => 'required',
             'toilet' => 'required',
-            'video_link' => '',
+            'video_link' => 'nullable',
             'status' => 'required',
             'feature' => 'required'
         ]);
 
 
         DB::beginTransaction();
+        if(Auth::check()) {
+            if ($request->hasFile('image')) {
+                foreach ($request->file('image') as $picture) {
+                    $pictures[] = $fileName = time().'.'.$picture->getClientOriginalExtension();
+                    $image_path = public_path('/FeaturedProperty_images');
+                    $picture->move($image_path,$fileName);
+                    // Storage::put('public/' . $fileName, file_get_contents($picture));
+                }
 
-        try{
-            $user_id = Auth::user()->id;
-            $data['user_id'] = $user_id;
+                $property = Property::create([
+                    'user_id' => auth('api')->user()->id,
+                    'category_id' => $request->category_id,
+                    'type_id' => $request->type_id,
+                    'location_id' => $request->location_id,
+                    'location' => $request->location,
+                    'title' => $request->title,
+                    'description' => $request->description,
+                    'state' => $request->state,
+                    'area' => $request->area,
+                    'total_area' => $request->total_area,
+                    'market_status' => $request->market_status,
+                    'parking' => $request->parking,
+                    'locality' => $request->locality,
+                    'budget' => $request->budget,
+                    'image' => implode(',', $pictures),
+                    'bedroom' => $request->bedroom,
+                    'bathroom' => $request->bathroom,
+                    'toilet' => $request->toilet,
+                    'video_link' => $request->video_link,
+                    'status' => $request->status,
+                    'feature' => $request->feature,
+                ]);
 
-            $featuredImage = $request->file('image');
-            $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
-            $image_path = public_path('/FeaturedProperty_images');
-            $featuredImage->move($image_path,$image_filename);
-
-            $data['image'] = $image_filename;
-
-
-        }
-        catch(\Exception $e){
-            DB::rollback();
-            dump($e->getMessage());
+                return response()->json([
+                    'message' => 'Property Created!',
+                    'property' => $property,
+                ], 201);
+            }
+        } else {
             return response()->json([
-                'message' => 'An error occured',
-            ], 400);
+                'message' => 'You are not logged in!'
+            ], 201);
         }
-
-        $property = Property::create($data);
-            return response()->json([
-                'message' => 'Property Created',
-                'property' => $property,
-            ], 200);
     }
 
     /**
@@ -152,10 +175,10 @@ class PropertyController extends Controller
             $data = $request->all();
             try{
 
-                $featuredImage = $request->file('image');
-                $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
+                $picture = $request->file('image');
+                $image_filename = time().'.'.$picture->getClientOriginalExtension();
                 $image_path = public_path('/FeaturedProperty_images');
-                $featuredImage->move($image_path,$image_filename);
+                $picture->move($image_path,$image_filename);
 
                 $data['image'] = $image_filename;
             }
@@ -232,13 +255,79 @@ class PropertyController extends Controller
                         ->orWhere('locality', 'like', "%{$data}%")
                         ->orWhere('type_id', 'like', "%{$data}%")
                         ->orWhere('category_id', 'like', "%{$data}%")
-                        ->orWhere('location_id', 'like', "%{$data}%")
+                        // ->orWhere('location_id', 'like', "%{$data}%")
                         ->get();
 
         return response()->json([
             'data' => $property
         ]);
     }
+
+    public function filter(Request $request, Property $property)
+    {
+        $property = $property->newQuery();
+        // Search for a Property based on their title.
+        if ($request->has('title')) {
+            $property->where('title', $request->input('title'));
+        } else{
+            return response()->json(404);
+        }
+
+        // Search for a Property based on their bathroom.
+        if ($request->has('bathroom')) {
+            $property->where('bathroom', $request->input('bathroom'));
+        } else{
+            return response()->json(404);
+        }
+
+        // Search for a Property based on their budget.
+        if ($request->has('budget')) {
+            $property->where('budget', $request->input('budget'));
+        } else{
+            return response()->json(404);
+        }
+
+        // Search for a Property based on their state.
+        if ($request->has('state')) {
+            $property->where('state', $request->input('state'));
+        }else{
+            return response()->json(404);
+        }
+
+        // Search for a Property based on their agent.
+        if ($request->has('user_id')) {
+            $property->where('user_id', $request->input('user_id'));
+        } else{
+            return response()->json(404);
+        }
+
+        // Search for a Property based on their locality.
+        if ($request->has('locality')) {
+            $property->where('locality', $request->input('locality'));
+        }else{
+            return response()->json(404);
+        }
+
+        // Search for a Property based on their Category.
+        if ($request->has('category_id')) {
+            $property->where('category_id', $request->input('category_id'));
+        } else{
+            return response()->json(404);
+        }
+
+        // Search for a Property based on their  Type.
+        if ($request->has('type_id')) {
+            $property->where('type_id', $request->input('type_id'));
+        } else{
+            return response()->json(404);
+        }
+
+        // Continue for all of the filters.
+
+        // Get the results and return them.
+        return $property->get();
+    }
+
     public function propertyCount(){
         $propertyCount = Property::count();
         return response()-> json([

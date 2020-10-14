@@ -12,14 +12,13 @@ class CreatePropertiesTable extends Migration
      * @return void
      */
     public function up()
-    {   
-        Schema::disableForeignKeyConstraints();
+    {
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->index();
             $table->unsignedBigInteger('category_id')->index();
             $table->unsignedBigInteger('type_id')->index();
-            $table->unsignedBigInteger('location_id')->index();
+            $table->unsignedBigInteger('location_id')->index()->nullable();
             $table->string('title');
             $table->longText('description');
             $table->string('state');
