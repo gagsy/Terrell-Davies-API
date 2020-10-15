@@ -17,7 +17,7 @@ class BlogController extends Controller
         // $blogs = Blog::all();
         // return response()->json(['blogs' => $blogs], 200);
 
-        $blogs = Blog::paginate(5);
+        $blogs = Blog::paginate(6);
         return $blogs;
     }
 
