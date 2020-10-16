@@ -114,12 +114,14 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     Route::post('/profile-update', 'Api\AuthController@updateProfile');
 
+    Route::post('/profile/image/upload', 'Api\AuthController@ProfileImageUpload');
+
     Route::post('/admin-profile-update', 'Api\AuthController@adminUpdate');
 });
 
 
 
-Route::put('/toggle-user', 'Api\AuthController@toggleUser');
+
 
 //Type Api Controller Routes
 Route::post('/type/create', 'TypeController@store');
@@ -164,12 +166,6 @@ Route::post('/feature/create', 'FeatureController@store');
 Route::get('/features/{id}', 'FeatureController@show');
 Route::put('/features/{id}', 'FeatureController@update');
 Route::delete('features/{id}', 'FeatureController@destroy');
-
-//Subscription Plan Api Controller Routes
-Route::post('/create-subscription-plan', 'SubscriptionPlansController@store');
-Route::get('/subscription-plans/{id}', 'SubscriptionPlansController@edit');
-Route::put('/subscription-plans/{id}', 'SubscriptionPlansController@update');
-Route::delete('subscription-planFs/{id}', 'SubscriptionPlansController@destroy');
 
 //Category Api Controller Routes
 Route::get('/category/{id}', 'CategoryController@edit');
