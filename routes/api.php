@@ -92,7 +92,7 @@ Route::get('/account','Api\AuthController@account');
 Route::get('/property-count','PropertyController@propertyCount');
 
 Route::get('/plans', 'PlanController@index');
-Route::post('/plan/create', 'PlanController@store');
+
 Route::get('/plan/{id}', 'PlanController@show');
 Route::delete('plan/{id}', 'PlanController@destroy');
 Route::put('plan/{id}', 'PlanController@update');
@@ -117,6 +117,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('/profile/image/upload', 'Api\AuthController@ProfileImageUpload');
 
     Route::post('/admin-profile-update', 'Api\AuthController@adminUpdate');
+
+    Route::post('/plan/create', 'PlanController@store');
 });
 
 

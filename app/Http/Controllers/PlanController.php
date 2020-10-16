@@ -40,9 +40,11 @@ class PlanController extends Controller
             'name' => 'required',
             'price' => 'required',
             'duration' => 'required',
-            'maximum_listings' => 'required',
-            'maximum_premium_listings' => 'required',
-            'max_featured_ad_listings' => 'required',
+            'discount_month1' => 'nullable',
+            'discount_month2' => 'nullable',
+            'maximum_listings' => 'nullable',
+            'maximum_premium_listings' => 'nullable',
+            'max_featured_ad_listings' => 'nullable',
         ]);
 
         $plan = Plan::create($request->all());
