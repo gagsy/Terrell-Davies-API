@@ -85,19 +85,6 @@ class AuthController extends Controller
     public function updateProfile(Request $request, $id=null){
         $user_id = Auth::user()->id;
         $users = User::find($user_id);
-        $request->validate([
-            'avatar' => 'nullable|image|max:4096',
-        ]);
-        $avatar = $request->file('avatar');
-        $filename = time() . '.' . $avatar->getClientOriginalExtension();
-        $image_path = public_path('/Avatar_images');
-        $avatar->move($image_path,$filename);
-
-        $image_path1 = public_path('Avatar_images/'.$users->avatar);
-        if(File::exists($image_path1)) {
-            File::delete($image_path1);
-        }
-
 
         $users->name = $request->name;
         $users->address = $request->address;
@@ -112,7 +99,6 @@ class AuthController extends Controller
         $users->twitter_profile = $request->twitter_profile;
         $users->linkedin_profile = $request->linkedin_profile;
         $users->socialType = $request->socialType;
-        $users->avatar = $filename;
         $users->save();
 
         $data[] = [
@@ -130,8 +116,34 @@ class AuthController extends Controller
             'twitter_profile' => $users->twitter_profile,
             'linkedin_profile' => $users->linkedin_profile,
             'socialType' => $users->socialType,
+            'message'=> 'Your Account settings are saved',
+        ];
+        return response()->json($data);
+    }
+
+    public function ProfileImageUpload(Request $request, $id=null){
+        $user_id = Auth::user()->id;
+        $users = User::find($user_id);
+        $request->validate([
+            'avatar' => 'nullable|image|max:4096',
+        ]);
+        $avatar = $request->file('avatar');
+        $filename = time() . '.' . $avatar->getClientOriginalExtension();
+        $image_path = public_path('/Avatar_images');
+        $avatar->move($image_path,$filename);
+
+        $image_path1 = public_path('Avatar_images/'.$users->avatar);
+        if(File::exists($image_path1)) {
+            File::delete($image_path1);
+        }
+
+        $users->avatar = $filename;
+        $users->save();
+
+        $data[] = [
+            'id'=>$users->id,
             'avatar'=>$users->avatar,
-            'status'=>200,
+            'message'=>'Image Uploaded',
         ];
         return response()->json($data);
     }
