@@ -15,14 +15,14 @@ class CreatePlansTable extends Migration
     {
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->text('name');
             $table->double('price', 10 ,2);
             $table->string('duration');
             $table->string('discount_month1')->nullable();
             $table->string('discount_month2')->nullable();
-            $table->string('maximum_listings');
-            $table->string('maximum_premium_listings');
-            $table->string('max_featured_ad_listings');
+            $table->string('maximum_listings')->nullable();
+            $table->string('maximum_premium_listings')->nullable();
+            $table->string('max_featured_ad_listings')->nullable();
             $table->timestamps();
         });
     }
