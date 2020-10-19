@@ -339,4 +339,13 @@ class PropertyController extends Controller
             'propertyCount' => $propertyCount
         ], 200);
     }
+
+    public function user_property_count(){
+        $user_id = auth('api')->user()->id;
+
+        $user_property_Count = Property::where('user_id', $user_id)->count();
+            return response()-> json([
+            'user_property_listing_count' => $user_property_Count
+        ], 200);
+    }
 }
