@@ -106,6 +106,7 @@ Route::get('/subscriptions', 'SubscriptionController@index');
 
 
 
+
 Route::group(['middleware' => 'auth:api'], function(){
     //Property Api Controller Routes
     Route::post('/property/create', 'PropertyController@store');
@@ -119,6 +120,10 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('/admin-profile-update', 'Api\AuthController@adminUpdate');
 
     Route::post('/plan/create', 'PlanController@store');
+
+    Route::get('/user/property/count','PropertyController@user_property_count');
+
+
 });
 
 
