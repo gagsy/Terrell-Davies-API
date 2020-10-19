@@ -7,6 +7,7 @@ use App\Category;
 use App\Location;
 use App\Type;
 use App\User;
+use EloquentBuilder;
 use DB;
 use Auth;
 use Image;
@@ -24,11 +25,9 @@ class PropertyController extends Controller
      *
      *
      */
-
     public function index()
     {
         $property = Property::all();
-
         return response()->json(['property' => $property], 200);
     }
 
@@ -251,7 +250,7 @@ class PropertyController extends Controller
     }
 
     public function getsearchResults(Request $request) {
-        $data = $request->get('data');
+        $data = $request->has('data');
 
         $property = Property::where('title', 'like', "%{$data}%")
                         ->orWhere('bathroom', 'like', "%{$data}%")
@@ -259,77 +258,49 @@ class PropertyController extends Controller
                         ->orWhere('state', 'like', "%{$data}%")
                         ->orWhere('locality', 'like', "%{$data}%")
                         ->orWhere('type_id', 'like', "%{$data}%")
-                        ->orWhere('category_id', 'like', "%{$data}%")
-                        // ->orWhere('location_id', 'like', "%{$data}%")
-                        ->get();
+                        ->orWhere('category_id', 'like', "%{$data}%");
+                        // ->orWhere('location_id', 'like', "%{$data}%");
 
-        return response()->json([
-            'data' => $property
-        ]);
+
+        return $property->get();
     }
 
-    public function filter(Request $request, Property $property)
+    public function filter(Request $request)
     {
-        $property = $property->newQuery();
-        // Search for a Property based on their title.
-        if ($request->has('title')) {
-            $property->where('title', $request->input('title'));
-        } else{
-            return response()->json(404);
+        $property = Property::where('status', 'Publish');
+        if ($request->has('title','bathroom','budget', 'state', 'locality', 'type_id', 'category_id')) {
+            $property->where('title', $request->title);
+            $property->orWhere('bathroom', $request->bathroom);
+            $property->orWhere('budget', $request->budget);
+            $property->orWhere('state', $request->state);
+            $property->orWhere('locality', $request->locality);
+            $property->orWhere('type_id', $request->type_id);
+            $property->orWhere('category_id', $request->category_id);
         }
 
-        // Search for a Property based on their bathroom.
-        if ($request->has('bathroom')) {
-            $property->where('bathroom', $request->input('bathroom'));
-        } else{
-            return response()->json(404);
-        }
+        // if ($request->has('bathroom')) {
+        //     $property->where('bathroom', $request->bathroom);
+        // }
 
-        // Search for a Property based on their budget.
-        if ($request->has('budget')) {
-            $property->where('budget', $request->input('budget'));
-        } else{
-            return response()->json(404);
-        }
+        // if ($request->has('budget')) {
+        //     $property->where('budget', $request->budget);
+        // }
 
-        // Search for a Property based on their state.
-        if ($request->has('state')) {
-            $property->where('state', $request->input('state'));
-        }else{
-            return response()->json(404);
-        }
+        // if ($request->has('state')) {
+        //     $property->where('state', $request->state);
+        // }
 
-        // Search for a Property based on their agent.
-        if ($request->has('user_id')) {
-            $property->where('user_id', $request->input('user_id'));
-        } else{
-            return response()->json(404);
-        }
+        // if ($request->has('locality')) {
+        //     $property->where('locality', $request->locality);
+        // }
 
-        // Search for a Property based on their locality.
-        if ($request->has('locality')) {
-            $property->where('locality', $request->input('locality'));
-        }else{
-            return response()->json(404);
-        }
+        // if ($request->has('type_id')) {
+        //     $property->where('type_id', $request->type_id);
+        // }
 
-        // Search for a Property based on their Category.
-        if ($request->has('category_id')) {
-            $property->where('category_id', $request->input('category_id'));
-        } else{
-            return response()->json(404);
-        }
-
-        // Search for a Property based on their  Type.
-        if ($request->has('type_id')) {
-            $property->where('type_id', $request->input('type_id'));
-        } else{
-            return response()->json(404);
-        }
-
-        // Continue for all of the filters.
-
-        // Get the results and return them.
+        // if ($request->has('category_id')) {
+        //     $property->where('category_id', $request->category_id);
+        // }
         return $property->get();
     }
 

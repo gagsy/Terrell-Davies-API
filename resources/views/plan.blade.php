@@ -91,17 +91,34 @@
                         <p>
                             <div>
                                 Name:{{ $plan->name}}<br>
-                                Duration:{{ $plan->duration}}<br>
+                                Duration: <select><br>
+                                Listings: {{ $plan->maximum_listings}}<br>
+                                @if ($plan->maximum_premium_listings == null)
+                                    Premium Listings: 0<br>
+                                @else
+                                    Premium Listings: {{ $plan->maximum_premium_listings}}<br>
+                                @endif
+
+                                @if ($plan->max_featured_ad_listings == null)
+                                    Featured Ad Listings: 0<br>
+                                @else
+                                    Featured Ad Listings: {{ $plan->max_featured_ad_listings}}<br>
+                                @endif
+
                                 ₦ {{ $plan->price }}
+
                             </div>
                         </p>
-                        <input type="hidden" name="payment_method" value="both" />
-                        <input type="hidden" name="email" value="{{ Auth::user()->email }}" />
-                        <input type="hidden" name="currency" value="NGN" />
-                        <input type="hidden" name="country" value="NG" />
-                        <input type="hidden" name="amount" value="{{ $plan->price }}" />
-                        <input type="hidden" name="description" value="Flutterwave Jersey" />
-                        <button type="submit" class="btn btn-primary">Checkout and Pay</button>
+                        @if ($plan->price == 0)
+                        @else
+                            <input type="hidden" name="payment_method" value="both" />
+                            <input type="hidden" name="email" value="{{ Auth::user()->email }}" />
+                            <input type="hidden" name="currency" value="NGN" />
+                            <input type="hidden" name="country" value="NG" />
+                            <input type="hidden" name="amount" value="{{ $plan->price }}" />
+                            <input type="hidden" name="description" value="Flutterwave Jersey" />
+                            <button type="submit" class="btn btn-primary">Checkout and Pay</button>
+                        @endif
                         </p>
                       </div>
                     </div>

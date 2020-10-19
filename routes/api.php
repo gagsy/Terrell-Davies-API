@@ -78,7 +78,7 @@ Route::get('/terms', 'TermsConditionsController@index');
 
 // Route::get('/search', 'PropertyController@getSearchResults');
 
-Route::get('/search', "PropertyController@filter");
+Route::get('/search', 'PropertyController@filter');
 
 Route::get('/users', 'Api\AuthController@users');
 Route::post('/create-category', 'CategoryController@store');
