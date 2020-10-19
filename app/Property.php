@@ -3,6 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Auth;
+use Session;
+use DB;
 
 class Property extends Model
 {
@@ -31,6 +34,12 @@ class Property extends Model
 
     public function user_id(){
         $this->belongsTo('App\User', 'user_id');
+    }
+
+    public static function shortlistCount(){
+        $user_id = auth('api')->user()->id;
+        $shortlistCount = DB::table('short_lists')->where('user_id', $user_id)->sum('quantity');
+        return $shortlistCount;
     }
 
     public function category()
