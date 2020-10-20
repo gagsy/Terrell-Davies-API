@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Property;
 use App\Category;
 use App\Location;
+use App\ShortList;
 use App\Type;
 use App\User;
-use EloquentBuilder;
 use DB;
 use Auth;
 use Image;
@@ -82,7 +82,7 @@ class PropertyController extends Controller
             'toilet' => 'required',
             'video_link' => 'nullable',
             'status' => 'required',
-            'feature' => 'required'
+            'feature' => 'required',
         ]);
 
 
@@ -95,6 +95,11 @@ class PropertyController extends Controller
                     $picture->move($image_path,$fileName);
                     // Storage::put('public/' . $fileName, file_get_contents($picture));
                 }
+
+                $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                $pin = mt_rand(1000000, 9999999)
+                        . mt_rand(1000000, 9999999)
+                        . $characters[rand(0, strlen($characters) - 1)];
 
                 $property = Property::create([
                     'user_id' => auth('api')->user()->id,
@@ -118,6 +123,7 @@ class PropertyController extends Controller
                     'video_link' => $request->video_link,
                     'status' => $request->status,
                     'feature' => $request->feature,
+                    'ref_no' => str_shuffle($pin),
                 ]);
 
                 return response()->json([
