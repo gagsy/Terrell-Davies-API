@@ -40,7 +40,7 @@ class AuthController extends Controller
              return response()->json($data, 200);
          }
 
-       return response()->json(['error'=>'Unauthorized'], 401);
+       return response()->json(['error'=>'Wrong Email or Password'], 401);
     }
 
     public function AdminLogin(Request $request)
