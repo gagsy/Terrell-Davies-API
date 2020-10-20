@@ -90,7 +90,7 @@ class PropertyController extends Controller
         if(Auth::check()) {
             if ($request->hasFile('image')) {
                 foreach ($request->file('image') as $picture) {
-                    $pictures[] = $fileName = time().'.'.$picture->getClientOriginalExtension();
+                    $pictures[] = $fileName = time().'.'.$picture->getClientOriginalName();
                     $image_path = public_path('/FeaturedProperty_images');
                     $picture->move($image_path,$fileName);
                     // Storage::put('public/' . $fileName, file_get_contents($picture));
@@ -125,10 +125,12 @@ class PropertyController extends Controller
                     'feature' => $request->feature,
                     'ref_no' => str_shuffle($pin),
                 ]);
+                //$property =
 
                 return response()->json([
                     'message' => 'Property Created!',
                     'property' => $property,
+                    'image_path' => '/FeaturedProperty_images/'.implode(',', $pictures),
                 ], 201);
             }
         } else {

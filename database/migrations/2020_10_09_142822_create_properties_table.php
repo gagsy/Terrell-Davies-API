@@ -20,6 +20,7 @@ class CreatePropertiesTable extends Migration
             $table->unsignedBigInteger('type_id')->index();
             $table->unsignedBigInteger('location_id')->index()->nullable();
             $table->string('title');
+            $table->string('location');
             $table->longText('description');
             $table->string('state');
             $table->string('area');
@@ -50,7 +51,6 @@ class CreatePropertiesTable extends Migration
             $table->foreign('type_id')->references('id')->on('types')->onDelete('cascade');
             $table->timestamps();
         });
-        Schema::enableForeignKeyConstraints();
     }
 
     /**
