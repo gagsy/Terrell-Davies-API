@@ -121,6 +121,8 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     Route::post('/plan/create', 'PlanController@store');
 
+    Route::post('/change-password', 'Api\AuthController@changePassword');
+
     Route::get('/user/property/count','PropertyController@user_property_count');
 
 

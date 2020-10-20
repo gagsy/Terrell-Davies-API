@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
-use Hash;
 use App\User;
 use App\Subscription;
 use Input;
 use Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\File;
 use Image;
 use Illuminate\Support\Facades\Password;
@@ -277,5 +277,33 @@ class AuthController extends Controller
         $user = Auth::User();
         $histories = Subscription::where('user_id' , $user->id)->get();
         return response()->json(['data' => $histories], 200);
+    }
+
+    public function changePassword(Request $request){
+        if (!(Hash::check($request->get('current-password'), Auth::user()->password))) {
+            // The passwords matches
+            return response()->json(["msg" => "Your current password does not matches with the password you provided. Please try again."], 400);
+        }
+
+        if(strcmp($request->get('current-password'), $request->get('new-password')) == 0){
+            //Current password and new password are same
+            return response()->json(["msg" => "New Password cannot be same as your current password. Please choose a different password."], 400);
+        }
+
+        if(strcmp($request->get('new-password'), $request->get('new-password_confirmation')) != 0){
+            //new password and confirm password are  not the same
+            return response()->json(["msg" => "New Password and Confirm password are not the same. Please try again."], 400);
+        }
+
+        $validatedData = $request->validate([
+            'current-password' => 'required',
+            'new-password' => 'required|string|min:6|confirmed',
+        ]);
+
+        //Change Password
+        $user = Auth::user();
+        $user->password = bcrypt($request->get('new-password'));
+        $user->save();
+        return response()->json(["msg" => "Password changed successfully!"], 200);
     }
 }

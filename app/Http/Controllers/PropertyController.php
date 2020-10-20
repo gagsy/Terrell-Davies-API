@@ -64,6 +64,7 @@ class PropertyController extends Controller
             'user_id' => 'required',
             'category_id' => 'required',
             'type_id' => 'required',
+            'location' => 'required',
             'location_id' => 'nullable',
             'title' => 'required',
             'description' => 'required',
@@ -277,30 +278,6 @@ class PropertyController extends Controller
             $property->orWhere('type_id', $request->type_id);
             $property->orWhere('category_id', $request->category_id);
         }
-
-        // if ($request->has('bathroom')) {
-        //     $property->where('bathroom', $request->bathroom);
-        // }
-
-        // if ($request->has('budget')) {
-        //     $property->where('budget', $request->budget);
-        // }
-
-        // if ($request->has('state')) {
-        //     $property->where('state', $request->state);
-        // }
-
-        // if ($request->has('locality')) {
-        //     $property->where('locality', $request->locality);
-        // }
-
-        // if ($request->has('type_id')) {
-        //     $property->where('type_id', $request->type_id);
-        // }
-
-        // if ($request->has('category_id')) {
-        //     $property->where('category_id', $request->category_id);
-        // }
         return $property->get();
     }
 
