@@ -32,6 +32,7 @@ class CreatePropertiesTable extends Migration
             $table->string('bedroom');
             $table->string('bathroom');
             $table->string('toilet');
+            $table->string('ref_no');
             $table->string('video_link')->nullable();
             $table->enum('status',['Publish','Unpublish']);
             $table->enum('feature',['Serviced','Furnished']);

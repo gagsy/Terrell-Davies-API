@@ -29,7 +29,8 @@ class Property extends Model
         'toilet',
         'video-link',
         'status',
-        'feature'
+        'feature',
+        'ref_no'
     ];
 
     public function user_id(){
