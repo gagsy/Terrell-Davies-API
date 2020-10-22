@@ -55,7 +55,7 @@ class AuthController extends Controller
              return response()->json($data, 200);
          }
 
-       return response()->json(['error'=>'Unauthorized'], 401,);
+       return response()->json(['error'=>'Unauthorized'], 401);
     }
     public function adminUpdate(Request $request, $id=null){
         $user_id = auth('api')->user()->id;
@@ -93,6 +93,7 @@ class AuthController extends Controller
         $users->country = $request->country;
         $users->phone = $request->phone;
         $users->company_name = $request->company_name;
+        $users->company_logo = $request->company_logo;
         $users->userType = $request->userType;
         $users->services = $request->services;
         $users->facebook_profile = $request->facebook_profile;
@@ -110,6 +111,7 @@ class AuthController extends Controller
             'country' => $users->country,
             'phone' => $users->phone,
             'company_name' => $users->company_name,
+            'company_logo' => $users->company_logo,
             'userType' => $users->userType,
             'services' => $users->services,
             'facebook_profile' => $users->facebook_profile,
