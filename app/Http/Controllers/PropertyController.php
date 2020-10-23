@@ -140,6 +140,73 @@ class PropertyController extends Controller
         }
     }
 
+    public function addToShortlist($id)
+    {
+        $property = Property::find($id);
+        if(!$property) {
+            return response()->json([
+                'message' => 'Property does not exisy!'
+            ], 404);
+        }
+        $shortlist = session()->get('shortlist');
+        // if shortlist is empty then this the first pro$property
+        if(!$shortlist) {
+            $shortlist = [
+                    $id => [
+                        "name" => $property->name,
+                        "quantity" => 1,
+                        "budget" => $property->budget,
+                        "image" => $property->image
+                    ]
+            ];
+            session()->put('shortlist', $shortlist);
+            return response()->json([
+                'message' => 'Property added to shortlist successfully!',
+            ], 201);
+        }
+        // if shortlist not empty then check if this pro$property exist then increment quantity
+        if(isset($shortlist[$id])) {
+            $shortlist[$id]['quantity']++;
+            session()->put('shortlist', $shortlist);
+            return response()->json([
+                'message' => 'Property added to shortlist successfully!',
+            ], 201);
+        }
+        // if item not exist in shortlist then add to shortlist with quantity = 1
+        $shortlist[$id] = [
+            "name" => $property->name,
+            "quantity" => 1,
+            "budget" => $property->budget,
+            "image" => $property->image
+        ];
+        session()->put('shortlist', $shortlist);
+        return response()->json([
+            'message' => 'Property added to shortlist successfully!',
+        ], 201);
+    }
+
+    public function updateShortlist(Request $request)
+    {
+        if($request->id and $request->quantity)
+        {
+            $cart = session()->get('cart');
+            $cart[$request->id]["quantity"] = $request->quantity;
+            session()->put('cart', $cart);
+            session()->flash('success', 'Cart updated successfully');
+        }
+    }
+    public function removeShortlist(Request $request)
+    {
+        if($request->id) {
+            $cart = session()->get('cart');
+            if(isset($cart[$request->id])) {
+                unset($cart[$request->id]);
+                session()->put('cart', $cart);
+            }
+            session()->flash('success', 'Product removed successfully');
+        }
+    }
+
     /**
      * Display the specified resource.
      *
