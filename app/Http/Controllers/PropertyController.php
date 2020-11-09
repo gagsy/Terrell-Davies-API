@@ -129,19 +129,11 @@ class PropertyController extends Controller
             }
     }
 
-    public function shortlist(Request $request, $id=null){
+    public function shortlist(Request $request){
         $request->validate([
             'user_id' => 'required',
             'property_id' => 'required',
         ]);
-
-        $property_id = Property::find($id);
-        if(!$property_id) {
-            return response()->json([
-                'message' => 'Property does not exist!'
-            ], 404);
-        }
-
 
 
         DB::beginTransaction();
