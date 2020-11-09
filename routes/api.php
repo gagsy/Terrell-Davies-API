@@ -123,13 +123,14 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     Route::post('/change-password', 'Api\AuthController@changePassword');
 
+    Route::post('/shortlist/add', 'PropertyController@shortlist');
+
+    Route::get('/user/shortlist/count', 'PropertyController@user_shortlist_count');
+
     Route::get('/user/property/count','PropertyController@user_property_count');
 
 
 });
-
-
-
 
 
 //Type Api Controller Routes
@@ -137,10 +138,6 @@ Route::post('/type/create', 'TypeController@store');
 Route::get('/types/{id}', 'TypeController@show');
 Route::put('/types/{id}', 'TypeController@update');
 Route::delete('types/{id}', 'TypeController@destroy');
-
-
-
-
 
 Route::get('/property/{id}', 'PropertyController@edit');
 Route::put('/property/{id}', 'PropertyController@update');
