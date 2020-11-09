@@ -25,20 +25,20 @@ public $successStatus = 200;
 public function register(Request $request)
 {
 $validator = Validator::make($request->all(), [
-‘name’ => ‘required’,
-‘email’ => ‘required|email’,
-‘password’ => ‘required’,
-‘c_password’ => ‘required|same:password’,
+'name' => 'required',
+'email' => 'required|email',
+'password' => 'required',
+'c_password' => 'required|same:password',
 ]);
 if ($validator->fails()) {
-return response()->json([‘error’=>$validator->errors()], 401);
+return response()->json(['error'=>$validator->errors()], 401);
 }
 $input = $request->all();
-$input[‘password’] = Hash::make($input[‘password’]);
+$input['password'] = Hash::make($input['password']);
 $user = User::create($input);
 $user->sendApiEmailVerificationNotification();
-$success[‘message’] = ‘Please confirm yourself by clicking on verify user button sent to you on your email’;
-return response()->json([‘success’=>$success], $this-> successStatus);
+$success['message'] = 'Please confirm yourself by clicking on verify user button sent to you on your email';
+return response()->json(['success'=>$success], $this-> successStatus);
 }
 /**
 * details api
@@ -48,6 +48,6 @@ return response()->json([‘success’=>$success], $this-> successStatus);
 public function details()
 {
 $user = Auth::user();
-return response()->json([‘success’ => $user], $this-> successStatus);
+return response()->json(['success' => $user], $this-> successStatus);
 }
 }
