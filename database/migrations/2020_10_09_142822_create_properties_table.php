@@ -28,7 +28,7 @@ class CreatePropertiesTable extends Migration
             $table->string('market_status');
             $table->string('parking');
             $table->string('locality');
-            $table->double('budget', 10, 2);
+            $table->decimal('budget', 12, 2);
             $table->string('image');
             $table->string('bedroom');
             $table->string('bathroom');

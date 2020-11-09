@@ -33,11 +33,6 @@ class PropertyController extends Controller
 
     public function paginate()
     {
-        // $property = Property::all();
-        // // $propertytype_ids = Propertytype_id::get();
-        // // $propertycats = Propertycategory_id::get();
-        // return response()->json(['property' => $property], 200);
-
         $property = Property::paginate(5);
         return $property;
     }
@@ -87,7 +82,7 @@ class PropertyController extends Controller
 
 
         DB::beginTransaction();
-        if(Auth::check()) {
+
             if ($request->hasFile('image')) {
                 foreach ($request->file('image') as $picture) {
                     $pictures[] = $fileName = time().'.'.$picture->getClientOriginalName();
@@ -101,43 +96,37 @@ class PropertyController extends Controller
                         . mt_rand(1000000, 9999999)
                         . $characters[rand(0, strlen($characters) - 1)];
 
-                $property = Property::create([
-                    'user_id' => auth('api')->user()->id,
-                    'category_id' => $request->category_id,
-                    'type_id' => $request->type_id,
-                    'location_id' => $request->location_id,
-                    'location' => $request->location,
-                    'title' => $request->title,
-                    'description' => $request->description,
-                    'state' => $request->state,
-                    'area' => $request->area,
-                    'total_area' => $request->total_area,
-                    'market_status' => $request->market_status,
-                    'parking' => $request->parking,
-                    'locality' => $request->locality,
-                    'budget' => $request->budget,
-                    'image' => implode(',', $pictures),
-                    'bedroom' => $request->bedroom,
-                    'bathroom' => $request->bathroom,
-                    'toilet' => $request->toilet,
-                    'video_link' => $request->video_link,
-                    'status' => $request->status,
-                    'feature' => $request->feature,
-                    'ref_no' => str_shuffle($pin),
-                ]);
-                //$property =
+                    $property = Property::create([
+                        'user_id' => auth('api')->user()->id,
+                        'category_id' => $request->category_id,
+                        'type_id' => $request->type_id,
+                        'location_id' => $request->location_id,
+                        'location' => $request->location,
+                        'title' => $request->title,
+                        'description' => $request->description,
+                        'state' => $request->state,
+                        'area' => $request->area,
+                        'total_area' => $request->total_area,
+                        'market_status' => $request->market_status,
+                        'parking' => $request->parking,
+                        'locality' => $request->locality,
+                        'budget' => $request->budget,
+                        'image' => implode(',', $pictures),
+                        'bedroom' => $request->bedroom,
+                        'bathroom' => $request->bathroom,
+                        'toilet' => $request->toilet,
+                        'video_link' => $request->video_link,
+                        'status' => $request->status,
+                        'feature' => $request->feature,
+                        'ref_no' => str_shuffle($pin),
+                    ]);
 
-                return response()->json([
-                    'message' => 'Property Created!',
-                    'property' => $property,
-                    'image_path' => '/FeaturedProperty_images/'.implode(',', $pictures),
-                ], 201);
+                    return response()->json([
+                        'message' => 'Property Created!',
+                        'property' => $property,
+                        'image_path' => '/FeaturedProperty_images/'.implode(',', $pictures),
+                    ], 201);
             }
-        } else {
-            return response()->json([
-                'message' => 'You are not logged in!'
-            ], 201);
-        }
     }
 
     public function addToShortlist($id)
