@@ -129,12 +129,47 @@ class PropertyController extends Controller
             }
     }
 
+    public function shortlist(Request $request, $id=null){
+        $request->validate([
+            'user_id' => 'required',
+            'property_id' => 'required',
+        ]);
+
+        $property_id = Property::find($id);
+        if(!$property_id) {
+            return response()->json([
+                'message' => 'Property does not exist!'
+            ], 404);
+        }
+
+
+
+        DB::beginTransaction();
+        $shortlist = ShortList::create([
+            'user_id' => auth('api')->user()->id,
+            'property_id' => $request->property_id,
+        ]);
+
+        return response()->json([
+            'message' => 'Property added to shortlist successfully!',
+        ], 201);
+    }
+
+    public function user_shortlist_count(){
+        $user_id = auth('api')->user()->id;
+
+        $user_shortlist_count = Shortlist::where('user_id', $user_id)->count();
+            return response()-> json([
+            'user_shortlist_count' => $user_shortlist_count
+        ], 200);
+    }
+
     public function addToShortlist($id)
     {
         $property = Property::find($id);
         if(!$property) {
             return response()->json([
-                'message' => 'Property does not exisy!'
+                'message' => 'Property does not exist!'
             ], 404);
         }
         $shortlist = session()->get('shortlist');
@@ -184,6 +219,7 @@ class PropertyController extends Controller
             session()->flash('success', 'Cart updated successfully');
         }
     }
+
     public function removeShortlist(Request $request)
     {
         if($request->id) {
