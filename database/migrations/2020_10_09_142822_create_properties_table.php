@@ -30,6 +30,7 @@ class CreatePropertiesTable extends Migration
             $table->string('locality');
             $table->decimal('budget', 12, 2);
             $table->string('image');
+            $table->string('other_images');
             $table->string('bedroom');
             $table->string('bathroom');
             $table->string('toilet');

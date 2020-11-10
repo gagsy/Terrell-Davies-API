@@ -28,7 +28,10 @@ class PropertyController extends Controller
     public function index()
     {
         $property = Property::all();
-        return response()->json(['property' => $property], 200);
+        return response()->json([
+            'property' => $property,
+        ], 200);
+
     }
 
     public function paginate()
@@ -70,8 +73,8 @@ class PropertyController extends Controller
             'parking' => 'required',
             'locality' => 'required',
             'budget' => 'required',
+            'other_images' => 'nullable',
             'image' => 'required',
-            'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:3048',
             'bedroom' => 'required',
             'bathroom' => 'required',
             'toilet' => 'required',
@@ -82,14 +85,6 @@ class PropertyController extends Controller
 
 
         DB::beginTransaction();
-
-            if ($request->hasFile('image')) {
-                foreach ($request->file('image') as $picture) {
-                    $pictures[] = $fileName = time().'.'.$picture->getClientOriginalName();
-                    $image_path = public_path('/FeaturedProperty_images');
-                    $picture->move($image_path,$fileName);
-                    // Storage::put('public/' . $fileName, file_get_contents($picture));
-                }
 
                 $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
                 $pin = mt_rand(1000000, 9999999)
@@ -111,7 +106,8 @@ class PropertyController extends Controller
                         'parking' => $request->parking,
                         'locality' => $request->locality,
                         'budget' => $request->budget,
-                        'image' => implode(',', $pictures),
+                        'other_images' => $request->other_images,
+                        'image' => $request->image,
                         'bedroom' => $request->bedroom,
                         'bathroom' => $request->bathroom,
                         'toilet' => $request->toilet,
@@ -124,9 +120,7 @@ class PropertyController extends Controller
                     return response()->json([
                         'message' => 'Property Created!',
                         'property' => $property,
-                        'image_path' => '/FeaturedProperty_images/'.implode(',', $pictures),
                     ], 201);
-            }
     }
 
     public function shortlist(Request $request){
@@ -151,9 +145,21 @@ class PropertyController extends Controller
         $user_id = auth('api')->user()->id;
 
         $user_shortlist_count = Shortlist::where('user_id', $user_id)->count();
-            return response()-> json([
+            return response()->json([
             'user_shortlist_count' => $user_shortlist_count
         ], 200);
+    }
+
+    public function searchByStateAreaCity(Request $request){
+        $pro = Property::where('status', 'Publish');
+
+        if ($request->has('state')) {
+            $pro->where('state', $request->state);
+        }
+
+
+
+        return $pro->get();
     }
 
     public function addToShortlist($id)
@@ -265,26 +271,6 @@ class PropertyController extends Controller
         $property = Property::findorfail($id);
         if ($request->isMethod('post')) {
             $data = $request->all();
-            try{
-
-                $picture = $request->file('image');
-                $image_filename = time().'.'.$picture->getClientOriginalExtension();
-                $image_path = public_path('/FeaturedProperty_images');
-                $picture->move($image_path,$image_filename);
-
-                $data['image'] = $image_filename;
-
-                $image_path1 = public_path('FeaturedProperty_images/'.$property->image);
-                if(File::exists($image_path1)) {
-                    File::delete($image_path1);
-                }
-            }
-            catch(Exception $e){
-                return response()->json([
-                    'message' => 'An error occured',
-                ], 400);
-            }
-
 
             $property->update([
                 'category_id' => $data['category_id'],
@@ -299,7 +285,7 @@ class PropertyController extends Controller
                 'parking' => $data['parking'],
                 'locality' => $data['locality'],
                 'budget' => $data['budget'],
-                'image' => $image_filename,
+                'image' => $data['image'],
                 'bedroom' => $data['bedroom'],
                 'bathroom' => $data['bathroom'],
                 'toilet' => $data['toilet'],
