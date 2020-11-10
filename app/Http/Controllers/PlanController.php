@@ -104,7 +104,7 @@ class PlanController extends Controller
             $plan->save();
 
             return response()->json([
-                "message" => "plans Plan updated successfully"
+                "message" => "Plan updated successfully"
             ], 200);
             } else {
             return response()->json([

@@ -76,7 +76,7 @@ Route::get('/property-locations', 'PropertyLocationController@index');
 
 Route::get('/terms', 'TermsConditionsController@index');
 
-// Route::get('/search', 'PropertyController@getSearchResults');
+Route::get('/filter', 'PropertyController@searchByStateAreaCity');
 
 Route::get('/search', 'PropertyController@filter');
 
