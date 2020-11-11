@@ -225,6 +225,13 @@ class AuthController extends Controller
             ], 200);
 
     }
+
+    public function singleUser(Request $request, $id){
+        \Log::info($request->all());
+        $user = User::find($request->id);
+        return response()->json(['user' => $user], 200);
+    }
+
     public function enableUser(Request $request, $id){
 
         \Log::info($request->all());

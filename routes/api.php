@@ -132,6 +132,8 @@ Route::group(['middleware' => 'auth:api'], function(){
 
 });
 
+Route::get('user/{id}', 'Api\AuthController@singleUser');
+
 
 //Type Api Controller Routes
 Route::post('/type/create', 'TypeController@store');
