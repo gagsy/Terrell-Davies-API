@@ -129,10 +129,12 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     Route::get('/user/property/count','PropertyController@user_property_count');
 
+    Route::get('user/{id}', 'Api\AuthController@singleUser');
+
 
 });
 
-Route::get('user/{id}', 'Api\AuthController@singleUser');
+
 
 
 //Type Api Controller Routes
