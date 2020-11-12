@@ -36,32 +36,29 @@ class AboutUsController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $request->validate([
             'content' => 'required',
             'description' => 'required',
             'image' => 'required|image',
         ]);
 
-        try{
+        DB::beginTransaction();
+        $featuredImage = $request->file('image');
+        $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
+        $image_path = public_path('/About_images');
+        $featuredImage->move($image_path,$image_filename);
+        $path = '/About_images/'.$image_filename;
 
-            $featuredImage = $request->file('image');
-            $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
-            $image_path = public_path('/About_images');
-            $featuredImage->move($image_path,$image_filename);
+        $about = About::create([
+            'content' => $request->content,
+            'description' => $request->description,
+            'image' => $path,
+        ]);
 
-            $data['image'] = $image_filename;
-        }
-        catch(Exception $e){
-            return response()->json([
-                'message' => 'An error occured',
-            ], 400);
-        }
-
-        $about = AboutUs::create($data);
         return response()->json([
-            'message' => 'About Us Created',
+            'message' => 'About Us Created!',
             'about' => $about,
-        ], 200);
+        ], 201);
     }
 
     /**

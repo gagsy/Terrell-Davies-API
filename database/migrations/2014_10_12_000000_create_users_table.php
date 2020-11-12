@@ -23,13 +23,11 @@ class CreateUsersTable extends Migration
             $table->string('userType')->default('individual');
             $table->string('company_name')->nullable();
             $table->string('company_phone')->nullable();
-            $table->string('company_phone2')->nullable();
             $table->string('company_logo')->nullable();
             $table->string('address')->nullable();
             $table->string('locality')->nullable();
             $table->string('state')->nullable();
             $table->string('country')->nullable();
-            $table->string('mobile')->nullable();
             $table->string('services')->nullable();
             $table->string('facebook_profile')->nullable();
             $table->string('twitter_profile')->nullable();
