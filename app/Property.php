@@ -30,7 +30,23 @@ class Property extends Model
         'video-link',
         'status',
         'feature',
-        'ref_no'
+        'ref_no',
+        'user_name',
+        'user_email',
+        'user_phone',
+        'user_type',
+        'user_company_name',
+        'user_company_description',
+        'user_company_phone',
+        'user_company_logo',
+        'user_address',
+        'user_locality',
+        'user_state',
+        'user_country',
+        'user_services',
+        'user_facebook_profile',
+        'user_twitter_profile',
+        'user_linkedin_profile',
     ];
 
     public function user_id(){

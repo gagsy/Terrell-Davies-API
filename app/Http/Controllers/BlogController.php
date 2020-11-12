@@ -39,7 +39,7 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
+       $request->validate([
             'category_id' => 'required',
             'title' => 'required',
             'content' => 'required',
@@ -47,26 +47,26 @@ class BlogController extends Controller
             'image' => 'required|image',
         ]);
 
-        try{
+        DB::beginTransaction();
+        $featuredImage = $request->file('image');
+        $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
+        $image_path = public_path('/Blog_images');
+        $featuredImage->move($image_path,$image_filename);
+        $path = '/Blog_images/'.$image_filename;
 
-            $featuredImage = $request->file('image');
-            $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
-            $image_path = public_path('/Blog_images');
-            $featuredImage->move($image_path,$image_filename);
+        $blog = Blog::create([
+            'category_id' => $request->category_id,
+            'title' => $request->title,
+            'content' => $request->content,
+            'url' => $request->url,
+            'image' => $path,
+        ]);
 
-            $data['image'] = $image_filename;
-        }
-        catch(Exception $e){
-            return response()->json([
-                'message' => 'An error occured',
-            ], 400);
-        }
-
-        $blog = Blog::create($data);
         return response()->json([
-            'message' => 'Blog Created',
+            'message' => 'Blog Created!',
             'blog' => $blog,
-        ], 200);
+        ], 201);
+
     }
 
     /**

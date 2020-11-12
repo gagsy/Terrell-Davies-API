@@ -8,10 +8,11 @@ use Validator;
 use App\User;
 use App\Subscription;
 use Input;
+use DB;
 use Auth;
+use Image;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\File;
-use Image;
 use Illuminate\Support\Facades\Password;
 
 class AuthController extends Controller
@@ -86,6 +87,18 @@ class AuthController extends Controller
         $user_id = Auth::user()->id;
         $users = User::find($user_id);
 
+        $request->validate([
+            'company_logo' => 'nullable',
+            'company_logo.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:3048',
+        ]);
+        DB::beginTransaction();
+
+        $featuredImage = $request->file('company_logo');
+        $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
+        $image_path = public_path('/company_logo_images');
+        $featuredImage->move($image_path,$image_filename);
+        $path = '/company_logo_images/'.$image_filename;
+
         $users->name = $request->name;
         $users->address = $request->address;
         $users->locality = $request->locality;
@@ -93,7 +106,7 @@ class AuthController extends Controller
         $users->country = $request->country;
         $users->phone = $request->phone;
         $users->company_name = $request->company_name;
-        $users->company_logo = $request->company_logo;
+        $users->company_logo = $path;
         $users->userType = $request->userType;
         $users->services = $request->services;
         $users->facebook_profile = $request->facebook_profile;

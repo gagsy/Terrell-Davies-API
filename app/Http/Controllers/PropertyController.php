@@ -74,7 +74,9 @@ class PropertyController extends Controller
             'locality' => 'required',
             'budget' => 'required',
             'other_images' => 'nullable',
+            'other_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:3048',
             'image' => 'required',
+            'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:3048',
             'bedroom' => 'required',
             'bathroom' => 'required',
             'toilet' => 'required',
@@ -86,41 +88,63 @@ class PropertyController extends Controller
 
         DB::beginTransaction();
 
-                $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                $pin = mt_rand(1000000, 9999999)
-                        . mt_rand(1000000, 9999999)
-                        . $characters[rand(0, strlen($characters) - 1)];
+        $featuredImage = $request->file('image');
+        $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
+        $image_path = public_path('/FeaturedProperty_images');
+        $featuredImage->move($image_path,$image_filename);
+        $path = '/FeaturedProperty_images/'.$image_filename;
 
-                    $property = Property::create([
-                        'user_id' => auth('api')->user()->id,
-                        'category_id' => $request->category_id,
-                        'type_id' => $request->type_id,
-                        'location_id' => $request->location_id,
-                        'location' => $request->location,
-                        'title' => $request->title,
-                        'description' => $request->description,
-                        'state' => $request->state,
-                        'area' => $request->area,
-                        'total_area' => $request->total_area,
-                        'market_status' => $request->market_status,
-                        'parking' => $request->parking,
-                        'locality' => $request->locality,
-                        'budget' => $request->budget,
-                        'other_images' => $request->other_images,
-                        'image' => $request->image,
-                        'bedroom' => $request->bedroom,
-                        'bathroom' => $request->bathroom,
-                        'toilet' => $request->toilet,
-                        'video_link' => $request->video_link,
-                        'status' => $request->status,
-                        'feature' => $request->feature,
-                        'ref_no' => str_shuffle($pin),
-                    ]);
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $pin = mt_rand(1000000, 9999999)
+                . mt_rand(1000000, 9999999)
+                . $characters[rand(0, strlen($characters) - 1)];
 
-                    return response()->json([
-                        'message' => 'Property Created!',
-                        'property' => $property,
-                    ], 201);
+        $property = Property::create([
+            'user_id' => auth('api')->user()->id,
+            'category_id' => $request->category_id,
+            'type_id' => $request->type_id,
+            'location_id' => $request->location_id,
+            'location' => $request->location,
+            'title' => $request->title,
+            'description' => $request->description,
+            'state' => $request->state,
+            'area' => $request->area,
+            'total_area' => $request->total_area,
+            'market_status' => $request->market_status,
+            'parking' => $request->parking,
+            'locality' => $request->locality,
+            'budget' => $request->budget,
+            'other_images' => $request->other_images,
+            'image' => $path,
+            'bedroom' => $request->bedroom,
+            'bathroom' => $request->bathroom,
+            'toilet' => $request->toilet,
+            'video_link' => $request->video_link,
+            'status' => $request->status,
+            'feature' => $request->feature,
+            'ref_no' => str_shuffle($pin),
+            'user_name' => auth('api')->user()->name,
+            'user_email' => auth('api')->user()->email,
+            'user_phone' => auth('api')->user()->phone,
+            'user_type' => auth('api')->user()->userType,
+            'user_company_name' => auth('api')->user()->company_name,
+            'user_company_description' => auth('api')->user()->company_description,
+            'user_company_phone' => auth('api')->user()->company_phone,
+            'user_company_logo' => auth('api')->user()->company_logo,
+            'user_address' => auth('api')->user()->address,
+            'user_locality' => auth('api')->user()->locality,
+            'user_state' => auth('api')->user()->state,
+            'user_country' => auth('api')->user()->country,
+            'user_services' => auth('api')->user()->services,
+            'user_facebook_profile' => auth('api')->user()->facebook_profile,
+            'user_twitter_profile' => auth('api')->user()->twitter_profile,
+            'user_linkedin_profile' => auth('api')->user()->linkedin_profile,
+        ]);
+
+        return response()->json([
+            'message' => 'Property Created!',
+            'property' => $property,
+        ], 201);
     }
 
     public function shortlist(Request $request){
