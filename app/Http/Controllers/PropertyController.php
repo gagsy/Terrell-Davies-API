@@ -132,7 +132,6 @@ class PropertyController extends Controller
         return response()->json([
             'message' => 'Property Created!',
             'property' => $property,
-            'user' => $user
         ], 201);
     }
 
