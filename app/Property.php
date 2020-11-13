@@ -31,26 +31,12 @@ class Property extends Model
         'status',
         'feature',
         'ref_no',
-        'user_name',
-        'user_email',
-        'user_phone',
-        'user_type',
-        'user_company_name',
-        'user_company_description',
-        'user_company_phone',
-        'user_company_logo',
-        'user_address',
-        'user_locality',
-        'user_state',
-        'user_country',
-        'user_services',
-        'user_facebook_profile',
-        'user_twitter_profile',
-        'user_linkedin_profile',
+        'user',
     ];
 
-    public function user_id(){
-        $this->belongsTo('App\User', 'user_id');
+    public function user()
+	{
+		return $this->belongsTo(User::class);
     }
 
     public static function shortlistCount(){
@@ -69,17 +55,6 @@ class Property extends Model
 		return $this->belongsTo(Type::class);
     }
 
+    protected $casts = [ 'other_images' => 'array', 'user' => 'array' ];
 
-    public function image(){
-        return $this->hasMany('App\PropertyGallery', 'property_id', 'id');
-    }
-
-    protected $casts = [ 'image' => 'array' ];
-
-
-    // public static function scopeSearch($query, $searchTerm)
-    // {
-    //     return $query->where('title', 'like', '%' .$searchTerm. '%')
-    //                  ->orWhere('slug', 'like', '%' .$searchTerm. '%');
-    // }
 }

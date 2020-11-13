@@ -27,7 +27,7 @@ class PropertyController extends Controller
      */
     public function index()
     {
-        $property = Property::orderBy('id', 'DESC')->get();
+        $property = Property::orderBy('id', 'DESC')->where('status', 'Publish')->get();
         return response()->json([
             'property' => $property,
         ], 200);
@@ -99,6 +99,9 @@ class PropertyController extends Controller
                 . mt_rand(1000000, 9999999)
                 . $characters[rand(0, strlen($characters) - 1)];
 
+        $users = auth('api')->user();
+        $user = json_decode($users);
+
         $property = Property::create([
             'user_id' => auth('api')->user()->id,
             'category_id' => $request->category_id,
@@ -123,28 +126,23 @@ class PropertyController extends Controller
             'status' => $request->status,
             'feature' => $request->feature,
             'ref_no' => str_shuffle($pin),
-            'user_name' => auth('api')->user()->name,
-            'user_email' => auth('api')->user()->email,
-            'user_phone' => auth('api')->user()->phone,
-            'user_type' => auth('api')->user()->userType,
-            'user_company_name' => auth('api')->user()->company_name,
-            'user_company_description' => auth('api')->user()->company_description,
-            'user_company_phone' => auth('api')->user()->company_phone,
-            'user_company_logo' => auth('api')->user()->company_logo,
-            'user_address' => auth('api')->user()->address,
-            'user_locality' => auth('api')->user()->locality,
-            'user_state' => auth('api')->user()->state,
-            'user_country' => auth('api')->user()->country,
-            'user_services' => auth('api')->user()->services,
-            'user_facebook_profile' => auth('api')->user()->facebook_profile,
-            'user_twitter_profile' => auth('api')->user()->twitter_profile,
-            'user_linkedin_profile' => auth('api')->user()->linkedin_profile,
+            'user' => [$user],
         ]);
 
         return response()->json([
             'message' => 'Property Created!',
             'property' => $property,
+            'user' => $user
         ], 201);
+    }
+
+    public function user_property_count(){
+        $user_id = auth('api')->user()->id;
+
+        $user_property_Count = Property::where('user_id', $user_id)->count();
+            return response()-> json([
+            'user_property_listing_count' => $user_property_Count
+        ], 200);
     }
 
     public function shortlist(Request $request){
@@ -387,15 +385,6 @@ class PropertyController extends Controller
         $propertyCount = Property::count();
         return response()-> json([
             'propertyCount' => $propertyCount
-        ], 200);
-    }
-
-    public function user_property_count(){
-        $user_id = auth('api')->user()->id;
-
-        $user_property_Count = Property::where('user_id', $user_id)->count();
-            return response()-> json([
-            'user_property_listing_count' => $user_property_Count
         ], 200);
     }
 }
