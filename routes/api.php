@@ -129,6 +129,8 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     Route::get('/user/property/count','PropertyController@user_property_count');
 
+    Route::get('/user/property/list','PropertyController@user_property_list');
+
     Route::get('user/{id}', 'Api\AuthController@singleUser');
 
 

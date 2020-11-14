@@ -4,17 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Property;
 use App\Category;
+use App\Helpers\ApiConstants;
 use App\Location;
 use App\ShortList;
+use Illuminate\Support\Arr;
 use App\Type;
 use App\User;
 use DB;
+use Exception;
 use Auth;
 use Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class PropertyController extends Controller
 {
@@ -58,7 +63,9 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        DB::beginTransaction();
+        try{
+            $validator = Validator::make($request->all(),[
             'user_id' => 'required',
             'category_id' => 'required',
             'type_id' => 'required',
@@ -85,8 +92,10 @@ class PropertyController extends Controller
             'feature' => 'required',
         ]);
 
-
-        DB::beginTransaction();
+        if($validator->fails()){
+            session()->flash('errors' , $validator->errors());
+            throw new ValidationException($validator);
+        }
 
         $featuredImage = $request->file('image');
         $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
@@ -103,7 +112,7 @@ class PropertyController extends Controller
         $user = json_decode($users);
 
         $property = Property::create([
-            'user_id' => auth('api')->user()->id,
+            'user_id' => $user->id,
             'category_id' => $request->category_id,
             'type_id' => $request->type_id,
             'location_id' => $request->location_id,
@@ -126,13 +135,36 @@ class PropertyController extends Controller
             'status' => $request->status,
             'feature' => $request->feature,
             'ref_no' => str_shuffle($pin),
-            'user' => [$user],
+            'user' => $user,
         ]);
 
+        DB::commit();
+        // return validResponse('Property Created!');
         return response()->json([
             'message' => 'Property Created!',
             'property' => $property,
         ], 201);
+        }
+        catch(ValidationException $e){
+            DB::rollback();
+            $message = "" . (implode(' ', Arr::flatten($e->errors())));
+            return problemResponse($message , ApiConstants::BAD_REQ_ERR_CODE , $request);
+        }
+        catch(Exception $e){
+            session()->flash('error_msg' , $e->getMessage());
+            dd($e->getMessage());
+            DB::rollback();
+            return problemResponse($e->getMessage() , ApiConstants::SERVER_ERR_CODE , $request);
+        }
+    }
+
+    public function user_property_list(){
+        $user_id = auth('api')->user()->id;
+
+        $user_property_get = Property::where('user_id', $user_id)->get();
+        return response()-> json([
+            'user_property_listing' => $user_property_get
+        ], 200);
     }
 
     public function user_property_count(){
