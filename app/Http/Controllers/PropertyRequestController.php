@@ -3,7 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\PropertyRequest;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use App\Helpers\ApiConstants;
 use Illuminate\Http\Request;
+use DB;
+use Exception;
 use Carbon\Carbon;
 
 class PropertyRequestController extends Controller
@@ -38,7 +44,9 @@ class PropertyRequestController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        DB::beginTransaction();
+        try{
+            $validator = Validator::make($request->all(),[
             'name' => 'required',
             'email' => 'required',
             'phone' => 'required',
@@ -53,11 +61,29 @@ class PropertyRequestController extends Controller
             'comment' => 'required'
         ]);
 
-        $prop_request = PropertyRequest::create($request->all());
-        return response()->json([
-            'message' => 'Property Request Created',
-            'property_requests' => $prop_request,
-        ], 200);
+            if($validator->fails()){
+                session()->flash('errors' , $validator->errors());
+                throw new ValidationException($validator);
+            }
+
+            $prop_request = PropertyRequest::create($request->all());
+            DB::commit();
+            return response()->json([
+                'message' => 'Property Request Created',
+                'property_requests' => $prop_request,
+            ], 200);
+        }
+        catch(ValidationException $e){
+            DB::rollback();
+            $message = "" . (implode(' ', Arr::flatten($e->errors())));
+            return problemResponse($message , ApiConstants::BAD_REQ_ERR_CODE , $request);
+        }
+        catch(Exception $e){
+            session()->flash('error_msg' , $e->getMessage());
+            dd($e->getMessage());
+            DB::rollback();
+            return problemResponse($e->getMessage() , ApiConstants::SERVER_ERR_CODE , $request);
+        }
     }
 
     /**
