@@ -4,11 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Validator;
 use App\User;
 use App\Subscription;
-use Input;
+use App\Helpers\ApiConstants;
+use Illuminate\Support\Arr;
 use DB;
+use Exception;
+use Input;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Auth;
 use Image;
 use Illuminate\Support\Facades\Hash;
@@ -87,80 +91,122 @@ class AuthController extends Controller
         $user_id = Auth::user()->id;
         $users = User::find($user_id);
 
-        $request->validate([
-            'company_logo' => 'nullable',
-            'company_logo.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:3048',
-        ]);
         DB::beginTransaction();
+        try{
+            $validator = Validator::make($request->all(),[
+                'company_logo' => 'nullable',
+                'company_logo.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:3048',
+            ]);
 
-        $featuredImage = $request->file('company_logo');
-        $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
-        $image_path = public_path('/company_logo_images');
-        $featuredImage->move($image_path,$image_filename);
-        $path = '/company_logo_images/'.$image_filename;
+            if($validator->fails()){
+                session()->flash('errors' , $validator->errors());
+                throw new ValidationException($validator);
+            }
 
-        $users->name = $request->name;
-        $users->address = $request->address;
-        $users->locality = $request->locality;
-        $users->state = $request->state;
-        $users->country = $request->country;
-        $users->phone = $request->phone;
-        $users->company_name = $request->company_name;
-        $users->company_logo = $path;
-        $users->userType = $request->userType;
-        $users->services = $request->services;
-        $users->facebook_profile = $request->facebook_profile;
-        $users->twitter_profile = $request->twitter_profile;
-        $users->linkedin_profile = $request->linkedin_profile;
-        $users->socialType = $request->socialType;
-        $users->save();
+            $featuredImage = $request->file('company_logo');
+            $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
+            $image_path = public_path('/company_logo_images');
+            $featuredImage->move($image_path,$image_filename);
+            $path = '/company_logo_images/'.$image_filename;
 
-        $data[] = [
-            'id'=>$users->id,
-            'name'=>$users->name,
-            'address' => $users->address,
-            'locality' => $users->locality,
-            'state' => $users->state,
-            'country' => $users->country,
-            'phone' => $users->phone,
-            'company_name' => $users->company_name,
-            'company_logo' => $users->company_logo,
-            'userType' => $users->userType,
-            'services' => $users->services,
-            'facebook_profile' => $users->facebook_profile,
-            'twitter_profile' => $users->twitter_profile,
-            'linkedin_profile' => $users->linkedin_profile,
-            'socialType' => $users->socialType,
-            'message'=> 'Your Account settings are saved',
-        ];
-        return response()->json($data);
+            $users->name = $request->name;
+            $users->address = $request->address;
+            $users->locality = $request->locality;
+            $users->state = $request->state;
+            $users->country = $request->country;
+            $users->phone = $request->phone;
+            $users->company_name = $request->company_name;
+            $users->company_logo = $path;
+            $users->userType = $request->userType;
+            $users->services = $request->services;
+            $users->facebook_profile = $request->facebook_profile;
+            $users->twitter_profile = $request->twitter_profile;
+            $users->linkedin_profile = $request->linkedin_profile;
+            $users->socialType = $request->socialType;
+            $users->save();
+
+            $data[] = [
+                'id'=>$users->id,
+                'name'=>$users->name,
+                'address' => $users->address,
+                'locality' => $users->locality,
+                'state' => $users->state,
+                'country' => $users->country,
+                'phone' => $users->phone,
+                'company_name' => $users->company_name,
+                'company_logo' => $users->company_logo,
+                'userType' => $users->userType,
+                'services' => $users->services,
+                'facebook_profile' => $users->facebook_profile,
+                'twitter_profile' => $users->twitter_profile,
+                'linkedin_profile' => $users->linkedin_profile,
+                'socialType' => $users->socialType,
+                'message'=> 'Your Account settings are saved',
+            ];
+            DB::commit();
+            return response()->json($data);
+            }
+        catch(ValidationException $e){
+            DB::rollback();
+            $message = "" . (implode(' ', Arr::flatten($e->errors())));
+            return problemResponse($message , ApiConstants::BAD_REQ_ERR_CODE , $request);
+        }
+        catch(Exception $e){
+            session()->flash('error_msg' , $e->getMessage());
+            dd($e->getMessage());
+            DB::rollback();
+            return problemResponse($e->getMessage() , ApiConstants::SERVER_ERR_CODE , $request);
+        }
     }
 
     public function ProfileImageUpload(Request $request, $id=null){
         $user_id = Auth::user()->id;
         $users = User::find($user_id);
-        $request->validate([
-            'avatar' => 'nullable|image|max:4096',
-        ]);
-        $avatar = $request->file('avatar');
-        $filename = time() . '.' . $avatar->getClientOriginalExtension();
-        $image_path = public_path('/Avatar_images');
-        $avatar->move($image_path,$filename);
+        DB::beginTransaction();
+        try{
+            $validator = Validator::make($request->all(),[
+                'avatar' => 'nullable',
+                'avatar.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:3048',
+            ]);
 
-        $image_path1 = public_path('Avatar_images/'.$users->avatar);
-        if(File::exists($image_path1)) {
-            File::delete($image_path1);
+            if($validator->fails()){
+                session()->flash('errors' , $validator->errors());
+                throw new ValidationException($validator);
+            }
+
+            $avatar = $request->file('avatar');
+            $filename = time() . '.' . $avatar->getClientOriginalExtension();
+            $image_path = public_path('/Avatar_images');
+            $avatar->move($image_path,$filename);
+
+            $image_path1 = public_path('Avatar_images/'.$users->avatar);
+            if(File::exists($image_path1)) {
+                File::delete($image_path1);
+            }
+            $path = '/Avatar_images/'.$filename;
+
+            $users->avatar = $path;
+            $users->save();
+
+            $data[] = [
+                'id'=>$users->id,
+                'avatar'=>$users->avatar,
+                'message'=>'Image Uploaded',
+            ];
+            DB::commit();
+            return response()->json($data);
         }
-
-        $users->avatar = $filename;
-        $users->save();
-
-        $data[] = [
-            'id'=>$users->id,
-            'avatar'=>$users->avatar,
-            'message'=>'Image Uploaded',
-        ];
-        return response()->json($data);
+        catch(ValidationException $e){
+            DB::rollback();
+            $message = "" . (implode(' ', Arr::flatten($e->errors())));
+            return problemResponse($message , ApiConstants::BAD_REQ_ERR_CODE , $request);
+        }
+        catch(Exception $e){
+            session()->flash('error_msg' , $e->getMessage());
+            dd($e->getMessage());
+            DB::rollback();
+            return problemResponse($e->getMessage() , ApiConstants::SERVER_ERR_CODE , $request);
+        }
     }
 
     public function register(Request $request)
