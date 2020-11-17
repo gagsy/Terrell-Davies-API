@@ -152,7 +152,8 @@ class AuthController extends Controller
             File::delete($image_path1);
         }
 
-        $users->avatar = $filename;
+        // $users->avatar = $filename;
+        $users->avatar = $image_path1;
         $users->save();
 
         $data[] = [
