@@ -94,6 +94,7 @@ class AuthController extends Controller
         DB::beginTransaction();
         try{
             $validator = Validator::make($request->all(),[
+                'name' => 'nullable',
                 'company_logo' => 'nullable',
                 'company_logo.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:3048',
             ]);
@@ -103,11 +104,58 @@ class AuthController extends Controller
                 throw new ValidationException($validator);
             }
 
+            if(!$request->hasFile('company_logo')) {
+                $users->name = $request->name;
+                $users->address = $request->address;
+                $users->locality = $request->locality;
+                $users->state = $request->state;
+                $users->country = $request->country;
+                $users->phone = $request->phone;
+                $users->company_name = $request->company_name;
+                $users->company_description = $request->company_description;
+                $users->userType = $request->userType;
+                $users->services = $request->services;
+                $users->facebook_profile = $request->facebook_profile;
+                $users->twitter_profile = $request->twitter_profile;
+                $users->linkedin_profile = $request->linkedin_profile;
+                $users->socialType = $request->socialType;
+                $users->save();
+
+                $data[] = [
+                    'id'=>$users->id,
+                    'name'=>$users->name,
+                    'address' => $users->address,
+                    'locality' => $users->locality,
+                    'state' => $users->state,
+                    'country' => $users->country,
+                    'phone' => $users->phone,
+                    'company_name' => $users->company_name,
+                    'company_logo' => $users->company_logo,
+                    'userType' => $users->userType,
+                    'services' => $users->services,
+                    'facebook_profile' => $users->facebook_profile,
+                    'twitter_profile' => $users->twitter_profile,
+                    'linkedin_profile' => $users->linkedin_profile,
+                    'socialType' => $users->socialType,
+                    'message'=> 'Your Account settings are saved',
+                ];
+                DB::commit();
+                return response()->json($data);
+
+                return response()->json(['error_msg'=>'image file is required', 'message'=>'image file is required for upload']);
+            }
+
             $featuredImage = $request->file('company_logo');
             $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
             $image_path = public_path('/company_logo_images');
             $featuredImage->move($image_path,$image_filename);
+
+            $image_paths = public_path('company_logo_images/'.$users->company_logo);
+            if(File::exists($image_paths)) {
+                File::delete($image_paths);
+            }
             $path = '/company_logo_images/'.$image_filename;
+
 
             $users->name = $request->name;
             $users->address = $request->address;
@@ -117,6 +165,7 @@ class AuthController extends Controller
             $users->phone = $request->phone;
             $users->company_name = $request->company_name;
             $users->company_logo = $path;
+            $users->company_description = $request->company_description;
             $users->userType = $request->userType;
             $users->services = $request->services;
             $users->facebook_profile = $request->facebook_profile;

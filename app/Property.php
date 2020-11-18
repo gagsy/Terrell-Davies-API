@@ -24,6 +24,7 @@ class Property extends Model
         'locality',
         'budget',
         'image',
+        'other_images',
         'bedroom',
         'bathroom',
         'toilet',
