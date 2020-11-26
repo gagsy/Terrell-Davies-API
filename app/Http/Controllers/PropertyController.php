@@ -100,64 +100,113 @@ class PropertyController extends Controller
             throw new ValidationException($validator);
         }
 
-        $featuredImage = $request->file('image');
-
-        if(!isset($featuredImage) || empty($featuredImage) && gettype($request->image) == 'string'){
+        if ($request->hasFile('other_images')) {
             
-            //if image is not sent via form input
+            foreach ($request->file('other_images') as $picture) {
+                $pictures[] = $fileName = time().'.'.$picture->getClientOriginalName();
+                $image_path = public_path('/FeaturedProperty_images');
+                $picture->move($image_path,$fileName);
 
-            $path = $request->image;
+                // Storage::put('public/' . $fileName, file_get_contents($picture));
+            }
+            $path2 = '/FeaturedProperty_images/'.implode(',/FeaturedProperty_images/', $pictures);
+            $featuredImage = $request->file('image');
+            $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
+            $image_path2 = public_path('/FeaturedProperty_images');
+            $featuredImage->move($image_path2,$image_filename);
+            $path = '/FeaturedProperty_images/'.$image_filename;
 
-        }else{
+            $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $pin = mt_rand(1000000, 9999999)
+                    . mt_rand(1000000, 9999999)
+                    . $characters[rand(0, strlen($characters) - 1)];
 
+            $users = auth('api')->user();
+            $user = json_decode($users);
+
+            $property = Property::create([
+                'user_id' => $user->id,
+                'category_id' => $request->category_id,
+                'type_id' => $request->type_id,
+                'location_id' => $request->location_id,
+                'location' => $request->location,
+                'title' => $request->title,
+                'description' => $request->description,
+                'state' => $request->state,
+                'area' => $request->area,
+                'total_area' => $request->total_area,
+                'market_status' => $request->market_status,
+                'parking' => $request->parking,
+                'locality' => $request->locality,
+                'budget' => $request->budget,
+                'other_images' => $path2,
+                'image' => $path,
+                'bedroom' => $request->bedroom,
+                'bathroom' => $request->bathroom,
+                'toilet' => $request->toilet,
+                'video_link' => $request->video_link,
+                'status' => $request->status,
+                'feature' => $request->feature,
+                'ref_no' => str_shuffle($pin),
+                'user' => $user,
+            ]);
+
+            DB::commit();
+            // return validResponse('Property Created!');
+            return response()->json([
+                'message' => 'Property Created!',
+                'property' => $property,
+            ], 201);
+        }
+        if (!$request->hasFile('other_images')) {
+            $featuredImage = $request->file('image');
             $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
             $image_path = public_path('/FeaturedProperty_images');
             $featuredImage->move($image_path,$image_filename);
             $path = '/FeaturedProperty_images/'.$image_filename;
 
-        }       
+            $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $pin = mt_rand(1000000, 9999999)
+                    . mt_rand(1000000, 9999999)
+                    . $characters[rand(0, strlen($characters) - 1)];
 
-        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $pin = mt_rand(1000000, 9999999)
-                . mt_rand(1000000, 9999999)
-                . $characters[rand(0, strlen($characters) - 1)];
+            $users = auth('api')->user();
+            $user = json_decode($users);
 
-        $users = auth('api')->user(); 
-        $user = json_decode($users); 
+            $property = Property::create([
+                'user_id' => $user->id,
+                'category_id' => $request->category_id,
+                'type_id' => $request->type_id,
+                'location_id' => $request->location_id,
+                'location' => $request->location,
+                'title' => $request->title,
+                'description' => $request->description,
+                'state' => $request->state,
+                'area' => $request->area,
+                'total_area' => $request->total_area,
+                'market_status' => $request->market_status,
+                'parking' => $request->parking,
+                'locality' => $request->locality,
+                'budget' => $request->budget,
+                'other_images' => $request->other_images,
+                'image' => $path,
+                'bedroom' => $request->bedroom,
+                'bathroom' => $request->bathroom,
+                'toilet' => $request->toilet,
+                'video_link' => $request->video_link,
+                'status' => $request->status,
+                'feature' => $request->feature,
+                'ref_no' => str_shuffle($pin),
+                'user' => $user,
+            ]);
 
-        $property = Property::create([
-            'user_id' => $user->id,
-            'category_id' => $request->category_id,
-            'type_id' => $request->type_id,
-            'location_id' => $request->location_id,
-            'location' => $request->location,
-            'title' => $request->title,
-            'description' => $request->description,
-            'state' => $request->state,
-            'area' => $request->area,
-            'total_area' => $request->total_area,
-            'market_status' => $request->market_status,
-            'parking' => $request->parking,
-            'locality' => $request->locality,
-            'budget' => $request->budget,
-            'other_images' => $request->other_images,
-            'image' => $path, 
-            'bedroom' => $request->bedroom,
-            'bathroom' => $request->bathroom,
-            'toilet' => $request->toilet,
-            'video_link' => $request->video_link,
-            'status' => $request->status,
-            'feature' => $request->feature,
-            'ref_no' => str_shuffle($pin),
-            'user' => $user,
-        ]);
-
-        DB::commit();
-        // return validResponse('Property Created!');
-        return response()->json([
-            'message' => 'Property Created!',
-            'property' => $property,
-        ], 201);
+            DB::commit();
+            // return validResponse('Property Created!');
+            return response()->json([
+                'message' => 'Property Created!',
+                'property' => $property,
+            ], 201);
+            }
         }
         catch(ValidationException $e){
             DB::rollback();

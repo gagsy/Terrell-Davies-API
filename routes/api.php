@@ -105,8 +105,6 @@ Route::get('/subscriptions', 'SubscriptionController@index');
 
 
 
-
-
 Route::group(['middleware' => 'auth:api'], function(){
     //Property Api Controller Routes
     Route::post('/property/create', 'PropertyController@store');
@@ -132,7 +130,6 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('/user/property/list','PropertyController@user_property_list');
 
     Route::get('user/{id}', 'Api\AuthController@singleUser');
-
 
 });
 
