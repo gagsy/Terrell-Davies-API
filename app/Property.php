@@ -24,6 +24,7 @@ class Property extends Model
         'locality',
         'budget',
         'image',
+        'other_images',
         'bedroom',
         'bathroom',
         'toilet',
@@ -56,5 +57,9 @@ class Property extends Model
     }
 
     protected $casts = [ 'other_images' => 'array', 'user' => 'array' ];
+
+    public function getOtherImagesAttribute(){
+        return explode(',',$this->attributes['other_images']);
+    }
 
 }

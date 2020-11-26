@@ -33,6 +33,9 @@ class PropertyController extends Controller
     public function index()
     {
         $property = Property::orderBy('id', 'DESC')->where('status', 'Publish')->get();
+
+        //extract the images
+
         return response()->json([
             'property' => $property,
         ], 200);
@@ -98,18 +101,29 @@ class PropertyController extends Controller
         }
 
         $featuredImage = $request->file('image');
-        $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
-        $image_path = public_path('/FeaturedProperty_images');
-        $featuredImage->move($image_path,$image_filename);
-        $path = '/FeaturedProperty_images/'.$image_filename;
+
+        if(!isset($featuredImage) || empty($featuredImage) && gettype($request->image) == 'string'){
+            
+            //if image is not sent via form input
+
+            $path = $request->image;
+
+        }else{
+
+            $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
+            $image_path = public_path('/FeaturedProperty_images');
+            $featuredImage->move($image_path,$image_filename);
+            $path = '/FeaturedProperty_images/'.$image_filename;
+
+        }       
 
         $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $pin = mt_rand(1000000, 9999999)
                 . mt_rand(1000000, 9999999)
                 . $characters[rand(0, strlen($characters) - 1)];
 
-        $users = auth('api')->user();
-        $user = json_decode($users);
+        $users = auth('api')->user(); 
+        $user = json_decode($users); 
 
         $property = Property::create([
             'user_id' => $user->id,
@@ -127,7 +141,7 @@ class PropertyController extends Controller
             'locality' => $request->locality,
             'budget' => $request->budget,
             'other_images' => $request->other_images,
-            'image' => $path,
+            'image' => $path, 
             'bedroom' => $request->bedroom,
             'bathroom' => $request->bathroom,
             'toilet' => $request->toilet,

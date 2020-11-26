@@ -147,13 +147,14 @@ class AuthController extends Controller
         $image_path = public_path('/Avatar_images');
         $avatar->move($image_path,$filename);
 
-        $image_path1 = public_path('Avatar_images/'.$users->avatar);
+        $image_path1 = public_path('Avatar_images/'.$users->avatar); //Not sure what this is.
+
         if(File::exists($image_path1)) {
             File::delete($image_path1);
         }
 
         // $users->avatar = $filename;
-        $users->avatar = $image_path1;
+        $users->avatar = $test_path;
         $users->save();
 
         $data[] = [

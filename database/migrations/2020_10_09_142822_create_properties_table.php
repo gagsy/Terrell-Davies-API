@@ -12,7 +12,7 @@ class CreatePropertiesTable extends Migration
      * @return void
      */
     public function up()
-    {
+    { 
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->index();
