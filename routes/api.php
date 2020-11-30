@@ -109,6 +109,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     //Property Api Controller Routes
     Route::post('/property/create', 'PropertyController@store');
 
+    Route::post('/property/image-upload', 'PropertyController@imageUpload');
+
     Route::get('/user-detail', 'Api\AuthController@userDetail');
 
     Route::post('/profile-update', 'Api\AuthController@updateProfile');

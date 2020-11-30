@@ -211,25 +211,6 @@ class AuthController extends Controller
     public function ProfileImageUpload(Request $request, $id=null){
         $user_id = Auth::user()->id;
         $users = User::find($user_id);
-<<<<<<< HEAD
-        $request->validate([
-            'avatar' => 'nullable|image|max:4096',
-        ]);
-        $avatar = $request->file('avatar');
-        $filename = time() . '.' . $avatar->getClientOriginalExtension();
-        $image_path = public_path('/Avatar_images');
-        $avatar->move($image_path,$filename);
-
-        $image_path1 = public_path('Avatar_images/'.$users->avatar); //Not sure what this is.
-
-        if(File::exists($image_path1)) {
-            File::delete($image_path1);
-        }
-
-        // $users->avatar = $filename;
-        $users->avatar = $test_path;
-        $users->save();
-=======
         DB::beginTransaction();
         try{
             $validator = Validator::make($request->all(),[
@@ -246,7 +227,6 @@ class AuthController extends Controller
             $filename = time() . '.' . $avatar->getClientOriginalExtension();
             $image_path = public_path('/Avatar_images');
             $avatar->move($image_path,$filename);
->>>>>>> 7570580445e3932b30cea11decea4f34dd5abcef
 
             $image_path1 = public_path('Avatar_images/'.$users->avatar);
             if(File::exists($image_path1)) {

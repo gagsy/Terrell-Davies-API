@@ -66,55 +66,48 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
+        $path2 = "";
+
         DB::beginTransaction();
+
         try{
             $validator = Validator::make($request->all(),[
-            'user_id' => 'required',
-            'category_id' => 'required',
-            'type_id' => 'required',
-            'location' => 'required',
-            'location_id' => 'nullable',
-            'title' => 'required',
-            'description' => 'required',
-            'state' => 'required',
-            'area' => 'required',
-            'total_area' => 'required',
-            'market_status' => 'required',
-            'parking' => 'required',
-            'locality' => 'required',
-            'budget' => 'required',
-            'other_images' => 'nullable',
-            'other_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:3048',
-            'image' => 'required',
-            'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:3048',
-            'bedroom' => 'required',
-            'bathroom' => 'required',
-            'toilet' => 'required',
-            'video_link' => 'nullable',
-            'status' => 'required',
-            'feature' => 'required',
-        ]);
-
-        if($validator->fails()){
-            session()->flash('errors' , $validator->errors());
-            throw new ValidationException($validator);
-        }
-
-        if ($request->hasFile('other_images')) {
+                'user_id' => 'required',
+                'category_id' => 'required',
+                'type_id' => 'required',
+                'location' => 'required',
+                'location_id' => 'nullable',
+                'title' => 'required',
+                'description' => 'required',
+                'state' => 'required',
+                'area' => 'required',
+                'total_area' => 'required',
+                'market_status' => 'required',
+                'parking' => 'required',
+                'locality' => 'required',
+                'budget' => 'required',
+                'other_images' => 'nullable',
+                'other_images.*' => 'text|max:3048',
+                'image' => 'required',
+                'image.*' => 'text|max:3048',
+                'bedroom' => 'required',
+                'bathroom' => 'required',
+                'toilet' => 'required',
+                'video_link' => 'nullable',
+                'status' => 'required',
+                'feature' => 'required',
+            ]);
             
-            foreach ($request->file('other_images') as $picture) {
-                $pictures[] = $fileName = time().'.'.$picture->getClientOriginalName();
-                $image_path = public_path('/FeaturedProperty_images');
-                $picture->move($image_path,$fileName);
+            //TODO: Don't forget to remove the ! from this validation
 
-                // Storage::put('public/' . $fileName, file_get_contents($picture));
+            if($validator->fails()){
+                session()->flash('errors' , $validator->errors());
+                throw new ValidationException($validator);
             }
-            $path2 = '/FeaturedProperty_images/'.implode(',/FeaturedProperty_images/', $pictures);
-            $featuredImage = $request->file('image');
-            $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
-            $image_path2 = public_path('/FeaturedProperty_images');
-            $featuredImage->move($image_path2,$image_filename);
-            $path = '/FeaturedProperty_images/'.$image_filename;
+        
+        
+            
+            return $path2;
 
             $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $pin = mt_rand(1000000, 9999999)
@@ -157,68 +150,59 @@ class PropertyController extends Controller
                 'message' => 'Property Created!',
                 'property' => $property,
             ], 201);
+        
+      
+    }
+    catch(Exception $e){
+        session()->flash('error_msg' , $e->getMessage());
+        dd($e->getMessage());
+        DB::rollback();
+        return problemResponse($e->getMessage() , ApiConstants::SERVER_ERR_CODE , $request);
+    }
+     catch(ValidationException $e){
+            DB::rollback();
+            $message = "" . (implode(' ', Arr::flatten($e->errors())));
+            return problemResponse($message , ApiConstants::BAD_REQ_ERR_CODE , $request);
         }
-        if (!$request->hasFile('other_images')) {
-            $featuredImage = $request->file('image');
-            $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
-            $image_path = public_path('/FeaturedProperty_images');
-            $featuredImage->move($image_path,$image_filename);
-            $path = '/FeaturedProperty_images/'.$image_filename;
+}
 
-            $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            $pin = mt_rand(1000000, 9999999)
-                    . mt_rand(1000000, 9999999)
-                    . $characters[rand(0, strlen($characters) - 1)];
-
-            $users = auth('api')->user();
-            $user = json_decode($users);
-
-            $property = Property::create([
-                'user_id' => $user->id,
-                'category_id' => $request->category_id,
-                'type_id' => $request->type_id,
-                'location_id' => $request->location_id,
-                'location' => $request->location,
-                'title' => $request->title,
-                'description' => $request->description,
-                'state' => $request->state,
-                'area' => $request->area,
-                'total_area' => $request->total_area,
-                'market_status' => $request->market_status,
-                'parking' => $request->parking,
-                'locality' => $request->locality,
-                'budget' => $request->budget,
-                'other_images' => $request->other_images,
-                'image' => $path,
-                'bedroom' => $request->bedroom,
-                'bathroom' => $request->bathroom,
-                'toilet' => $request->toilet,
-                'video_link' => $request->video_link,
-                'status' => $request->status,
-                'feature' => $request->feature,
-                'ref_no' => str_shuffle($pin),
-                'user' => $user,
+    public function imageUpload(Request $request){
+     
+        try{
+            $validator = Validator::make($request->all(),[
+                'image' => 'nullable',
+                'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:3048',
             ]);
 
-            DB::commit();
-            // return validResponse('Property Created!');
-            return response()->json([
-                'message' => 'Property Created!',
-                'property' => $property,
-            ], 201);
+            if($validator->fails()){
+                session()->flash('errors' , $validator->errors());
+                throw new ValidationException($validator);
             }
+
+            $image = $request->file('image');
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image_path = public_path('/Property_images');
+            $image->move($image_path,$filename);
+          
+            $path = env('APP_URL').'/Property_images/'.$filename;
+        
+            return response()->json($path);
+
         }
+
         catch(ValidationException $e){
             DB::rollback();
             $message = "" . (implode(' ', Arr::flatten($e->errors())));
             return problemResponse($message , ApiConstants::BAD_REQ_ERR_CODE , $request);
         }
+
         catch(Exception $e){
             session()->flash('error_msg' , $e->getMessage());
             dd($e->getMessage());
             DB::rollback();
             return problemResponse($e->getMessage() , ApiConstants::SERVER_ERR_CODE , $request);
         }
+        
     }
 
     public function user_property_list(){
