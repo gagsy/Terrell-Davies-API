@@ -103,12 +103,8 @@ class PropertyController extends Controller
             if($validator->fails()){
                 session()->flash('errors' , $validator->errors());
                 throw new ValidationException($validator);
-            }
+            }       
         
-        
-            
-            return $path2;
-
             $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $pin = mt_rand(1000000, 9999999)
                     . mt_rand(1000000, 9999999)
@@ -132,8 +128,8 @@ class PropertyController extends Controller
                 'parking' => $request->parking,
                 'locality' => $request->locality,
                 'budget' => $request->budget,
-                'other_images' => $path2,
-                'image' => $path,
+                'other_images' => $request->other_images,
+                'image' => $request->image,
                 'bedroom' => $request->bedroom,
                 'bathroom' => $request->bathroom,
                 'toilet' => $request->toilet,
