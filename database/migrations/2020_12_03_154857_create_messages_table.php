@@ -18,8 +18,9 @@ class CreateMessagesTable extends Migration
             $table->string('sender');
             $table->string('receiver');
             $table->text('content');
-            $table->string('title');
-            $table->string('reply_to');
+            $table->string('title')->nullable();
+            $table->string('reply_to')->nullable();
+            $table->string('read_at');
             $table->timestamps();
         });
     }

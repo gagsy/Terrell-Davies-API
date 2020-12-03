@@ -94,7 +94,7 @@ Route::group(['middleware' => 'auth:api'], function(){
      */
 
 
-     Route::post('message/create','MessageController@store');
+     Route::post('message/create','MessageController@create');
      Route::post('message/reply','MessageController@reply');
      Route::get('user/messages','MessageController@index');
      Route::get('user/messages/count','MessageController@index');
