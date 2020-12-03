@@ -226,6 +226,33 @@ class PropertyController extends Controller
         ]);
 
 
+        if(auth('api')->user()->id != $request->user_id){
+
+            return response()->json([
+                'message' => 'Authentication Failed',
+            ], 403);
+        }
+
+        $findProperty = Property::find($request->property_id);
+
+        if(!$findProperty){
+            
+            return response()->json([
+                'message' => 'Property Not Found',
+            ], 404);
+
+        }
+
+        $isPropertyAlreadyAdded = ShortList::where('user_id',$request->user_id)->where('property_id',$request->property_id)->count();
+
+        if($isPropertyAlreadyAdded > 0){
+
+            return response()->json([
+                'message' => 'Duplicate Request, this property has already been added',
+            ], 505);
+
+        }
+
         DB::beginTransaction();
         $shortlist = ShortList::create([
             'user_id' => auth('api')->user()->id,
@@ -465,7 +492,14 @@ class PropertyController extends Controller
             $property->orWhere('type_id', $request->type_id);
             $property->orWhere('category_id', $request->category_id);
         }
+
+        //Save result in SearchHistory:: 
+
         return $property->get();
+    }
+
+    public function searchHistory(Request $request){
+
     }
 
     public function propertyCount(){
