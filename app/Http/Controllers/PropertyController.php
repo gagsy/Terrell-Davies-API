@@ -9,6 +9,7 @@ use App\Location;
 use App\ShortList;
 use Illuminate\Support\Arr;
 use App\Type;
+use App\SearchHistory;
 use App\User;
 use DB;
 use Exception;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use App\Http\Resources\SearchHistoryCollection;
 
 class PropertyController extends Controller
 {
@@ -482,6 +484,8 @@ class PropertyController extends Controller
 
     public function filter(Request $request)
     {
+        $user_id = auth('api')->user()->id;
+
         $property = Property::where('status', 'Publish');
         if ($request->has('title','bathroom','budget', 'state', 'locality', 'type_id', 'category_id')) {
             $property->where('title', $request->title);
@@ -495,10 +499,45 @@ class PropertyController extends Controller
 
         //Save result in SearchHistory:: 
 
+        if(isset($user_id) && !empty($user_id)){
+
+            foreach($property->get() as $property){
+
+                SearchHistory::create([
+                    'user_id'=>$user_id,
+                    'property_id'=>$property->id
+                ]);
+
+            }         
+
+        }
+       
+
         return $property->get();
     }
 
     public function searchHistory(Request $request){
+
+        $user_id = $request->user_id;
+        $auth_user = auth('api')->user()->id; 
+
+        if($user_id != $auth_user){
+
+            return response()->json([
+                'message' => 'Authentication Failed',
+                'data'=>[]
+            ], 403);
+
+        }
+        
+        $searchHistory = new SearchHistoryCollection(SearchHistory::where('user_id')->paginate());
+
+        return response()->json([
+            'message' => 'Search History',
+            'data'=>$searchHistory
+        ], 403);
+
+
 
     }
 
