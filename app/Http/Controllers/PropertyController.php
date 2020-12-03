@@ -520,21 +520,11 @@ class PropertyController extends Controller
         return $property->get();
     }
 
-    public function searchHistory(Request $request){
+    public function searchHistory(){
 
-        $user_id = $request->user_id;
         $auth_user = auth('api')->user()->id; 
-
-        if($user_id != $auth_user){
-
-            return response()->json([
-                'message' => 'Authentication Failed',
-                'data'=>[]
-            ], 403);
-
-        }
         
-        $searchHistory = new SearchHistoryCollection(SearchHistory::where('user_id')->paginate());
+        $searchHistory = new SearchHistoryCollection(SearchHistory::where('user_id',$auth_user)->paginate());
 
         return response()->json([
             'message' => 'Search History',
