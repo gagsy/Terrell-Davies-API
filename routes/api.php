@@ -41,13 +41,9 @@ Route::get('/types', 'TypeController@index');
 
 
 Route::post('/submit-request', 'PropertyRequestController@store');
-
 Route::get('/property-type', 'PropertyTypeController@index');
-
 Route::get('/property-locations', 'PropertyLocationController@index');
-
 Route::get('/property-features', 'PropertyFeatureController@index');
-
 Route::get('/properties', 'PropertyController@index');
 
 Route::get('properties/{page?}', 'PropertyController@paginate');
@@ -81,20 +77,15 @@ Route::get('/filter', 'PropertyController@searchByStateAreaCity');
 Route::get('/search', 'PropertyController@filter'); //
 
 Route::get('/search/history', 'PropertyController@searchHistory'); //
-
 Route::get('/users', 'Api\AuthController@users');
 Route::post('/create-category', 'CategoryController@store');
 
 Route::get('/manage', 'Api\AuthController@manageAdmin');
-
 Route::post('/disable-user/{id}','Api\AuthController@disableUser');
 Route::post('/enable-user/{id}','Api\AuthController@enableUser');
-
 Route::get('/account','Api\AuthController@account');
 Route::get('/property-count','PropertyController@propertyCount');
-
 Route::get('/plans', 'PlanController@index');
-
 Route::get('/plan/{id}', 'PlanController@show');
 Route::delete('plan/{id}', 'PlanController@destroy');
 Route::put('plan/{id}', 'PlanController@update');
@@ -118,6 +109,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('/plan/create', 'PlanController@store');
     Route::post('/change-password', 'Api\AuthController@changePassword');
     Route::post('/shortlist/add', 'PropertyController@shortlist');        
+    Route::delete('/shortlist/remove', 'PropertyController@shortlistRemove');        
     Route::get('/user/shortlist/count', 'PropertyController@user_shortlist_count');
     Route::get('/user/shortlists/', 'PropertyController@user_shortlist');
     Route::get('/user/property/count','PropertyController@user_property_count');

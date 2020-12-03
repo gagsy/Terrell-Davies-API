@@ -266,6 +266,50 @@ class PropertyController extends Controller
         ], 201);
     }
 
+    public function shortlistRemove(Request $request){
+
+        $request->validate([
+            'user_id' => 'required',
+            'shortlist_id' => 'required',
+        ]);
+
+        $isShortListAvailable = ShortList::find($request->shortlist_id);
+
+        if(!$isShortListAvailable){
+            
+            return response()->json([
+                'message' => 'Shortlist Not Found',
+                'data'=>[]
+            ], 404);
+
+        }
+
+        if(auth('api')->user()->id != $request->user_id){
+
+            return response()->json([
+                'message' => 'Authentication Failed',
+                'data'=>[]
+            ], 403);
+        }
+
+        if($isShortListAvailable->user_id != $request->user_id){
+
+            return response()->json([
+                'message' => 'This shortlist does not belong to this user',
+                'data'=>[]
+            ], 403);
+
+        }
+
+        $isShortListAvailable->delete();
+
+        return response()->json([
+            'message' => 'Shortlist removed successfully',
+            'data'=>[]
+        ], 200);
+
+    }
+
     public function user_shortlist_count(){
         $user_id = auth('api')->user()->id;
 
@@ -475,8 +519,7 @@ class PropertyController extends Controller
                         ->orWhere('state', 'like', "%{$data}%")
                         ->orWhere('locality', 'like', "%{$data}%")
                         ->orWhere('type_id', 'like', "%{$data}%")
-                        ->orWhere('category_id', 'like', "%{$data}%");
-                        // ->orWhere('location_id', 'like', "%{$data}%");
+                        ->orWhere('category_id', 'like', "%{$data}%");                        
 
 
         return $property->get();
