@@ -246,6 +246,19 @@ class PropertyController extends Controller
         ], 200);
     }
 
+    public function user_shortlist(){
+
+        $user_id = auth('api')->user()->id;
+
+        $user_shortlist = Shortlist::where('user_id', $user_id)->get();
+
+            return response()->json([
+
+            'user_shortlists' => $user_shortlist
+
+        ], 200);
+    }
+
     public function searchByStateAreaCity(Request $request){
         $pro = Property::where('status', 'Publish');
 
