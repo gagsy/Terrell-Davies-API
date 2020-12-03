@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class SearchHistory extends Model
 {
     protected $fillable = [
-        'user_id','properties_results'
+        'user_id','property_id'
     ];
 
 

@@ -15,6 +15,8 @@ class CreateSearchHistoriesTable extends Migration
     {
         Schema::create('search_histories', function (Blueprint $table) {
             $table->id();
+            $table->string('user_id');
+            $table->string('property_id');
             $table->timestamps();
         });
     }

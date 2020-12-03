@@ -484,28 +484,32 @@ class PropertyController extends Controller
 
     public function filter(Request $request)
     {
-        $user_id = auth('api')->user()->id;
+        $user_id = auth('api')->user()->id ?? '';
+
+        
 
         $property = Property::where('status', 'Publish');
         if ($request->has('title','bathroom','budget', 'state', 'locality', 'type_id', 'category_id')) {
-            $property->where('title', $request->title);
+
+            $property->orWhere('title', $request->title);
             $property->orWhere('bathroom', $request->bathroom);
             $property->orWhere('budget', $request->budget);
             $property->orWhere('state', $request->state);
             $property->orWhere('locality', $request->locality);
             $property->orWhere('type_id', $request->type_id);
             $property->orWhere('category_id', $request->category_id);
+
         }
 
         //Save result in SearchHistory:: 
 
-        if(isset($user_id) && !empty($user_id)){
-
-            foreach($property->get() as $property){
-
+        if(isset($user_id) && !empty($user_id) && $property->count() > 0){
+            
+            foreach($property->get() as $singleProperty){
+                
                 SearchHistory::create([
                     'user_id'=>$user_id,
-                    'property_id'=>$property->id
+                    'property_id'=>$singleProperty->id
                 ]);
 
             }         
