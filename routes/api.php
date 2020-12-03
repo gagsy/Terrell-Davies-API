@@ -108,31 +108,18 @@ Route::get('/subscriptions', 'SubscriptionController@index');
 Route::group(['middleware' => 'auth:api'], function(){
     //Property Api Controller Routes
     Route::post('/property/create', 'PropertyController@store');
-
     Route::post('/property/image-upload', 'PropertyController@imageUpload');
-
     Route::get('/user-detail', 'Api\AuthController@userDetail');
-
     Route::post('/profile-update', 'Api\AuthController@updateProfile');
-
     Route::post('/profile/image/upload', 'Api\AuthController@ProfileImageUpload');
-
     Route::post('/admin-profile-update', 'Api\AuthController@adminUpdate');
-
     Route::post('/plan/create', 'PlanController@store');
-
     Route::post('/change-password', 'Api\AuthController@changePassword');
-
-    Route::post('/shortlist/add', 'PropertyController@shortlist');
-    
+    Route::post('/shortlist/add', 'PropertyController@shortlist');    
     Route::get('/user/shortlist/count', 'PropertyController@user_shortlist_count');
-
     Route::get('/user/shortlists/', 'PropertyController@user_shortlist');
-
     Route::get('/user/property/count','PropertyController@user_property_count');
-
     Route::get('/user/property/list','PropertyController@user_property_list');
-
     Route::get('user/{id}', 'Api\AuthController@singleUser');
 
 });
