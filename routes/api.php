@@ -15,19 +15,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/login', 'Api\AuthController@login')->name('login');
-
 Route::post('/admin-login', 'Api\AuthController@AdminLogin');
-
 Route::post('register', 'Api\AuthController@register')->name('register');
-
 Route::get('email/verify/{id}', 'VerificationApiController@verify')->name('verificationapi.verify');
-
 Route::get('email/resend', 'VerificationApiController@resend')->name('verificationapi.resend');
-
 Route::post('password/email', 'Api\AuthController@forgot');
-
 Route::post('password/reset', 'ForgotPasswordController@reset');
-
 
 
 Route::get('logout', 'Api\AuthController@logout')->name('logout');
@@ -38,48 +31,29 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/types', 'TypeController@index');
-
-
 Route::post('/submit-request', 'PropertyRequestController@store');
 Route::get('/property-type', 'PropertyTypeController@index');
 Route::get('/property-locations', 'PropertyLocationController@index');
 Route::get('/property-features', 'PropertyFeatureController@index');
 Route::get('/properties', 'PropertyController@index');
-
 Route::get('properties/{page?}', 'PropertyController@paginate');
-
 Route::get('/locations', 'LocationController@index');
-
 Route::get('/features', 'FeatureController@index');
-
 Route::get('/property-category', 'PropertyCategoryController@index');
-
 Route::get('/category', 'CategoryController@index');
-
 Route::get('/blog-categories', 'BlogCategoryController@index');
-
 Route::get('/blogs', 'BlogController@index');
-
 Route::get('/about', 'AboutUsController@index');
-
 Route::get('/policy', 'PrivacyPolicyController@index');
-
 Route::get('/property-cats', 'PropertyCategoryController@index');
-
 Route::get('/property-types', 'PropertyTypeController@index');
-
 Route::get('/property-locations', 'PropertyLocationController@index');
-
 Route::get('/terms', 'TermsConditionsController@index');
-
 Route::get('/filter', 'PropertyController@searchByStateAreaCity');
-
-Route::get('/search', 'PropertyController@filter'); //
-
-Route::get('/search/history', 'PropertyController@searchHistory'); //
+Route::get('/search', 'PropertyController@filter'); 
+Route::get('/search/history', 'PropertyController@searchHistory'); 
 Route::get('/users', 'Api\AuthController@users');
 Route::post('/create-category', 'CategoryController@store');
-
 Route::get('/manage', 'Api\AuthController@manageAdmin');
 Route::post('/disable-user/{id}','Api\AuthController@disableUser');
 Route::post('/enable-user/{id}','Api\AuthController@enableUser');
@@ -95,8 +69,6 @@ Route::get('plan/{id}', 'PlanController@edit');
 Route::post('/subscribe', 'PaymentController@redirectToGateway')->name('pay');
 Route::get('/payment/callback', 'PaymentController@handleGatewayCallback');
 Route::get('/subscriptions', 'SubscriptionController@index');
-
-
 
 Route::group(['middleware' => 'auth:api'], function(){
     //Property Api Controller Routes
@@ -115,6 +87,22 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('/user/property/count','PropertyController@user_property_count');
     Route::get('/user/property/list','PropertyController@user_property_list');
     Route::get('user/{id}', 'Api\AuthController@singleUser');
+
+
+    /**
+     * Messaging EndPoints
+     */
+
+
+     Route::post('message/create','MessageController@store');
+     Route::post('message/reply','MessageController@reply');
+     Route::get('user/messages','MessageController@index');
+     Route::get('user/messages/count','MessageController@index');
+     Route::get('user/messages/read','MessageController@read');
+     Route::get('user/messages/read/count','MessageController@read');
+     Route::get('user/messages/unread/count','MessageController@unread');
+     
+     
 
 });
 
@@ -201,7 +189,6 @@ Route::get('/sub-history','Api\AuthController@sub_history');
 // Newsletter Subscription Api Routes
 Route::get('/sub-newsletter','NewsletterController@index');
 Route::post('/create-newsletter','NewsletterController@store');
-
 
 
 //About Page
