@@ -323,7 +323,7 @@ class PropertyController extends Controller
 
         $user_id = auth('api')->user()->id;
 
-        $user_shortlist = Shortlist::where('user_id', $user_id)->get();
+        $user_shortlist = Shortlist::where('user_id', $user_id)->with('property')->get();
 
             return response()->json([
 
@@ -565,14 +565,13 @@ class PropertyController extends Controller
 
     public function searchHistory(){
 
-        $auth_user = auth('api')->user()->id; 
-        
-        $searchHistory = new SearchHistoryCollection(SearchHistory::where('user_id',$auth_user)->paginate());
+        $auth_user = auth('api')->user()->id;         
+        $searchHistory = SearchHistory::where('user_id',$auth_user)->with('property')->get();
 
         return response()->json([
             'message' => 'Search History',
             'data'=>$searchHistory
-        ], 403);
+        ], 200);
 
 
 
