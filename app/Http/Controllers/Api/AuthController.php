@@ -235,12 +235,12 @@ class AuthController extends Controller
             if(File::exists($image_path1)) {
                 File::delete($image_path1);
             }
-            $path = '/Avatar_images/'.$filename;
+            $path =  env('APP_URL') . '/Avatar_images/'.$filename;
 
             $users->avatar = $path;
             $users->save();
 
-            $data[] = [
+            $data = [
                 'id'=>$users->id,
                 'avatar'=>$users->avatar,
                 'message'=>'Image Uploaded',
