@@ -15,7 +15,12 @@ class CreateNoticesTable extends Migration
     {
         Schema::create('notices', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('sender_id');
+            $table->string('receiver_id');
+            $table->text('content');
+            $table->string('title')->nullable();            
+            $table->string('read_at');
+            $table->timestamps(); 
         });
     }
 
