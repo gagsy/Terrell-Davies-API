@@ -98,19 +98,54 @@ class NoticeController extends Controller
 
         }
 
-        $findNotice = Notice::find($request->notice_id);
+        $responseMessage = [];
 
-        if(!$findNotice){
+        if(is_array($request->notice_id)){
 
+            foreach($request->notice_id as $singleNoticeId){
+
+                $findSingleNotice = Notice::find($singleNoticeId);
+
+                if(!$findSingleNotice){
+        
+                   array_push($responseMessage,'Notice with id ' . $singleNoticeId . ' does not exist');
+        
+                }else{
+
+                    $findSingleNotice->read_at = now();
+                    $findSingleNotice->save();
+                    array_push($responseMessage,'Notice with id ' . $singleNoticeId . ' has been marked as read');
+
+                }
+
+            }
+            
             return response()->json([
-                'message' => 'Notice Not Found',
+                'message' => $responseMessage,
                 'data'=>[]
-            ], 404);
+            ], 200);
+         
+
+        }else{
+
+            $findNotice = Notice::find($request->notice_id);
+
+            if(!$findNotice){
+    
+                return response()->json([
+                    'message' => 'Notice Not Found',
+                    'data'=>[]
+                ], 404);
+    
+            }
+    
+            $findNotice->read_at = now();
+            $findNotice->save();
+
 
         }
 
-        $findNotice->read_at = now();
-        $findNotice->save();
+    
 
         return response()->json([
             'message' => 'Notice Marked as Read',
