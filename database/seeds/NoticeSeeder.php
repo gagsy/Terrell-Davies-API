@@ -19,7 +19,7 @@ class NoticeSeeder extends Seeder
             Notice::create([
 
                 'title'=> Str::random(10),
-                'sender_id'=>,
+                'sender_id'=>5,
                 'receiver_id'=>4,
                 'content'=>Str::random(250)
 
