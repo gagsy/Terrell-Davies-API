@@ -153,7 +153,7 @@ class PropertyController extends Controller
     }
     catch(Exception $e){
         session()->flash('error_msg' , $e->getMessage());
-        dd($e->getMessage());
+        // dd($e->getMessage());
         DB::rollback();
         return problemResponse($e->getMessage() , ApiConstants::SERVER_ERR_CODE , $request);
     }
