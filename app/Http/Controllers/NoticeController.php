@@ -8,13 +8,12 @@ class NoticeController extends Controller
 {
     public function index(){
 
-        $user_id = auth('api')->user()->id;
-
-        $messages = Message::where('user_id',$user_id)->get();
-
+        
+        $user = auth('api')->user();        
+         
         return response()->json([
-            'message' => 'Messages',
-            'data'=>$messages
+            'message' => 'Notice',
+            'data'=>$user->notices()->get()
         ], 200);
  
     }

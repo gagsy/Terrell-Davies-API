@@ -50,4 +50,8 @@ class User extends Model implements AuthenticatableContract
     {
         $this->notify(new VerifyApiEmail); // my notification
     }
+
+    public function notices(){
+        return $this->hasMany(Notice::class,'id','receiver_id');
+    }
 }
