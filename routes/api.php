@@ -95,7 +95,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 
      Route::post('notice/create','NoticeController@create');
      Route::get('notice','NoticeController@index'); //return all notice read and unread
-     Route::get('notice/count','NoticeController@index');
+     Route::get('notice/count','NoticeController@noticeCount');
      Route::get('notice/read','NoticeController@read');
      Route::get('notice/read/count','NoticeController@read');
      Route::get('notice/unread/count','NoticeController@unread');  

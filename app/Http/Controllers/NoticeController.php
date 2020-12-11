@@ -6,16 +6,49 @@ use Illuminate\Http\Request;
 
 class NoticeController extends Controller
 {
-    public function index(){
+    protected $user;
 
-        
+    public function __construct()
+    {
+        $this->user = auth('api')->user();
+
+        if(!isset($this->user)){
+
+            return response()->json([
+                'message' => 'Authentication Failed',
+                'data'=>[]
+            ], 403);
+
+        }
+    }
+    
+    public function index(){        
+      
+        return response()->json([
+            'message' => 'Notice',
+            'data'=>$this->user->notices()->get()
+        ], 200);
+ 
+    }
+
+    public function noticeCount(){      
+         
+        return response()->json([
+            'message' => 'Notice',
+            'data'=>$this->user->notices()->count()
+        ], 200);
+
+    }
+
+    public function read(){
+
         $user = auth('api')->user();        
          
         return response()->json([
             'message' => 'Notice',
-            'data'=>$user->notices()->get()
+            'data'=>$user->notices()->whereNotNull('read_at')->get()
         ], 200);
- 
+
     }
 
     public function create(Request $request){
