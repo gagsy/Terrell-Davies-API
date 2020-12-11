@@ -90,16 +90,16 @@ Route::group(['middleware' => 'auth:api'], function(){
 
 
     /**
-     * Messaging EndPoints
+     * Notice EndPoints
      */
 
-     Route::post('notice/create','MessageController@create');
-     Route::get('user/notice','MessageController@index');
-     Route::get('user/notice/count','MessageController@index');
-     Route::get('user/notice/read','MessageController@read');
-     Route::get('user/notice/read/count','MessageController@read');
-     Route::get('user/notice/unread/count','MessageController@unread');
-     
+     Route::post('notice/create','NoticeController@create');
+     Route::get('user/notice','NoticeController@index'); //return all notice read and unread
+     Route::get('user/notice/count','NoticeController@index');
+     Route::get('user/notice/read','NoticeController@read');
+     Route::get('user/notice/read/count','NoticeController@read');
+     Route::get('user/notice/unread/count','NoticeController@unread');  
+     Route::post('user/notice/mark-read','NoticeController@markRead'); //mark notice as read 
      
 
 });
