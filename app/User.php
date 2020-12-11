@@ -52,6 +52,6 @@ class User extends Model implements AuthenticatableContract
     }
 
     public function notices(){
-        return $this->hasMany(Notice::class,'id','receiver_id');
+        return $this->hasMany(Notice::class,'receiver_id');
     }
 }

@@ -19,7 +19,7 @@ class CreateNoticesTable extends Migration
             $table->string('receiver_id');
             $table->text('content');
             $table->string('title')->nullable();            
-            $table->string('read_at');
+            $table->string('read_at')->nullable();
             $table->timestamps(); 
         });
     }
