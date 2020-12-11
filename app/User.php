@@ -9,10 +9,12 @@ use App\Notifications\VerifyApiEmail;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Auth\Passwords\CanResetPassword;
 
-class User extends Model implements AuthenticatableContract
+class User extends Model implements AuthenticatableContract,CanResetPasswordContract
 {
-    use Notifiable, HasApiTokens, Authenticatable;
+    use Notifiable, HasApiTokens, Authenticatable,CanResetPassword;
 
 
     /**
