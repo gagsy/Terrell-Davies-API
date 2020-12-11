@@ -209,9 +209,12 @@ class AuthController extends Controller
     }
 
     public function ProfileImageUpload(Request $request, $id=null){
-        $user_id = Auth::user()->id;
+
+        $user_id = auth('api')->user()->id;
         $users = User::find($user_id);
+
         DB::beginTransaction();
+
         try{
             $validator = Validator::make($request->all(),[
                 'avatar' => 'nullable',
