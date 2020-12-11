@@ -51,6 +51,39 @@ class NoticeController extends Controller
 
     }
 
+    public function readCount(){
+
+        $user = auth('api')->user();        
+         
+        return response()->json([
+            'message' => 'Notice',
+            'data'=>$user->notices()->whereNotNull('read_at')->count()
+        ], 200);
+
+    }
+
+    public function unread(){
+
+        $user = auth('api')->user();        
+         
+        return response()->json([
+            'message' => 'Notice',
+            'data'=>$user->notices()->whereNull('read_at')->get()
+        ], 200);
+
+    }
+
+    public function unreadCount(){
+
+        $user = auth('api')->user();        
+         
+        return response()->json([
+            'message' => 'Notice',
+            'data'=>$user->notices()->whereNull('read_at')->count()
+        ], 200);
+
+    }
+
     public function create(Request $request){
 
         //check that the user is admin
