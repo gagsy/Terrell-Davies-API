@@ -15,23 +15,27 @@ Route::get('user/messages/unread/count','MessageController@unread');
 
 class MessageController extends Controller
 {
+    //Fetch all messages
 
     public function index(){
 
         $user_id = auth('api')->user()->id;
 
-        $messages = Message::where('sender')->orWhere('receiver')->get();
+        $messages = Message::where('user_id',$user_id)->get();
 
         return response()->json([
             'message' => 'Messages',
             'data'=>$messages
         ], 200);
-
+ 
     }
 
     public function create(Request $request){
 
-        //validation
+        //check that the user is admin
+        //create messages
+        //send message to selected set of people
+        //Send message to all users
 
         $array = $request->validate();
 
@@ -43,10 +47,6 @@ class MessageController extends Controller
 
     }
 
-    public function reply(Request $request){
-
-        $this->store($array);
-    }
 
     protected function store(Array $data = null)
     {
