@@ -93,14 +93,12 @@ Route::group(['middleware' => 'auth:api'], function(){
      * Messaging EndPoints
      */
 
-
-     Route::post('message/create','MessageController@create');
-     Route::post('message/reply','MessageController@reply');
-     Route::get('user/messages','MessageController@index');
-     Route::get('user/messages/count','MessageController@index');
-     Route::get('user/messages/read','MessageController@read');
-     Route::get('user/messages/read/count','MessageController@read');
-     Route::get('user/messages/unread/count','MessageController@unread');
+     Route::post('notice/create','MessageController@create');
+     Route::get('user/notice','MessageController@index');
+     Route::get('user/notice/count','MessageController@index');
+     Route::get('user/notice/read','MessageController@read');
+     Route::get('user/notice/read/count','MessageController@read');
+     Route::get('user/notice/unread/count','MessageController@unread');
      
      
 
