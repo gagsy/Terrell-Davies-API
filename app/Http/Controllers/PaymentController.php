@@ -32,10 +32,10 @@ class PaymentController extends Controller
              //check that plan with that name does not exist
 
         $availablePaymentPlans = $this->getPlans();
+        
+        foreach($availablePaymentPlans['data'] as $option){
 
-        foreach($availablePaymentPlans as $option){
-
-           $singlePlanName = $option->json()['data'][0]['name'];
+           $singlePlanName = $option['name'];
 
            if($request->name == $singlePlanName){
 
@@ -47,7 +47,6 @@ class PaymentController extends Controller
            }
 
         }
-
         
 
         $paymentPlan = $this->paymentService->createPlan([
@@ -66,7 +65,7 @@ class PaymentController extends Controller
 
         $paymentPlans = $this->paymentService->fetchPlanDetails();
 
-        return $paymentPlans->json()['data'][0]['name'];
+        return $paymentPlans->json();
 
      
     }

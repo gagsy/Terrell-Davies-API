@@ -4,9 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Plan;
+use App\Services\FlutterwavePaymentService;
+
 
 class PlanController extends Controller
 {
+
+    protected $paymentService;
+
+    public function __construct()
+    {
+        $this->paymentService = new FlutterwavePaymentService();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -34,7 +44,7 @@ class PlanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request) 
     {
         $request->validate([
             'name' => 'required',
@@ -44,10 +54,33 @@ class PlanController extends Controller
             'discount_month2' => 'nullable',
             'maximum_listings' => 'nullable',
             'maximum_premium_listings' => 'nullable',
-            'max_featured_ad_listings' => 'nullable',
+            'max_featured_ad_listings' => 'nullable'            
         ]);
 
-        $plan = Plan::create($request->all());
+        $paymentPlan = $this->paymentService->createPlan([
+            "amount"=> $request->price,
+            "name"=> $request->name,
+            "interval"=> 'monthly',
+            "duration"=> $request->duration
+        ]);
+
+        $plan = Plan::create([
+
+            'name' => $request->name,
+            'price' => $request->price,
+            'duration' => $request->duration,
+            'discount_month1' => $request->discount_month1 ?? '',
+            'discount_month2' =>  $request->discount_month2 ?? '',
+            'maximum_listings' => $request->maximum_listings,
+            'maximum_premium_listings' => $request->maximum_premium_listings,
+            'max_featured_ad_listings' => $request->max_featured_ad_listings,
+            'plan_id'=>
+
+        ]);
+        
+        //create plan in the payment service too
+
+
         return response()->json([
             'message' => 'Subscription Plan Created',
             'plan' => $plan,
