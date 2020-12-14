@@ -1,8 +1,10 @@
 <?php namespace App\Services;
 
+use App\Contracts\PaymentServiceContract;
 use Illuminate\Support\Facades\Http;
 
-class FlutterwavePaymentService 
+
+class FlutterwavePaymentService extends PaymentServiceContract
 {
     protected $__publicKey;
     protected $__secretKey;
