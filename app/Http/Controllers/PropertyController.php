@@ -550,13 +550,15 @@ class PropertyController extends Controller
 
                 $checkIfPropertyIsAlreadyRegistered = SearchHistory::where('user_Id',$user_id)->where('property_id',$singleProperty->id)->count();
 
-                if($checkIfPropertyIsAlreadyRegistered > 0){
+                // return $checkIfPropertyIsAlreadyRegistered;
+
+                if($checkIfPropertyIsAlreadyRegistered == 0){
 
                     SearchHistory::create([
                         'user_id'=>$user_id,
                         'property_id'=>$singleProperty->id
                     ]);
-                    
+
                 }               
                 
 
@@ -570,11 +572,11 @@ class PropertyController extends Controller
     public function searchHistory(){
 
         $auth_user = auth('api')->user()->id;         
-        $searchHistory = SearchHistory::where('user_id',$auth_user)->with('property')->get();
+        $searchHistory = SearchHistory::where('user_id',$auth_user)->with('property')->paginate();
 
         return response()->json([
             'message' => 'Search History',
-            'data'=>$searchHistory
+            'data'=> count($searchHistory)
         ], 200);
 
     }
