@@ -56,7 +56,7 @@ class PaymentController extends Controller
             "duration"=> $request->duration
         ]);
 
-      return $paymentPlan;
+      return $paymentPlan->json();
 
 
     }

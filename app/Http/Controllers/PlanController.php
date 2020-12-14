@@ -57,6 +57,23 @@ class PlanController extends Controller
             'max_featured_ad_listings' => 'nullable'            
         ]);
 
+        $availablePaymentPlans = $this->getPlans();
+
+        foreach($availablePaymentPlans['data'] as $option){
+
+            $singlePlanName = $option['name'];
+ 
+            if($request->name == $singlePlanName){
+ 
+                 return response()->json([
+                     'message' => 'The plan name already exists',
+                     'data'=>[]
+                 ], 405);
+ 
+            }
+ 
+         }
+
         $paymentPlan = $this->paymentService->createPlan([
             "amount"=> $request->price,
             "name"=> $request->name,
@@ -64,27 +81,35 @@ class PlanController extends Controller
             "duration"=> $request->duration
         ]);
 
-        $plan = Plan::create([
+        if($paymentPlan->json()['status'] == 'success'){
 
-            'name' => $request->name,
-            'price' => $request->price,
-            'duration' => $request->duration,
-            'discount_month1' => $request->discount_month1 ?? '',
-            'discount_month2' =>  $request->discount_month2 ?? '',
-            'maximum_listings' => $request->maximum_listings,
-            'maximum_premium_listings' => $request->maximum_premium_listings,
-            'max_featured_ad_listings' => $request->max_featured_ad_listings,
-            'plan_id'=>
+            $plan = Plan::create([
 
-        ]);
-        
-        //create plan in the payment service too
-
+                'name' => $request->name,
+                'price' => $request->price,
+                'duration' => $request->duration,
+                'discount_month1' => $request->discount_month1 ?? '',
+                'discount_month2' =>  $request->discount_month2 ?? '',
+                'maximum_listings' => $request->maximum_listings,
+                'maximum_premium_listings' => $request->maximum_premium_listings,
+                'max_featured_ad_listings' => $request->max_featured_ad_listings,
+                'plan_id'=>
+    
+            ]);
+             
+    
+            return response()->json([
+                'message' => 'Subscription Plan Created',
+                'plan' => $plan,
+            ], 200);
+        }
 
         return response()->json([
-            'message' => 'Subscription Plan Created',
-            'plan' => $plan,
-        ], 200);
+            'message' => 'Something went wrong during plan creation',
+            'plan' => [],
+        ], 503);
+
+     
     }
 
     /**
@@ -167,5 +192,15 @@ class PlanController extends Controller
           "message" => "Plans not found"
         ], 404);
     }
+    }
+
+
+    public function getPlans(){
+
+        $paymentPlans = $this->paymentService->fetchPlanDetails();
+
+        return $paymentPlans->json();
+
+     
     }
 }
