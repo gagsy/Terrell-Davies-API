@@ -249,15 +249,19 @@ class AuthController extends Controller
             return response()->json($data);
         }
         catch(ValidationException $e){
+
             DB::rollback();
             $message = "" . (implode(' ', Arr::flatten($e->errors())));
             return problemResponse($message , ApiConstants::BAD_REQ_ERR_CODE , $request);
+            
         }
         catch(Exception $e){
+
             session()->flash('error_msg' , $e->getMessage());
             dd($e->getMessage());
             DB::rollback();
             return problemResponse($e->getMessage() , ApiConstants::SERVER_ERR_CODE , $request);
+
         }
     }
 

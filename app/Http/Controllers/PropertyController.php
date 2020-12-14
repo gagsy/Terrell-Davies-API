@@ -25,6 +25,22 @@ use App\Http\Resources\SearchHistoryCollection;
 
 class PropertyController extends Controller
 {
+    protected $user;
+
+    public function __construct()
+    {
+        $this->user = auth('api')->user();
+
+        if( !isset($this->user) || empty($this->user) ){
+
+            return response()->json([
+                'message' => 'Authentication Failed',
+                'data'=>[]
+            ], 403);
+            
+        }
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -176,6 +192,8 @@ class PropertyController extends Controller
                 session()->flash('errors' , $validator->errors());
                 throw new ValidationException($validator);
             }
+
+            //carry out other checks.
 
             $image = $request->file('image');
             $filename = time() . '.' . $image->getClientOriginalExtension();
