@@ -33,23 +33,25 @@ class PaymentController extends Controller
         //check that plan with that name does not exist
         
 
-        $this->paymentService->createPlan([
+        $paymentPlan = $this->paymentService->createPlan([
             "amount"=> $request->amount,
             "name"=> $request->name,
             "interval"=> $request->interval,
             "duration"=> $request->duration
         ]);
 
-        return response()->json([
-            'message' => 'Payment Plan Created!',
-            'data' => $paymentPlan,
-        ], 201);
+      return $paymentPlan;
 
 
     }
 
     public function getPlans(){
 
+        $paymentPlans = $this->paymentService->fetchPlanDetails();
+
+        return $paymentPlans;
+
+     
     }
 
     /**

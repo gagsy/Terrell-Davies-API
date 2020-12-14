@@ -191,11 +191,7 @@ class PropertyController extends Controller
             if($validator->fails()){
                 session()->flash('errors' , $validator->errors());
                 throw new ValidationException($validator);
-            }
-
-            //carry out other checks.
-
-
+            }            
 
             $imageSize = $request->file('image')->getSize();
 
@@ -204,7 +200,7 @@ class PropertyController extends Controller
                 return response()->json([
                     'message' => 'Uploaded image is too large, image should be less than 10MB',
                     'data'=>[]
-                ], 403);
+                ], 405);
 
             }
 

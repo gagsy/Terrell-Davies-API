@@ -44,6 +44,16 @@ class FlutterwavePaymentService extends PaymentServiceContract
 
     public function fetchPlanDetails(){
         //return plan details
+
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer " . $this->__secretKey,
+            'Content-Type' => 'application/json'
+        ])
+        ->withOptions(['verify' => false]) //take this out in production
+        ->get($this->_baseurl . "/payment-plans");
+
+        return $response;
+
     }
 
     public function purchasePlan(){
