@@ -27,15 +27,29 @@ class PaymentController extends Controller
         $this->paymentService = new FlutterwavePaymentService();
     }
 
-    public function createPlans(){
+    public function createPaymentPlan(Request $request){
+
+
+        //check that plan with that name does not exist
         
-        $planData =  [
-            "amount"=> 5000,
-            "name"=> "Church collections plan",
-            "interval"=> "monthly",
-            "duration"=> 48
-        ];
-        return $this->paymentService->createPlan($planData);
+
+        $this->paymentService->createPlan([
+            "amount"=> $request->amount,
+            "name"=> $request->name,
+            "interval"=> $request->interval,
+            "duration"=> $request->duration
+        ]);
+
+        return response()->json([
+            'message' => 'Payment Plan Created!',
+            'data' => $paymentPlan,
+        ], 201);
+
+
+    }
+
+    public function getPlans(){
+
     }
 
     /**

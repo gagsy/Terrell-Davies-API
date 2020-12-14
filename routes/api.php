@@ -107,7 +107,8 @@ Route::group(['middleware' => 'auth:api'], function(){
       * Payment Endpoints
       */
 
-      Route::post('create-plan','PaymentController@createPlans');
+      Route::post('payment-plan','PaymentController@createPaymentPlan');
+      Route::get('payment-plans','PaymentController@getPlans');
      
 
 });
