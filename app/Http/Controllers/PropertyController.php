@@ -519,19 +519,17 @@ class PropertyController extends Controller
                         ->orWhere('state', 'like', "%{$data}%")
                         ->orWhere('locality', 'like', "%{$data}%")
                         ->orWhere('type_id', 'like', "%{$data}%")
-                        ->orWhere('category_id', 'like', "%{$data}%");                        
-
+                        ->orWhere('category_id', 'like', "%{$data}%");    
 
         return $property->get();
     }
 
     public function filter(Request $request)
     {
-        $user_id = auth('api')->user()->id ?? '';
-
-        
+        $user_id = auth('api')->user()->id ?? '';        
 
         $property = Property::where('status', 'Publish');
+
         if ($request->has('title','bathroom','budget', 'state', 'locality', 'type_id', 'category_id')) {
 
             $property->orWhere('title', $request->title);
@@ -549,16 +547,22 @@ class PropertyController extends Controller
         if(isset($user_id) && !empty($user_id) && $property->count() > 0){
             
             foreach($property->get() as $singleProperty){
+
+                $checkIfPropertyIsAlreadyRegistered = SearchHistory::where('user_Id',$user_id)->where('property_id',$singleProperty->id)->count();
+
+                if($checkIfPropertyIsAlreadyRegistered > 0){
+
+                    SearchHistory::create([
+                        'user_id'=>$user_id,
+                        'property_id'=>$singleProperty->id
+                    ]);
+                    
+                }               
                 
-                SearchHistory::create([
-                    'user_id'=>$user_id,
-                    'property_id'=>$singleProperty->id
-                ]);
 
             }         
 
-        }
-       
+        }       
 
         return $property->get();
     }
@@ -572,8 +576,6 @@ class PropertyController extends Controller
             'message' => 'Search History',
             'data'=>$searchHistory
         ], 200);
-
-
 
     }
 
