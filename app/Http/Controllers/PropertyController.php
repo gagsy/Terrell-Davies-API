@@ -195,6 +195,19 @@ class PropertyController extends Controller
 
             //carry out other checks.
 
+
+
+            $imageSize = $request->file('image')->getSize();
+
+            if( $imageSize > 10000000 ){
+
+                return response()->json([
+                    'message' => 'Uploaded image is too large, image should be less than 10MB',
+                    'data'=>[]
+                ], 403);
+
+            }
+
             $image = $request->file('image');
             $filename = time() . '.' . $image->getClientOriginalExtension();
             $image_path = public_path('/Property_images');
@@ -574,7 +587,7 @@ class PropertyController extends Controller
                 if($checkIfPropertyIsAlreadyRegistered == 0){
 
                     SearchHistory::create([
-                        'user_id'=>$user_id,
+                        'user_id'=>$this->user->id,
                         'property_id'=>$singleProperty->id
                     ]);
 
@@ -595,7 +608,7 @@ class PropertyController extends Controller
 
         return response()->json([
             'message' => 'Search History',
-            'data'=> count($searchHistory)
+            'data'=> $searchHistory
         ], 200);
 
     }
