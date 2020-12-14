@@ -4,6 +4,8 @@ class PaymentServiceContract {
 
     protected $__publicKey;
     protected $__secretKey;
-    protected $__encryptionKey; 
+    protected $__encryptionKey;
+    
+    
 
 }

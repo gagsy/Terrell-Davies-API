@@ -101,6 +101,13 @@ Route::group(['middleware' => 'auth:api'], function(){
      Route::get('notice/unread/count','NoticeController@unreadCount');  
      Route::get('notice/unread','NoticeController@unread');  
      Route::post('notice/mark-read','NoticeController@markRead'); //mark notice as read 
+
+
+     /**
+      * Payment Endpoints
+      */
+
+      Route::post('create-plan','PaymentController@createPlans');
      
 
 });

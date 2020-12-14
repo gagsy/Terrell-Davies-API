@@ -12,8 +12,31 @@ use App\Http\Controllers\Controller;
 use Paystack;
 use Session;
 
+use App\Services\FlutterwavePaymentService;
+
 class PaymentController extends Controller
 {
+    protected $paymentService;
+
+    public function __construct()
+    {
+        //Select payment service here, only available option is flutterwave service, 
+        //you can make other services by using the flutterwave service as a template 
+        //and implementing the paymentservice contract
+
+        $this->paymentService = new FlutterwavePaymentService();
+    }
+
+    public function createPlans(){
+        
+        $planData =  [
+            "amount"=> 5000,
+            "name"=> "Church collections plan",
+            "interval"=> "monthly",
+            "duration"=> 48
+        ];
+        return $this->paymentService->createPlan($planData);
+    }
 
     /**
      * Redirect the User to Paystack Payment Page
