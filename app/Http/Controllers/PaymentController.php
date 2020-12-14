@@ -29,8 +29,25 @@ class PaymentController extends Controller
 
     public function createPaymentPlan(Request $request){
 
+             //check that plan with that name does not exist
 
-        //check that plan with that name does not exist
+        $availablePaymentPlans = $this->getPlans();
+
+        foreach($availablePaymentPlans as $option){
+
+           $singlePlanName = $option->json()['data'][0]['name'];
+
+           if($request->name == $singlePlanName){
+
+                return response()->json([
+                    'message' => 'The plan name already exists',
+                    'data'=>[]
+                ], 405);
+
+           }
+
+        }
+
         
 
         $paymentPlan = $this->paymentService->createPlan([
@@ -49,7 +66,7 @@ class PaymentController extends Controller
 
         $paymentPlans = $this->paymentService->fetchPlanDetails();
 
-        return $paymentPlans;
+        return $paymentPlans->json()['data'][0]['name'];
 
      
     }
