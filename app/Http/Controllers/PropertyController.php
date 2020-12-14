@@ -37,7 +37,7 @@ class PropertyController extends Controller
                 'message' => 'Authentication Failed',
                 'data'=>[]
             ], 403);
-            
+
         }
 
     }
@@ -128,11 +128,11 @@ class PropertyController extends Controller
                     . mt_rand(1000000, 9999999)
                     . $characters[rand(0, strlen($characters) - 1)];
 
-            $users = auth('api')->user();
-            $user = json_decode($users);
+            // $users = auth('api')->user();
+            $user = json_decode($this->user);
 
             $property = Property::create([
-                'user_id' => $user->id,
+                'user_id' => $this->user->id,
                 'category_id' => $request->category_id,
                 'type_id' => $request->type_id,
                 'location_id' => $request->location_id,
@@ -222,18 +222,19 @@ class PropertyController extends Controller
     }
 
     public function user_property_list(){
-        $user_id = auth('api')->user()->id;
+        
+        $user_property_get = Property::where('user_id', $this->user->id)->get();
 
-        $user_property_get = Property::where('user_id', $user_id)->get();
         return response()-> json([
             'user_property_listing' => $user_property_get
         ], 200);
     }
 
     public function user_property_count(){
-        $user_id = auth('api')->user()->id;
+        
 
-        $user_property_Count = Property::where('user_id', $user_id)->count();
+        $user_property_Count = Property::where('user_id', $this->user->id)->count();
+
             return response()-> json([
             'user_property_listing_count' => $user_property_Count
         ], 200);
@@ -329,9 +330,10 @@ class PropertyController extends Controller
     }
 
     public function user_shortlist_count(){
-        $user_id = auth('api')->user()->id;
+        
 
-        $user_shortlist_count = Shortlist::where('user_id', $user_id)->count();
+        $user_shortlist_count = Shortlist::where('user_id', $this->user->id)->count();
+
             return response()->json([
             'user_shortlist_count' => $user_shortlist_count
         ], 200);
@@ -339,9 +341,9 @@ class PropertyController extends Controller
 
     public function user_shortlist(){
 
-        $user_id = auth('api')->user()->id;
+        
 
-        $user_shortlist = Shortlist::where('user_id', $user_id)->with('property')->get();
+        $user_shortlist = Shortlist::where('user_id', $this->user->id)->with('property')->get();
 
             return response()->json([
 
@@ -543,8 +545,7 @@ class PropertyController extends Controller
     }
 
     public function filter(Request $request)
-    {
-        $user_id = auth('api')->user()->id ?? '';        
+    {            
 
         $property = Property::where('status', 'Publish');
 
@@ -562,11 +563,11 @@ class PropertyController extends Controller
 
         //Save result in SearchHistory:: 
 
-        if(isset($user_id) && !empty($user_id) && $property->count() > 0){
+        if(isset($this->user->id) && !empty($this->user->id) && $property->count() > 0){
             
             foreach($property->get() as $singleProperty){
 
-                $checkIfPropertyIsAlreadyRegistered = SearchHistory::where('user_Id',$user_id)->where('property_id',$singleProperty->id)->count();
+                $checkIfPropertyIsAlreadyRegistered = SearchHistory::where('user_Id',$this->user->id)->where('property_id',$singleProperty->id)->count();
 
                 // return $checkIfPropertyIsAlreadyRegistered;
 
