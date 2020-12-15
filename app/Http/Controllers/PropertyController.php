@@ -50,7 +50,7 @@ class PropertyController extends Controller
      */
     public function index()
     {
-        $property = Property::orderBy('id', 'DESC')->where('status', 'Publish')->get();
+        $property = Property::orderBy('id', 'DESC')->where('status', 'Publish')->paginate();
 
         //extract the images
 
