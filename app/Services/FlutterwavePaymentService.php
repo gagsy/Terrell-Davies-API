@@ -56,12 +56,34 @@ class FlutterwavePaymentService extends PaymentServiceContract
 
     }
 
-    public function purchasePlan(){
-        //make plan purchase
+    public function purchasePlan(Array $data){
+        //make plan purchase          
+
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer " . $this->__secretKey,
+            'Content-Type' => 'application/json'
+        ])
+        ->withOptions(['verify' => false]) //take this out in production
+        ->post($this->_baseurl . "/payment-plans", $data);
+
+        return $response;
+
     }
 
     public function registerCustomer(){
         //register customer in flutterwave
+    }
+
+    public function generateTransactionReference($length = 20){
+
+        $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+
     }
     
 }
