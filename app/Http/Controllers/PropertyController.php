@@ -562,6 +562,8 @@ class PropertyController extends Controller
             if(
                 !isset( $request->title ) && empty( $request->title) &&
                 !isset( $request->bathroom ) && empty( $request->bathroom) &&
+                !isset( $request->bedroom ) && empty( $request->bedroom) &&
+                !isset( $request->toilet ) && empty( $request->toilet) &&
                 !isset( $request->budget ) && empty( $request->budget) &&
                 !isset( $request->state ) && empty( $request->state) &&
                 !isset( $request->locality ) && empty( $request->locality) &&
@@ -577,6 +579,8 @@ class PropertyController extends Controller
 
            (isset( $request->title ) && !empty( $request->title)) ? $property->where('title', "LIKE" , "%". $request->title . "%") : $property ;
            (isset( $request->bathroom ) && !empty( $request->bathroom)) ? $property->where('bathroom', "LIKE" , "%". $request->bathroom . "%") : $property ;
+           (isset( $request->bedroom ) && !empty( $request->bedroom)) ? $property->where('bedroom', "LIKE" , "%". $request->bedroom . "%") : $property ;
+           (isset( $request->toilet ) && !empty( $request->toilet)) ? $property->where('toilet', "LIKE" , "%". $request->toilet . "%") : $property ;
            (isset( $request->budget ) && !empty( $request->budget)) ? $property->where('budget', "LIKE" , "%". $request->budget . "%") : $property ;
            (isset( $request->state ) && !empty( $request->state)) ? $property->where('budget', "LIKE" , "%". $request->state . "%") : $property ;
            (isset( $request->locality ) && !empty( $request->locality)) ? $property->where('budget', "LIKE" , "%". $request->locality . "%") : $property ;
