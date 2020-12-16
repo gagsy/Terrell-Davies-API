@@ -554,22 +554,35 @@ class PropertyController extends Controller
     }
 
     public function filter(Request $request)
-    {            
-
+    {   
+        
         $property = Property::where('status', 'Publish');
+        // return $property;
 
-        // if ($request->has('title','bathroom','budget', 'state', 'locality', 'type_id', 'category_id')) {
+            if(
+                !isset( $request->title ) && empty( $request->title) &&
+                !isset( $request->bathroom ) && empty( $request->bathroom) &&
+                !isset( $request->budget ) && empty( $request->budget) &&
+                !isset( $request->state ) && empty( $request->state) &&
+                !isset( $request->locality ) && empty( $request->locality) &&
+                !isset( $request->type_id ) && empty( $request->type_id) &&
+                !isset( $request->category_id ) && empty( $request->category_id) 
+            ){
 
-            // $property->orWhere('title', $request->title);
-            // $property->orWhere('bathroom', $request->bathroom);
-            // $property->orWhere('budget', $request->budget);
-            // $property->orWhere('state', $request->state);
-            // $property->orWhere('locality', $request->locality);
-            // $property->orWhere('type_id', $request->type_id);
-            // $property->orWhere('category_id', $request->category_id);
+                return response()->json([
+                    'message' => 'Error: Search Parameters empty',
+                    'data'=> []
+                ], 400);
+            }
 
-        // }
-
+           (isset( $request->title ) && !empty( $request->title)) ? $property->where('title', "LIKE" , "%". $request->title . "%") : $property ;
+           (isset( $request->bathroom ) && !empty( $request->bathroom)) ? $property->where('bathroom', "LIKE" , "%". $request->bathroom . "%") : $property ;
+           (isset( $request->budget ) && !empty( $request->budget)) ? $property->where('budget', "LIKE" , "%". $request->budget . "%") : $property ;
+           (isset( $request->state ) && !empty( $request->state)) ? $property->where('budget', "LIKE" , "%". $request->state . "%") : $property ;
+           (isset( $request->locality ) && !empty( $request->locality)) ? $property->where('budget', "LIKE" , "%". $request->locality . "%") : $property ;
+           (isset( $request->type_id ) && !empty( $request->type_id)) ? $property->where('budget', "LIKE" , "%".$request->type_id . "%") : $property ;
+           (isset( $request->category_id ) && !empty( $request->category_id)) ? $property->where('budget', "LIKE" , "%". $request->category_id . "%") : $property ;
+        
         //Save result in SearchHistory:: 
 
         if(isset($this->user->id) && !empty($this->user->id) && $property->count() > 0){
@@ -592,10 +605,20 @@ class PropertyController extends Controller
 
         }       
 
+        if($property->count() == 0){
+
+            return response()->json([
+                'message' => 'Search Parameters did not return any results',
+                'data'=> []
+            ], 200);
+
+        }
+
         return response()->json([
             'message' => 'Search Result',
             'data'=> $property->get()
         ], 200);
+
     }
 
     public function searchHistory(){
