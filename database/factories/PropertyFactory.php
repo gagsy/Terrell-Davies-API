@@ -27,8 +27,8 @@ $factory->define(Property::class, function (Faker $faker) {
         'bathroom' => rand(1,5),
         'toilet' => rand(1,5),
         'video_link' => $faker->url,
-        'status' => $faker->randomElement(['yes','no']),
-        'feature' =>$faker->text(200),
+        'status' =>$faker->randomElement(['Publish','Unpublish']),
+        'feature' => $faker->randomElement(['Serviced','Furnished']),
         'ref_no' => str_shuffle($faker->realText(20)),
         'user' => rand(1,5),
     ];
