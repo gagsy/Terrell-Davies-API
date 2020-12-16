@@ -50,7 +50,7 @@ Route::get('/property-types', 'PropertyTypeController@index');
 Route::get('/property-locations', 'PropertyLocationController@index');
 Route::get('/terms', 'TermsConditionsController@index');
 Route::get('/filter', 'PropertyController@searchByStateAreaCity');
-Route::get('/search', 'PropertyController@filter'); 
+Route::post('/search', 'PropertyController@filter'); 
 Route::get('/search/history', 'PropertyController@searchHistory'); 
 Route::get('/users', 'Api\AuthController@users');
 Route::post('/create-category', 'CategoryController@store');
