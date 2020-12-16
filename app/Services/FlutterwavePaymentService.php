@@ -23,14 +23,6 @@ class FlutterwavePaymentService extends PaymentServiceContract
 
     public function createPlan(Array $data){
         //create subscription plans
-        /** Data sample to send
-         * {
-         *   "amount": 5000,
-         *  "name": "Church collections plan",
-         *   "interval": "monthly",
-         *   "duration": 48
-         *   }
-         */
 
         $response = Http::withHeaders([
             'Authorization' => "Bearer " . $this->__secretKey,
@@ -77,7 +69,7 @@ class FlutterwavePaymentService extends PaymentServiceContract
         //cancel subscribed plan
     }
 
-    public function 
+    // public function 
 
     public function generateTransactionReference($length = 20){
 

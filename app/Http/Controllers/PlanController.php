@@ -11,10 +11,25 @@ class PlanController extends Controller
 {
 
     protected $paymentService;
+    protected $user;
 
     public function __construct()
     {
+
+        $this->user = auth('api')->user();
+
+        if( !isset($this->user) || empty($this->user) ){
+
+            return response()->json([
+                'message' => 'Authentication Failed',
+                'data'=>[]
+            ], 403);
+
+        }
+
         $this->paymentService = new FlutterwavePaymentService();
+
+
     }
 
     /**
@@ -46,15 +61,11 @@ class PlanController extends Controller
      */
     public function store(Request $request) 
     {
+        // return $this->user;
         $request->validate([
             'name' => 'required',
             'price' => 'required',
-            'duration' => 'required',
-            'discount_month1' => 'nullable',
-            'discount_month2' => 'nullable',
-            'maximum_listings' => 'nullable',
-            'maximum_premium_listings' => 'nullable',
-            'max_featured_ad_listings' => 'nullable'            
+            'duration' => 'required'            
         ]);
 
         $availablePaymentPlans = $this->getPlans();
@@ -86,15 +97,14 @@ class PlanController extends Controller
             $plan = Plan::create([
 
                 'name' => $request->name,
-                'price' => $request->price,
+                'price' => $request->amount,
                 'duration' => $request->duration,
                 'discount_month1' => $request->discount_month1 ?? '',
                 'discount_month2' =>  $request->discount_month2 ?? '',
                 'maximum_listings' => $request->maximum_listings,
                 'maximum_premium_listings' => $request->maximum_premium_listings,
-                'max_featured_ad_listings' => $request->max_featured_ad_listings,
-                'plan_id'=>
-    
+                'max_featured_ad_listings' => $request->max_featured_ad_listings
+                'gateway_id'=> $paymentPlan->json()['data']['id']
             ]);
              
     

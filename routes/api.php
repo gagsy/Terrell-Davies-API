@@ -66,9 +66,9 @@ Route::put('plan/{id}', 'PlanController@update');
 Route::get('plan/{id}', 'PlanController@edit');
 
 //Subscribe
-Route::post('/subscribe', 'PaymentController@redirectToGateway')->name('pay');
-Route::get('/payment/callback', 'PaymentController@handleGatewayCallback');
-Route::get('/subscriptions', 'SubscriptionController@index');
+// Route::post('/subscribe', 'PaymentController@redirectToGateway')->name('pay');
+// Route::get('/payment/callback', 'PaymentController@handleGatewayCallback');
+// Route::get('/subscriptions', 'SubscriptionController@index');
 
 Route::group(['middleware' => 'auth:api'], function(){
     //Property Api Controller Routes
@@ -104,11 +104,11 @@ Route::group(['middleware' => 'auth:api'], function(){
 
 
      /**
-      * Payment Endpoints
+      * Payment Endpoints 
       */
 
-      Route::post('payment-plan','PaymentController@createPaymentPlan');
-      Route::get('payment-plans','PaymentController@getPlans');
+      Route::post('payment-plan','PlanController@store');
+      Route::get('payment-plans','PlanController@getPlans');
      
 
 });

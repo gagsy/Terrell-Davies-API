@@ -616,7 +616,7 @@ class PropertyController extends Controller
 
         return response()->json([
             'message' => 'Search Result',
-            'data'=> $property->get()
+            'data'=> $property->paginate()
         ], 200);
 
     }
