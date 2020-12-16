@@ -558,17 +558,17 @@ class PropertyController extends Controller
 
         $property = Property::where('status', 'Publish');
 
-        if ($request->has('title','bathroom','budget', 'state', 'locality', 'type_id', 'category_id')) {
+        // if ($request->has('title','bathroom','budget', 'state', 'locality', 'type_id', 'category_id')) {
 
-            $property->orWhere('title', $request->title);
-            $property->orWhere('bathroom', $request->bathroom);
-            $property->orWhere('budget', $request->budget);
-            $property->orWhere('state', $request->state);
-            $property->orWhere('locality', $request->locality);
-            $property->orWhere('type_id', $request->type_id);
-            $property->orWhere('category_id', $request->category_id);
+            // $property->orWhere('title', $request->title);
+            // $property->orWhere('bathroom', $request->bathroom);
+            // $property->orWhere('budget', $request->budget);
+            // $property->orWhere('state', $request->state);
+            // $property->orWhere('locality', $request->locality);
+            // $property->orWhere('type_id', $request->type_id);
+            // $property->orWhere('category_id', $request->category_id);
 
-        }
+        // }
 
         //Save result in SearchHistory:: 
 
@@ -577,8 +577,6 @@ class PropertyController extends Controller
             foreach($property->get() as $singleProperty){
 
                 $checkIfPropertyIsAlreadyRegistered = SearchHistory::where('user_Id',$this->user->id)->where('property_id',$singleProperty->id)->count();
-
-                // return $checkIfPropertyIsAlreadyRegistered;
 
                 if($checkIfPropertyIsAlreadyRegistered == 0){
 
@@ -594,7 +592,10 @@ class PropertyController extends Controller
 
         }       
 
-        return $property->get();
+        return response()->json([
+            'message' => 'Search Result',
+            'data'=> $property->get()
+        ], 200);
     }
 
     public function searchHistory(){

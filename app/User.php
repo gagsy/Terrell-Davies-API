@@ -45,7 +45,9 @@ class User extends Model implements AuthenticatableContract,CanResetPasswordCont
     ];
 
     public function properties(){
+
         return $this->hasMany(Property::class);
+        
     }
 
     public function sendApiEmailVerificationNotification()
