@@ -56,4 +56,16 @@ class User extends Model implements AuthenticatableContract,CanResetPasswordCont
     public function notices(){
         return $this->hasMany(Notice::class,'receiver_id');
     }
+
+    public function userSubscriptions(){
+        //return the currently active plan for user.
+
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function fetchActiveSubscription(){
+
+        return $this->userSubscriptions()->whereNull('completed_at')->first();
+
+    }
 }

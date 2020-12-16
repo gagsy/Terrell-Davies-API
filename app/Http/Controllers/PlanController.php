@@ -189,7 +189,7 @@ class PlanController extends Controller
         ], 202);
       } else {
         return response()->json([
-          "message" => "Plans not found"
+          "message" => "Plan not found"
         ], 404);
     }
     }
@@ -202,5 +202,19 @@ class PlanController extends Controller
         return $paymentPlans->json();
 
      
+    }
+
+
+    public function activePlan(Array $data){
+        //active plan for user, needs user_plan.
+        // add user id to plan 
+
+    }
+
+    public function cancelPlan(){
+        //allow user to cancel plan before being billed again
+
+        $cancelPlan = $this->paymentService->cancelPlan();
+        return $cancelPlan->json();
     }
 }

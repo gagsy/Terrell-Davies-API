@@ -75,15 +75,29 @@ class PaymentController extends Controller
             "tx_ref"=>$transactionRef,
             "amount"=>$amount,
             "payment_options"=>"card",
-            "payment_plan"=>$planId
-            "redirect_url"=> Route:: 
-        ]
+            "payment_plan"=>$planId,
+            "redirect_url"=> "/payment/successful"
+        ];
+
+        $isPaymentDone = $this->paymentService->makePayment($paymentData);
+
+        if($isPaymentDone){
+            $verify = $this->paymentService->verifyPayment();
+
+            if($verify){
+
+                $this->paymentService->recordTransaction();
+                $this->paymentService->activaPlan(); 
+
+                return response()->json([
+                    'message' => 'Payment Done',
+                    'data'=>[]
+                ], 403);
+
+            }
+        }
 
     }
-
-
-
-
 
 
 }

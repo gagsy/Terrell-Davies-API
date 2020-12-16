@@ -56,15 +56,14 @@ class FlutterwavePaymentService extends PaymentServiceContract
 
     }
 
-    public function purchasePlan(Array $data){
-        //make plan purchase          
-
+    public function makePayment(Array $data){
+        
         $response = Http::withHeaders([
             'Authorization' => "Bearer " . $this->__secretKey,
             'Content-Type' => 'application/json'
         ])
         ->withOptions(['verify' => false]) //take this out in production
-        ->post($this->_baseurl . "/payment-plans", $data);
+        ->post($this->_baseurl . "/payments", $data);
 
         return $response;
 
@@ -73,6 +72,12 @@ class FlutterwavePaymentService extends PaymentServiceContract
     public function registerCustomer(){
         //register customer in flutterwave
     }
+
+    public function cancelPlan(){
+        //cancel subscribed plan
+    }
+
+    public function 
 
     public function generateTransactionReference($length = 20){
 
