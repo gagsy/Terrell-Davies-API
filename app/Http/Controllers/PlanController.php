@@ -97,14 +97,15 @@ class PlanController extends Controller
             $plan = Plan::create([
 
                 'name' => $request->name,
-                'price' => $request->amount,
+                'price' => $request->price,
                 'duration' => $request->duration,
                 'discount_month1' => $request->discount_month1 ?? '',
                 'discount_month2' =>  $request->discount_month2 ?? '',
                 'maximum_listings' => $request->maximum_listings,
                 'maximum_premium_listings' => $request->maximum_premium_listings,
-                'max_featured_ad_listings' => $request->max_featured_ad_listings
+                'max_featured_ad_listings' => $request->max_featured_ad_listings,
                 'gateway_id'=> $paymentPlan->json()['data']['id']
+
             ]);
              
     
