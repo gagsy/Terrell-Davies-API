@@ -47,7 +47,6 @@ class PlanManagerservice
 
     public function canUserCreateProperty(){
 
-        // return $this->getCurrentUserPlan(); 
         //check if user can create property
 
         if(!$this->getCurrentUserPlan() || $this->getCurrentUserPlan() == null || empty($this->getCurrentUserPlan())){ 
