@@ -70,4 +70,10 @@ class User extends Model implements AuthenticatableContract,CanResetPasswordCont
         return $this->userSubscriptions()->whereNull('completed_at')->first();
 
     }
+
+    public function currentPlan(){
+
+        return Plan::where('plan_id',$this->fetchActiveSubscription()->plan_id)->first();
+        
+    }
 }
