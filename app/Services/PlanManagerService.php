@@ -1,8 +1,6 @@
 <?php namespace App\Services;
 
 
-use App\Property;
-
 class PlanManagerservice 
 {
     
@@ -26,12 +24,9 @@ class PlanManagerservice
 
     public function getCurrentUserPlan(){
 
-        $this->plan = $this->user()->currentPlan();
-        return $this->plan;
+        $this->plan = $this->user->currentPlan();
 
-    }
-
-    public function propertyCountAllowedForUser(){
+        return $this->plan ?? false;
 
     }
 
@@ -46,16 +41,22 @@ class PlanManagerservice
 
     public function getAllPropertiesListedByUser(){
 
-        return $this->user()->properties()->count();
+        return $this->user->properties()->count();
 
     }
 
     public function canUserCreateProperty(){
+
+        // return $this->getCurrentUserPlan(); 
         //check if user can create property
+
+        if(!$this->getCurrentUserPlan() || $this->getCurrentUserPlan() == null || empty($this->getCurrentUserPlan())){ 
+            return false; 
+        }
 
         if($this->getAllPropertiesListedByUser() >= $this->getCurrentUserPlan()->maximum_listings){
             return false;
-        }
+        }            
 
         return true;
     }

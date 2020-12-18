@@ -88,6 +88,7 @@ class AuthController extends Controller
     }
 
     public function updateProfile(Request $request, $id=null){
+        
         $user_id = Auth::user()->id;
         $users = User::find($user_id);
 

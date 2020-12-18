@@ -23,9 +23,12 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use App\Http\Resources\SearchHistoryCollection;
 
+use App\Services\PlanManagerservice;
+
 class PropertyController extends Controller
 {
     protected $user;
+    protected $planManager;
 
     public function __construct()
     {
@@ -39,6 +42,8 @@ class PropertyController extends Controller
             ], 403);
 
         }
+
+        $this->planManager = new PlanManagerservice();
 
     }
     /**
@@ -84,6 +89,15 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
+
+         if(!$this->planManager->canUserCreateProperty()){
+
+            return response()->json([
+                'message' => 'User does not have active subscription, or subscription has expired',
+                'property' => [],
+            ], 407);
+
+         }
         $path2 = "";
 
         DB::beginTransaction();

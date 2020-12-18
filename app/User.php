@@ -66,14 +66,21 @@ class User extends Model implements AuthenticatableContract,CanResetPasswordCont
     }
 
     public function fetchActiveSubscription(){
-
-        return $this->userSubscriptions()->whereNull('completed_at')->first();
+    
+        return $this->userSubscriptions()->whereNull('completed_at')->where('payment_status','!=','Pending')->first();
 
     }
 
     public function currentPlan(){
+// 
 
-        return Plan::where('plan_id',$this->fetchActiveSubscription()->plan_id)->first();
+        if($this->fetchActiveSubscription()){
+
+            return Plan::where('id',$this->fetchActiveSubscription()->plan_id)->first();
+
+        }
+
+        return false;
         
     }
 }
