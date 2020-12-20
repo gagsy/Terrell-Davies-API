@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Password;
 
+use App\Services\PlanManagerservice;
+
 class AuthController extends Controller
 {
     public function login(Request $request)
@@ -88,7 +90,7 @@ class AuthController extends Controller
     }
 
     public function updateProfile(Request $request, $id=null){
-        
+
         $user_id = Auth::user()->id;
         $users = User::find($user_id);
 
@@ -267,7 +269,7 @@ class AuthController extends Controller
     }
 
     public function register(Request $request)
-    {
+    { 
 
       $validator = Validator::make($request->all(), [
         'name' => 'required',
@@ -283,6 +285,10 @@ class AuthController extends Controller
       $user = $request->all();
       $user['password'] = Hash::make($user['password']);
       $user = User::create($user);
+
+      $planManager = new PlanManagerservice;
+      $planManager->activeDefaultPlanForUser($user);
+
       $success['token'] =  $user->createToken('MyApp')-> accessToken;
       $success['name'] =  $user->name;
       $success['userType'] = $user->userType;
