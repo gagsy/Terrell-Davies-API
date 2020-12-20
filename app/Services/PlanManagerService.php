@@ -1,5 +1,7 @@
 <?php namespace App\Services;
 
+use App\Subscription;
+use App\Plan;
 
 class PlanManagerservice 
 {
@@ -60,4 +62,27 @@ class PlanManagerservice
         return true;
     }
 
+    public function activeDefaultPlanForUser($user){
+
+        $defaultPlan = Plan::where('name','Basic')->first()['id'];
+
+        $isPlanDone = Subscription::create([
+
+        'user_id'=>$user['id'],
+        'plan_id'=>$defaultPlan,
+        'reference'=>"0000000000",
+        'amount'=>"0",
+        'payment_method'=>"none",
+        'payment_status'=>"completed"
+
+        ]);
+
+        if($isPlanDone){
+            return true;
+        }
+        return false;
+
+    }
+
 }
+

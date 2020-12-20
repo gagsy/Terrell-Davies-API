@@ -89,7 +89,6 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
-
          if(!$this->planManager->canUserCreateProperty()){
 
             return response()->json([
@@ -103,6 +102,7 @@ class PropertyController extends Controller
         DB::beginTransaction();
 
         try{
+            
             $validator = Validator::make($request->all(),[
                 'user_id' => 'required',
                 'category_id' => 'required',
