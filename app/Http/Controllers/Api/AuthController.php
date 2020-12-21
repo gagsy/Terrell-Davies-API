@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Password;
 
-use App\Services\PlanManagerservice;
+use App\Services\PlanManagerService;
 
 class AuthController extends Controller
 {
@@ -286,7 +286,7 @@ class AuthController extends Controller
       $user['password'] = Hash::make($user['password']);
       $user = User::create($user);
 
-      $planManager = new PlanManagerservice;
+      $planManager = new PlanManagerService;
       $planManager->activeDefaultPlanForUser($user);
 
       $success['token'] =  $user->createToken('MyApp')-> accessToken;

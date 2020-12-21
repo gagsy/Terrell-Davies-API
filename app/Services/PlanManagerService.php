@@ -3,7 +3,7 @@
 use App\Subscription;
 use App\Plan;
 
-class PlanManagerservice 
+class PlanManagerService 
 {
     
     protected $user;

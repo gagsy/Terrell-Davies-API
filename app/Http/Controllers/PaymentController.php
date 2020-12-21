@@ -13,7 +13,7 @@ use Paystack;
 use Session;
 
 use App\Services\FlutterwavePaymentService;
-use App\Services\PlanManagerservice;
+use App\Services\PlanManagerService;
 
 class PaymentController extends Controller
 {
@@ -41,7 +41,7 @@ class PaymentController extends Controller
 
         }
 
-        $this->planManger = new PlanManagerservice;
+        $this->planManger = new PlanManagerService;
 
     }
 
@@ -52,7 +52,7 @@ class PaymentController extends Controller
         $planId = $request->plan_id;
         $duration = $request->duration
         
-        //check if this plan exists
+        //check if this plan exists 
 
         $paymentData = [
             "tx_ref"=>$transactionRef,

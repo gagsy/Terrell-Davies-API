@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use App\Http\Resources\SearchHistoryCollection;
 
-use App\Services\PlanManagerservice;
+use App\Services\PlanManagerService;
 
 class PropertyController extends Controller
 {
@@ -43,7 +43,7 @@ class PropertyController extends Controller
 
         }
 
-        $this->planManager = new PlanManagerservice();
+        $this->planManager = new PlanManagerService();
 
     }
     /**
