@@ -65,6 +65,12 @@ class User extends Model implements AuthenticatableContract,CanResetPasswordCont
         return $this->hasMany(Subscription::class);
     }
 
+    public function subscriptionHistoryWithPlan(){
+
+        return Subscription::where('user_id',$this->id)->with('plan')->get();
+        
+    }
+
     public function fetchActiveSubscription(){
     
         return $this->userSubscriptions()->whereNull('completed_at')->where('payment_status','!=','Pending')->first();

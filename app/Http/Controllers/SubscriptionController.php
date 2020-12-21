@@ -7,6 +7,22 @@ use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
 {
+
+    protected $user;
+
+    public function __construct()
+    {
+        $this->user = auth('api')->user();
+
+        if(!$this->user || !isset($this->user)){
+            
+            return response()->json([
+                'message' => 'Authentication Failed',
+                'data'=>[]
+            ], 403);
+        }
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -26,6 +42,16 @@ class SubscriptionController extends Controller
     public function create()
     {
         //
+    }
+
+    public function userSubscriptions(){
+
+        
+        return response()->json([
+            'message' => 'Subscription History',
+            'data'=>$this->user->subscriptionHistoryWithPlan()
+        ], 200);
+
     }
 
     /**
