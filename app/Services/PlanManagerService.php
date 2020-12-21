@@ -95,20 +95,22 @@ class PlanManagerService
 
     public function activatePlan($user,$plan,$transaction){
 
-        $isUserAlreadyActive = Subscription::where('user_id',$user->id)->whereNull('completed_at')->count();
+        $isUserAlreadyActive = Subscription::where('user_id',$user)->whereNull('completed_at')->count();
 
-        return $isUserAlreadyActive;
+        // return $isUserAlreadyActive;
 
         if($isUserAlreadyActive > 0){
             return false;
         }
 
+        // die();
+
         $isPlanActivated = Subscription::create([
 
-            'user_id'=>$user->id,
+            'user_id'=>$user,
             'plan_id'=>$plan->id,
             'reference'=>$transaction['ref'],
-            'amount'=>$plan->amount,
+            'amount'=>$transaction['amount'],
             'payment_method'=>"card",
             'payment_status'=>$transaction['status'],
             'duration'=>$transaction['duration']

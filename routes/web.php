@@ -31,5 +31,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/pay', 'RaveController@initialize')->name('pay');
 Route::post('/rave/callback', 'RaveController@callback')->name('callback');
 
+Route::get('payment-response','PaymentController@paymentResponse'); 
+
 //Admin Route
 //Route::get('/admin','AdminController@index');

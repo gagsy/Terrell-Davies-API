@@ -9,7 +9,7 @@ class Subscription extends Model
 
 
     protected $fillable = [
-        'user_id','plan_id','reference','amount','payment_method','payment_status','completed_at'
+        'user_id','plan_id','reference','amount','payment_method','payment_status','completed_at','duration'
     ];
     
 

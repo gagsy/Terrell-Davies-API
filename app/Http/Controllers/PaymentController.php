@@ -27,6 +27,7 @@ class PaymentController extends Controller
         //you can make other services by using the flutterwave service as a template 
         //and implementing the paymentservice contract
 
+        $this->planManger = new PlanManagerService;
         $this->paymentService = new FlutterwavePaymentService();
 
         $this->user = auth('api')->user();
@@ -41,7 +42,7 @@ class PaymentController extends Controller
 
         }
 
-        $this->planManger = new PlanManagerService;
+       
 
     }
 
@@ -51,6 +52,32 @@ class PaymentController extends Controller
         $amount = $request->amount;
         $planId = $request->plan_id;
         $duration = $request->duration;
+
+        if(
+            !isset($duration) || empty($duration) ||
+            !isset($planId) || empty($planId) ||
+            !isset($amount) || empty($amount) 
+            ){
+
+                return response()->json([
+                    'message' => 'Missing Required parameter (plan, duration and amount are required)',
+                    'data'=>[]
+                ], 404);
+
+            }
+
+        //check if user already has subscription plan
+
+        $doesUserHaveActiveSubscription = Subscription::where('user_id',$this->user->id)->whereNull('completed_at')->count();
+
+        if($doesUserHaveActiveSubscription > 0){
+
+            return response()->json([
+                'message' => 'User has running subscription',
+                'data'=>[]
+            ], 450);
+
+        }
         
         //check if this plan exists 
 
@@ -70,7 +97,7 @@ class PaymentController extends Controller
             "amount"=>$amount,
             "payment_options"=>"card",
             "payment_plan"=>$planId,
-            "redirect_url"=> env('APP_URL') . "/api/payment-response/?user=" . $this->user->id ."&plan=" . $planId . "&duration=" . $duration, 
+            "redirect_url"=> env('APP_URL') . "/payment-response/?user=" . $this->user->id ."&plan=" . $planId . "&duration=" . $duration . '&amount='.$amount, 
             "currency"=>"NGN",
             "customer"=>[
                        "email" => $this->user->email,
@@ -79,12 +106,19 @@ class PaymentController extends Controller
                     ]
         ];
 
-        $isPaymentDone = $this->paymentService->makePayment($paymentData);
+        $isPaymentDone = ($this->paymentService->makePayment($paymentData))->json();
 
-        if($isPaymentDone->status == "success"){
+        // return $isPaymentDone['status'];
+
+        if($isPaymentDone['status'] == "success"){
+
+            return response()->json([
+                'message' => 'Connection to payment gateway established',
+                'data'=> $isPaymentDone['data']['link']
+            ], 500);
 
             //send them to the URL
-            return redirect()->away($isPaymentDone->data->link);
+            // return redirect()->away($isPaymentDone['data']['link']);
 
         }
 
@@ -98,7 +132,8 @@ class PaymentController extends Controller
 
 
     public function paymentResponse(Request $request){
-        
+
+        // return $request->all()['plan'];
        
         $user = $request['user'];
 
@@ -106,27 +141,23 @@ class PaymentController extends Controller
         $transaction_ref = $request['tx_ref'];
         $duration = $request['duration'];
         $transaction_id = $request['transaction_id'];
-        $plan_id = $request['plan_id'];
+        $plan_id = $request['plan'];
+        $amount = $request['amount'];
 
+        // return $plan_id;
         $plan = Plan::where('id',$plan_id)->first();
-    
-        //check that the user is the same
 
-        if($this->user->id != $user){
-
-            return response()->json([
-                'message' => 'Authentication Failed | The user who initiated this transaction must be the same',
-                'data'=> []
-            ], 403);
-
-        }
 
         //verify that payment was successful
 
         if($status == "successful"){
 
-            $attempt_activate_subscription = $this->planManger->activatePlan($this->user,$plan, ['ref'=>$transaction_ref,'status'=>$status,'duration'=>$duration]);
-            
+            //verify payment
+            // $this->planManger->verifyPayment()
+
+            $attempt_activate_subscription = $this->planManger->activatePlan($user,$plan, ['ref'=>$transaction_ref,'status'=>$status,'duration'=>$duration,'amount'=>$amount]);
+            // return $attempt_activate_subscription;
+        
             if($attempt_activate_subscription){
 
                 return response()->json([
