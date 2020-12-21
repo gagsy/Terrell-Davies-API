@@ -111,12 +111,15 @@ Route::group(['middleware' => 'auth:api'], function(){
       Route::get('payment-plans','PlanController@getPlans');
 
       Route::post('make-payment','PaymentController@makePayment');
-      Route::get('payment-response','PaymentController@paymentResponse');
+    //   Route::post('make-payment-mobile','PaymentController@makePaymentMobile');
+
+      Route::post('make-payment-mobile','PaymentController@makePayment');
+    
      
 
 });
 
-
+Route::get('payment-response','PaymentController@paymentResponse'); //Remove from API auth
 
 
 //Type Api Controller Routes

@@ -110,7 +110,8 @@ class PlanManagerService
             'reference'=>$transaction['ref'],
             'amount'=>$plan->amount,
             'payment_method'=>"card",
-            'payment_status'=>$transaction['status']
+            'payment_status'=>$transaction['status'],
+            'duration'=>$transaction['duration']
 
         ]);
 

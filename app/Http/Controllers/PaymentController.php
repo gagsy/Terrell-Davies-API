@@ -50,16 +50,27 @@ class PaymentController extends Controller
         $transactionRef = $this->paymentService->generateTransactionReference(20);
         $amount = $request->amount;
         $planId = $request->plan_id;
-        $duration = $request->duration
+        $duration = $request->duration;
         
         //check if this plan exists 
+
+        $doesPlanExist = Plan::where('id',$planId)->count();
+
+        if($doesPlanExist == 0){
+            
+            return response()->json([
+                'message' => 'The selected plan does not exist',
+                'data'=>[]
+            ], 404);
+
+        }
 
         $paymentData = [
             "tx_ref"=>$transactionRef,
             "amount"=>$amount,
             "payment_options"=>"card",
             "payment_plan"=>$planId,
-            "redirect_url"=> env('APP_URL') . "/api/payment-response/?user=" . $this->user->id ."&plan=" . $planId . "&ref=".$transactionRef, 
+            "redirect_url"=> env('APP_URL') . "/api/payment-response/?user=" . $this->user->id ."&plan=" . $planId . "&duration=" . $duration, 
             "currency"=>"NGN",
             "customer"=>[
                        "email" => $this->user->email,
@@ -70,21 +81,30 @@ class PaymentController extends Controller
 
         $isPaymentDone = $this->paymentService->makePayment($paymentData);
 
-        return $isPaymentDone->json();
+        if($isPaymentDone->status == "success"){
+
+            //send them to the URL
+            return redirect()->away($isPaymentDone->data->link);
+
+        }
+
+        return response()->json([
+            'message' => 'Connection to payment gateway failed!',
+            'data'=>[]
+        ], 500);
 
 
     }
 
+
     public function paymentResponse(Request $request){
         
-        // return $this->user->id;
-        // return $request->all();
-        
+       
         $user = $request['user'];
 
-        // return $user;
         $status = $request['status'];
         $transaction_ref = $request['tx_ref'];
+        $duration = $request['duration'];
         $transaction_id = $request['transaction_id'];
         $plan_id = $request['plan_id'];
 
@@ -105,12 +125,12 @@ class PaymentController extends Controller
 
         if($status == "successful"){
 
-            $attempt_activate_subscription = $this->planManger->activatePlan($this->user,$plan, ['ref'=>$transaction_ref,'status'=>$status]);
+            $attempt_activate_subscription = $this->planManger->activatePlan($this->user,$plan, ['ref'=>$transaction_ref,'status'=>$status,'duration'=>$duration]);
             
             if($attempt_activate_subscription){
 
                 return response()->json([
-                    'message' => 'Payment Completed, plan has been activated',
+                    'message' => 'Payment Completed, plan has been activated. You can close this window now.',
                     'data'=> []
                 ], 200);
                 

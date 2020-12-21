@@ -22,6 +22,7 @@ class CreateSubscriptionsTable extends Migration
             $table->string('payment_method')->nullable();
             $table->string('payment_status')->default('Pending'); 
             $table->string('completed_at')->nullable();
+            $table->string('duration');
             $table->timestamps();
         });
     }
