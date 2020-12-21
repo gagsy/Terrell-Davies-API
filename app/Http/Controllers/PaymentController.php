@@ -13,10 +13,12 @@ use Paystack;
 use Session;
 
 use App\Services\FlutterwavePaymentService;
+use App\Services\PlanManagerservice;
 
 class PaymentController extends Controller
 {
     protected $paymentService;
+    protected $planManger;
     protected $user;
 
     public function __construct()
@@ -39,63 +41,96 @@ class PaymentController extends Controller
 
         }
 
+        $this->planManger = new PlanManagerservice;
+
     }
 
     public function makePayment(Request $request){
 
-        // {
-        //     "tx_ref":"hooli-tx-1920bbtytty",
-        //     "amount":"100",
-        //     "currency":"NGN",
-        //     "redirect_url":"https://webhook.site/9d0b00ba-9a69-44fa-a43d-a82c33c36fdc",
-        //     "payment_options":"card",
-        //     "meta":{
-        //        "consumer_id":23,
-        //        "consumer_mac":"92a3-912ba-1192a"
-        //     },
-        //     "customer":{
-        //        "email":"user@gmail.com",
-        //        "phonenumber":"080****4528",
-        //        "name":"Yemi Desola"
-        //     },
-        //     "customizations":{
-        //        "title":"Pied Piper Payments",
-        //        "description":"Middleout isn't free. Pay the price",
-        //        "logo":"https://assets.piedpiper.com/logo.png"
-        //     }
-        //  }
-
         $transactionRef = $this->paymentService->generateTransactionReference(20);
         $amount = $request->amount;
-        $planId = $request->plan;
+        $planId = $request->plan_id;
+        $duration = $request->duration
         
-        
+        //check if this plan exists
 
         $paymentData = [
             "tx_ref"=>$transactionRef,
             "amount"=>$amount,
             "payment_options"=>"card",
             "payment_plan"=>$planId,
-            "redirect_url"=> "/payment/successful"
+            "redirect_url"=> env('APP_URL') . "/api/payment-response/?user=" . $this->user->id ."&plan=" . $planId . "&ref=".$transactionRef, 
+            "currency"=>"NGN",
+            "customer"=>[
+                       "email" => $this->user->email,
+                       "phonenumber" => $this->user->phone,
+                       "name" => $this->user->name
+                    ]
         ];
 
         $isPaymentDone = $this->paymentService->makePayment($paymentData);
 
-        if($isPaymentDone){
-            $verify = $this->paymentService->verifyPayment();
+        return $isPaymentDone->json();
 
-            if($verify){
 
-                $this->paymentService->recordTransaction();
-                $this->paymentService->activaPlan(); 
+    }
+
+    public function paymentResponse(Request $request){
+        
+        // return $this->user->id;
+        // return $request->all();
+        
+        $user = $request['user'];
+
+        // return $user;
+        $status = $request['status'];
+        $transaction_ref = $request['tx_ref'];
+        $transaction_id = $request['transaction_id'];
+        $plan_id = $request['plan_id'];
+
+        $plan = Plan::where('id',$plan_id)->first();
+    
+        //check that the user is the same
+
+        if($this->user->id != $user){
+
+            return response()->json([
+                'message' => 'Authentication Failed | The user who initiated this transaction must be the same',
+                'data'=> []
+            ], 403);
+
+        }
+
+        //verify that payment was successful
+
+        if($status == "successful"){
+
+            $attempt_activate_subscription = $this->planManger->activatePlan($this->user,$plan, ['ref'=>$transaction_ref,'status'=>$status]);
+            
+            if($attempt_activate_subscription){
 
                 return response()->json([
-                    'message' => 'Payment Done',
-                    'data'=>[]
-                ], 403);
-
+                    'message' => 'Payment Completed, plan has been activated',
+                    'data'=> []
+                ], 200);
+                
             }
+
+            
+            return response()->json([
+                'message' => 'Something went wrong with activating the plan',
+                'data'=> []
+            ], 502);
+
+
         }
+
+        return response()->json([
+            'message' => 'Something went wrong with your payment',
+            'data'=> []
+        ], 500);
+
+        
 
     }
 

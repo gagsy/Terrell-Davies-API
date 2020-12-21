@@ -64,6 +64,14 @@ class PlanManagerservice
 
     public function activeDefaultPlanForUser($user){
 
+        //check if user already has active subscription, this should not be possible, but, better to extra check
+
+        $isUserAlreadyActive = Subscription::where('user_id',$user->id)->count();
+
+        if($isUserAlreadyActive > 0){
+            return false;
+        }
+
         $defaultPlan = Plan::where('name','basic')->first();
 
         $isPlanDone = Subscription::create([
@@ -78,6 +86,35 @@ class PlanManagerservice
         ]);
 
         if($isPlanDone){
+            return true;
+        }
+
+        return false;
+
+    }
+
+    public function activatePlan($user,$plan,$transaction){
+
+        $isUserAlreadyActive = Subscription::where('user_id',$user->id)->whereNull('completed_at')->count();
+
+        return $isUserAlreadyActive;
+
+        if($isUserAlreadyActive > 0){
+            return false;
+        }
+
+        $isPlanActivated = Subscription::create([
+
+            'user_id'=>$user->id,
+            'plan_id'=>$plan->id,
+            'reference'=>$transaction['ref'],
+            'amount'=>$plan->amount,
+            'payment_method'=>"card",
+            'payment_status'=>$transaction['status']
+
+        ]);
+
+        if($isPlanActivated){
             return true;
         }
 

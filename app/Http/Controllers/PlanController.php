@@ -131,7 +131,7 @@ class PlanController extends Controller
      */
     public function show($id)
     {
-        $plan=Plans::where('id', $id)->first();
+        $plan = Plans::where('id', $id)->first();
         return response()->json(['plan' => $plan], 200);
     }
 
