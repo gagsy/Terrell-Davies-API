@@ -115,7 +115,7 @@ class PaymentController extends Controller
             return response()->json([
                 'message' => 'Connection to payment gateway established',
                 'data'=> $isPaymentDone['data']['link']
-            ], 500);
+            ], 200);
 
             //send them to the URL
             // return redirect()->away($isPaymentDone['data']['link']);
