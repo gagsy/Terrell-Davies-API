@@ -48,8 +48,7 @@ class PaymentController extends Controller
 
     public function makePayment(Request $request){
 
-        // return "here";
-
+        
         $transactionRef = $this->paymentService->generateTransactionReference(20);
         $amount = $request->amount;
         $planId = $request->plan_id;
@@ -110,7 +109,7 @@ class PaymentController extends Controller
 
         $isPaymentDone = ($this->paymentService->makePayment($paymentData))->json();
 
-        // return $isPaymentDone['status'];
+        return $isPaymentDone;
 
         if($isPaymentDone['status'] == "success"){
 
