@@ -27,8 +27,7 @@ class FlutterwavePaymentService extends PaymentServiceContract
         $response = Http::withHeaders([
             'Authorization' => "Bearer " . $this->__secretKey,
             'Content-Type' => 'application/json'
-        ])
-        ->withOptions(['verify' => false]) //take this out in production
+        ])      
         ->post($this->_baseurl . "/payment-plans", $data);
 
         return $response;
@@ -40,8 +39,7 @@ class FlutterwavePaymentService extends PaymentServiceContract
         $response = Http::withHeaders([
             'Authorization' => "Bearer " . $this->__secretKey,
             'Content-Type' => 'application/json'
-        ])
-        ->withOptions(['verify' => false]) //take this out in production
+        ])      
         ->get($this->_baseurl . "/payment-plans");
 
         return $response;
@@ -53,8 +51,7 @@ class FlutterwavePaymentService extends PaymentServiceContract
         $response = Http::withHeaders([
             'Authorization' => "Bearer " . $this->__secretKey,
             'Content-Type' => 'application/json'
-        ])
-        ->withOptions(['verify' => false]) //take this out in production
+        ])      
         ->post($this->_baseurl . "/payments", $data);
 
         return $response;
