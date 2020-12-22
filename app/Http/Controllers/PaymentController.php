@@ -109,8 +109,7 @@ class PaymentController extends Controller
 
         $isPaymentDone = ($this->paymentService->makePayment($paymentData))->json();
 
-        return $isPaymentDone;
-
+        
         if($isPaymentDone['status'] == "success"){
 
             return response()->json([
@@ -125,7 +124,7 @@ class PaymentController extends Controller
 
         return response()->json([
             'message' => 'Connection to payment gateway failed!',
-            'data'=>[]
+            'data'=>$isPaymentDone
         ], 500);
 
 
