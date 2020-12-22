@@ -167,10 +167,11 @@ class PaymentController extends Controller
                 
             }
 
-            
             return response()->json([
+
                 'message' => 'Something went wrong with activating the plan',
                 'data'=> []
+
             ], 502);
 
 
