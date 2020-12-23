@@ -21,7 +21,7 @@ class PlanSeeder extends Seeder
             'maximum_listings' => 5,
             'maximum_premium_listings' =>0,
             'max_featured_ad_listings' => 0,
-            'gateway_id'=> '123'
+            'gateway_id'=> 123
 
         ]);
     }
