@@ -81,7 +81,8 @@ class PlanManagerService
             'reference'=>"0000000000",
             'amount'=>0.0,
             'payment_method'=>"none",
-            'payment_status'=>"completed"
+            'payment_status'=>"completed",
+            'duration'=>"100"
 
         ]);
 
@@ -108,7 +109,7 @@ class PlanManagerService
         $isPlanActivated = Subscription::create([
 
             'user_id'=>$user,
-            'plan_id'=>$plan->id,
+            'plan_id'=>$plan->id, 
             'reference'=>$transaction['ref'],
             'amount'=>$transaction['amount'],
             'payment_method'=>"card",
