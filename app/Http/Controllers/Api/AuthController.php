@@ -284,16 +284,29 @@ class AuthController extends Controller
 
       $user = $request->all();
       $user['password'] = Hash::make($user['password']);
-      $user = User::create($user);
 
-      $planManager = new PlanManagerService;
-      $planManager->activeDefaultPlanForUser($user);
+      $testDefaultPlanActivated = false;
 
-      $success['token'] =  $user->createToken('MyApp')-> accessToken;
-      $success['name'] =  $user->name;
-      $success['userType'] = $user->userType;
-      $success['address'] = $user->address;
+      DB::beginTransaction();
 
+        $user = User::create($user);
+        $planManager = new PlanManagerService;
+        $testDefaultPlanActivated = $planManager->activeDefaultPlanForUser($user);
+
+        if($testDefaultPlanActivated){
+
+            $success['token'] =  $user->createToken('MyApp')-> accessToken;
+            $success['name'] =  $user->name;
+            $success['userType'] = $user->userType;
+            $success['address'] = $user->address;
+
+            DB::commit();
+
+        }else{
+
+            DB::rollBack();
+            return response()->json(['error'=>"We could not activate default plan for this user, please try again"], 500);
+        }
 
       return response()->json(['success'=>$success], 200);
     }

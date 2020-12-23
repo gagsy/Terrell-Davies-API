@@ -74,6 +74,10 @@ class PlanManagerService
 
         $defaultPlan = Plan::where('name','basic')->first();
 
+        if(!$defaultPlan){
+            return false;
+        }
+
         $isPlanDone = Subscription::create([
 
             'user_id'=>$user->id,
