@@ -6,6 +6,7 @@ use App\Property;
 use App\Category;
 use App\Helpers\ApiConstants;
 use App\Location;
+use App\SavedProperty;
 use App\ShortList;
 use Illuminate\Support\Arr;
 use App\Type;
@@ -53,9 +54,50 @@ class PropertyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function user_saved_property(){
+        $user_id = auth('api')->user()->id;
+
+        $user_saved_property = SavedProperty::where('user_id', $user_id)->count();
+            return response()-> json([
+            'user_saved_property' => $user_saved_property
+        ], 200);
+    }
+
+    public function createSavedProperty(Request $request)
     {
         //
+        DB::beginTransaction();
+        try{
+            $validator = Validator::make($request->all(),[
+            'user_id' => 'required',
+            'property_id' => 'required'
+            ]);
+
+            if($validator->fails()){
+                session()->flash('errors' , $validator->errors());
+                throw new ValidationException($validator);
+            } else {
+                $users = auth('api')->user();
+                $user = json_decode($users);
+
+                SavedProperty::create([
+                    'user_id' => $user->id,
+                    'property_id' => $request->property_id,
+                ]);
+            }
+        }
+
+        catch(ValidationException $e){
+            DB::rollback();
+            $message = "" . (implode(' ', Arr::flatten($e->errors())));
+            return problemResponse($message , ApiConstants::BAD_REQ_ERR_CODE , $request);
+        }
+        catch(Exception $e){
+            session()->flash('error_msg' , $e->getMessage());
+            dd($e->getMessage());
+            DB::rollback();
+            return problemResponse($e->getMessage() , ApiConstants::SERVER_ERR_CODE , $request);
+        }
     }
 
     /**
@@ -64,8 +106,129 @@ class PropertyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function storeFromServer(Request $request)
+    {
+         if(!$this->planManager->canUserCreateProperty()){
+
+            return response()->json([
+                'message' => 'User does not have active subscription, or subscription has expired',
+                'property' => [],
+            ], 407);
+
+         }
+        $path2 = "";
+
+        DB::beginTransaction();
+
+        try{
+            
+            $validator = Validator::make($request->all(),[
+                'user_id' => 'required',
+                'category_id' => 'required',
+                'type_id' => 'required',
+                'location' => 'required',
+                'location_id' => 'nullable',
+                'title' => 'required',
+                'description' => 'required',
+                'state' => 'required',
+                'area' => 'required',
+                'total_area' => 'required',
+                'market_status' => 'required',
+                'parking' => 'required',
+                'locality' => 'required',
+                'budget' => 'required',
+                // 'other_images' => 'nullable',
+                // 'other_images.*' => 'text|max:3048',
+                'image' => 'required',
+                'image.*' => 'text|max:3048',
+                'bedroom' => 'required',
+                'bathroom' => 'required',
+                'toilet' => 'required',
+                'video_link' => 'nullable',
+                'status' => 'required',
+                'feature' => 'required',
+            ]);
+            
+            //TODO: Don't forget to remove the ! from this validation
+
+            if($validator->fails()){
+                session()->flash('errors' , $validator->errors());
+                throw new ValidationException($validator);
+            }       
+        
+            $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $pin = mt_rand(1000000, 9999999)
+                    . mt_rand(1000000, 9999999)
+                    . $characters[rand(0, strlen($characters) - 1)];
+
+            // $users = auth('api')->user();
+            $user = json_decode($this->user);
+
+            if ($request->hasFile('other_images')) {
+                $path2 = array($request->other_images);
+                print_r('The images when converted to array '.$path2);
+                print_r('The images without array conversion '.$request->other_images);
+            }
+
+            $property = Property::create([
+                'user_id' => $this->user->id,
+                'category_id' => $request->category_id,
+                'type_id' => $request->type_id,
+                'location_id' => $request->location_id,
+                'location' => $request->location,
+                'title' => $request->title,
+                'description' => $request->description,
+                'state' => $request->state,
+                'area' => $request->area,
+                'total_area' => $request->total_area,
+                'market_status' => $request->market_status,
+                'parking' => $request->parking,
+                'locality' => $request->locality,
+                'budget' => $request->budget,
+                'other_images' => array($request->other_images),
+                'image' => $request->image,
+                'bedroom' => $request->bedroom,
+                'bathroom' => $request->bathroom,
+                'toilet' => $request->toilet,
+                'video_link' => $request->video_link,
+                'status' => $request->status,
+                'feature' => $request->feature,
+                'ref_no' => str_shuffle($pin),
+                'user' => $user,
+            ]);
+
+            DB::commit();
+            // return validResponse('Property Created!');
+            return response()->json([
+                'message' => 'Property Created!',
+                'property' => $property,
+            ], 201);
+        }
+        catch(Exception $e){
+            session()->flash('error_msg' , $e->getMessage());
+            // dd($e->getMessage());
+            DB::rollback();
+            return problemResponse($e->getMessage() , ApiConstants::SERVER_ERR_CODE , $request);
+        }
+        catch(ValidationException $e){
+            DB::rollback();
+            $message = "" . (implode(' ', Arr::flatten($e->errors())));
+            return problemResponse($message , ApiConstants::BAD_REQ_ERR_CODE , $request);
+        }
+    }
+
     public function store(Request $request)
     {
+        if(!$this->planManager->canUserCreateProperty()){
+
+            return response()->json([
+                'message' => 'User does not have active subscription, or subscription has expired',
+                'property' => [],
+            ], 407);
+
+         }
+        $path2 = "";
+
         DB::beginTransaction();
         try{
             $validator = Validator::make($request->all(),[
@@ -101,7 +264,9 @@ class PropertyController extends Controller
         }
 
         if ($request->hasFile('other_images')) {
-            
+
+            // break down the array
+
             foreach ($request->file('other_images') as $picture) {
                 $pictures[] = $fileName = time().'.'.$picture->getClientOriginalName();
                 $image_path = public_path('/FeaturedProperty_images');
@@ -110,6 +275,7 @@ class PropertyController extends Controller
                 // Storage::put('public/' . $fileName, file_get_contents($picture));
             }
             $path2 = '/FeaturedProperty_images/'.implode(',/FeaturedProperty_images/', $pictures);
+            $path2 = array($path2);
             $featuredImage = $request->file('image');
             $image_filename = time().'.'.$featuredImage->getClientOriginalExtension();
             $image_path2 = public_path('/FeaturedProperty_images');

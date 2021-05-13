@@ -131,6 +131,12 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     Route::get('user/{id}', 'Api\AuthController@singleUser');
 
+
+    Route::post('/saved-properties', 'PropertyController@createSavedProperty');
+
+    Route::get('/properties/saved', 'PropertyController@user_saved_property');
+
+
 });
 
 
