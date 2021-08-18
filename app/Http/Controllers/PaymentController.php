@@ -36,8 +36,22 @@ class PaymentController extends Controller
      */
     public function handleGatewayCallback()
     {
-        $paymentDetails = Paystack::getPaymentData();
+        // $paymentDetails = Paystack::getPaymentData();
 
+        // $subscription= new Subscription();
+        // $subscription->user_id = 1;
+        // $subscription->plan_id = $paymentDetails['data']['plan_id'];
+        // //dd($paymentDetails['data']['plan_id']);
+        // $subscription->payment_method = 'Paystack';
+        // $subscription->reference= $paymentDetails['data']['reference'];
+        // $subscription->amount= $paymentDetails['data']['amount'];
+        // $subscription->save();
+
+        // return redirect()-back();
+
+        //dd($paymentDetails);
+
+        // Implementing Flutterwave's callback
         $subscription= new Subscription();
         $subscription->user_id = 1;
         $subscription->plan_id = $paymentDetails['data']['plan_id'];
@@ -48,10 +62,7 @@ class PaymentController extends Controller
         $subscription->save();
 
         return redirect()-back();
-
-        //dd($paymentDetails);
-        // Now you have the payment details,
-        // you can store the authorization_code in your db to allow for recurrent subscriptions
-        // you can then redirect or do whatever you want
     }
+
+
 }

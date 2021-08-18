@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+// /* Setup CORS */
+// header('Access-Control-Allow-Origin: *');
+// header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization");
+// header("Access-Control-Allow-Methods: POST, GET, PUT, DELETE");
+
 Route::post('/login', 'Api\AuthController@login')->name('login');
 
 Route::post('/admin-login', 'Api\AuthController@AdminLogin');
@@ -36,6 +42,24 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 
 });
+
+Route::get('/rentByTown', 'PropertyController@rentByTownPropertyCount');
+Route::get('/saleByTown', 'PropertyController@saleByTownPropertyCount');
+Route::get('/shortletByTown', 'PropertyController@shortletByTownPropertyCount');
+
+Route::get('/category/shortlet', 'PropertyController@shortletByCategoryPropertyCount');
+Route::get('/category/rent', 'PropertyController@rentByCategoryPropertyCount');
+Route::get('/category/sale', 'PropertyController@saleByCategoryPropertyCount');
+
+Route::get('/get/stats', 'PropertyController@getCounts');
+
+Route::get('/get/flats', 'PropertyController@getFlats');
+
+Route::get('/get/houses', 'PropertyController@getHouses');
+
+Route::get('/get/commercial/projects', 'PropertyController@getCommercialProjects');
+
+Route::get('/get/lands', 'PropertyController@getLands');
 
 Route::get('/types', 'TypeController@index');
 
@@ -103,7 +127,7 @@ Route::post('/subscribe', 'PaymentController@redirectToGateway')->name('pay');
 Route::get('/payment/callback', 'PaymentController@handleGatewayCallback');
 Route::get('/subscriptions', 'SubscriptionController@index');
 
-
+Route::get('/admin/block/', 'Api\AuthController@adminBlockUser');
 
 Route::group(['middleware' => 'auth:api'], function(){
     //Property Api Controller Routes
@@ -112,6 +136,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('/user-detail', 'Api\AuthController@userDetail');
 
     Route::post('/profile-update', 'Api\AuthController@updateProfile');
+
+    Route::post('/role-update', 'Api\AuthController@switchRoles');
 
     Route::post('/profile/image/upload', 'Api\AuthController@ProfileImageUpload');
 
@@ -223,8 +249,6 @@ Route::get('/sub-history','Api\AuthController@sub_history');
 Route::get('/sub-newsletter','NewsletterController@index');
 Route::post('/create-newsletter','NewsletterController@store');
 
-
-
 //About Page
 Route::post('/about/create', 'AboutUsController@store');
 Route::get('/about/{id}', 'AboutUsController@edit');
@@ -243,3 +267,5 @@ Route::get('/policy/{id}', 'PrivacyPolicyController@edit');
 Route::put('/policy/{id}', 'PrivacyPolicyController@update');
 Route::delete('policy/{id}', 'PrivacyPolicyController@destroy');
 
+// chats 
+Route::get('/chat/{id}', 'ChatController@show');

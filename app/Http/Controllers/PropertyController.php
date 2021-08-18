@@ -80,11 +80,18 @@ class PropertyController extends Controller
                 $users = auth('api')->user();
                 $user = json_decode($users);
 
-                SavedProperty::create([
+                $property = SavedProperty::create([
                     'user_id' => $user->id,
                     'property_id' => $request->property_id,
                 ]);
-            }
+
+                DB::commit();
+                // return validResponse('Property Created!');
+                return response()->json([
+                    'message' => 'Property Saved!',
+                    'property' => $property,
+                ], 201);
+            }   
         }
 
         catch(ValidationException $e){
@@ -645,6 +652,153 @@ class PropertyController extends Controller
         $propertyCount = Property::count();
         return response()-> json([
             'propertyCount' => $propertyCount
+        ], 200);
+    }
+
+
+    // api to count distinct property
+    public function getUniquePropertyCount(Request $request)
+    {
+        // Property::where('type_id', 2);
+        /**
+         * Rent => 1
+         * Sale => 2
+         * Shortlet => 3
+         * 
+         * categories => 
+         */
+        // $property = DB::table('properties')->select('locality')->distinct()->get()->count();
+
+        // $property = Property::distinct('locality')->get('type_id')->count();
+        $property = Property::select('locality', DB::raw('count(locality) quantity'))->groupBy('locality')->get();
+
+        // by type 
+        $property = Property::where('type_id', 1)->select('locality', DB::raw('count(locality) quantity'))->groupBy('locality')->get();
+        $property = Property::select('type_id', DB::raw('count(type_id) quantity'))->groupBy('type_id')->get();
+
+        return response()-> json([
+            'propertyDistinctCount' => $property
+        ], 200);
+    }
+
+    public function rentByTownPropertyCount(Request $request)
+    {
+
+        $property = Property::where('type_id', 1)->select('locality', DB::raw('count(locality) quantity'))->groupBy('locality')->get();
+
+        return response()-> json([
+            'propertyCountForRentByTown' => $property
+        ], 200);
+
+    }
+
+    public function saleByTownPropertyCount(Request $request)
+    {
+
+        $property = Property::where('type_id', 2)->select('locality', DB::raw('count(locality) quantity'))->groupBy('locality')->get();
+
+        return response()-> json([
+            'propertyCountForSaleByTown' => $property
+        ], 200);
+
+    }
+
+    public function shortletByTownPropertyCount(Request $request)
+    {
+
+        $property = Property::where('type_id', 3)->select('locality', DB::raw('count(locality) quantity'))->groupBy('locality')->get();
+
+        return response()-> json([
+            'propertyCountForShortletByTown' => $property
+        ], 200);
+
+    }
+
+    public function shortletByCategoryPropertyCount(Request $request)
+    {
+
+        $property = Property::where('type_id', 3)->where('category_id', 3)->select('locality', DB::raw('count(locality) quantity'))->groupBy('locality')->get();
+
+        return response()-> json([
+            'categoryCountForShortlet' => $property
+        ], 200);
+
+    }
+
+    public function saleByCategoryPropertyCount(Request $request)
+    {
+
+        $property = Property::where('type_id', 2)->where('category_id', 3)->select('locality', DB::raw('count(locality) quantity'))->groupBy('locality')->get();
+
+        return response()-> json([
+            'categoryCountForSale' => $property
+        ], 200);
+
+    }
+
+    public function rentByCategoryPropertyCount(Request $request)
+    {
+
+        $property = Property::where('type_id', 1)->where('category_id', 3)->select('locality', DB::raw('count(locality) quantity'))->groupBy('locality')->get();
+
+        return response()-> json([
+            'categoryCountForRent' => $property
+        ], 200);
+
+    }
+
+    public function getCounts()
+    {
+        $user_count = User::where('userType', 'real_estate_agent')->count();
+        $property_count = Property::all()->count();
+        $areas_covered_count = Property::distinct('locality')->count();
+        return response()-> json([
+            'estateAgentCount' => $user_count,
+            'propertyCount' => $property_count,
+            'areasCovered' => $areas_covered_count
+        ], 200);
+    }
+
+    public function getFlats(Request $request)
+    {
+
+        $flats = Property::where('category_id', 1)->paginate(5);
+
+        return response()-> json([
+            'flats' => $flats
+        ], 200);
+
+    }
+
+    public function getHouses(Request $request)
+    {
+
+        $houses = Property::where('category_id', 2)->paginate(5);
+
+        return response()-> json([
+            'houses' => $houses
+        ], 200);
+
+    }
+
+    public function getCommercialProjects(Request $request)
+    {
+
+        $commercialProjects = Property::where('category_id', 3)->paginate(5);
+
+        return response()-> json([
+            'commercialProjects' => $commercialProjects
+        ], 200);
+
+    }
+
+    public function getLands(Request $request)
+    {
+
+        $lands = Property::where('category_id', 4)->paginate(5);
+
+        return response()-> json([
+            'lands' => $lands
         ], 200);
     }
 }

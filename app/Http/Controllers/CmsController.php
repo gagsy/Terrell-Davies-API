@@ -46,5 +46,6 @@ class CmsController extends Controller
             ], 404);
 
         }
-        }
+    }
+
 }

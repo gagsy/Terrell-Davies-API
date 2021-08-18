@@ -87,6 +87,45 @@ class AuthController extends Controller
             }
     }
 
+    public function switchRoles(Request $request, $id=null){
+        $user_id = Auth::user()->id;
+        $users = User::find($user_id);
+
+        DB::beginTransaction();
+        try{
+            $validator = Validator::make($request->all(),[
+                'userType' => 'required'
+            ]);
+
+            if($validator->fails()){
+                session()->flash('errors' , $validator->errors());
+                throw new ValidationException($validator);
+            }
+
+            $users->userType = $request->userType;
+            $users->save();
+
+            $data[] = [
+                'id'=>$users->id,
+                'userType' => $users->userType,
+                'message'=> 'Your user role has been updated',
+            ];
+            DB::commit();
+            return response()->json($data);
+            }
+        catch(ValidationException $e){
+            DB::rollback();
+            $message = "" . (implode(' ', Arr::flatten($e->errors())));
+            return problemResponse($message , ApiConstants::BAD_REQ_ERR_CODE , $request);
+        }
+        catch(Exception $e){
+            session()->flash('error_msg' , $e->getMessage());
+            dd($e->getMessage());
+            DB::rollback();
+            return problemResponse($e->getMessage() , ApiConstants::SERVER_ERR_CODE , $request);
+        }
+    }
+
     public function updateProfile(Request $request, $id=null){
         $user_id = Auth::user()->id;
         $users = User::find($user_id);
@@ -211,25 +250,6 @@ class AuthController extends Controller
     public function ProfileImageUpload(Request $request, $id=null){
         $user_id = Auth::user()->id;
         $users = User::find($user_id);
-<<<<<<< HEAD
-        $request->validate([
-            'avatar' => 'nullable|image|max:4096',
-        ]);
-        $avatar = $request->file('avatar');
-        $filename = time() . '.' . $avatar->getClientOriginalExtension();
-        $image_path = public_path('/Avatar_images');
-        $avatar->move($image_path,$filename);
-
-        $image_path1 = public_path('Avatar_images/'.$users->avatar); //Not sure what this is.
-
-        if(File::exists($image_path1)) {
-            File::delete($image_path1);
-        }
-
-        // $users->avatar = $filename;
-        $users->avatar = $test_path;
-        $users->save();
-=======
         DB::beginTransaction();
         try{
             $validator = Validator::make($request->all(),[
@@ -246,7 +266,6 @@ class AuthController extends Controller
             $filename = time() . '.' . $avatar->getClientOriginalExtension();
             $image_path = public_path('/Avatar_images');
             $avatar->move($image_path,$filename);
->>>>>>> 7570580445e3932b30cea11decea4f34dd5abcef
 
             $image_path1 = public_path('Avatar_images/'.$users->avatar);
             if(File::exists($image_path1)) {
@@ -353,6 +372,13 @@ class AuthController extends Controller
             ], 200);
 
     }
+
+    public function adminBlockUser(Request $request, $id){
+		$user = User::find($id);
+        $user->	isActivated = 'Deactivate';
+		
+		$user->save();
+	}
 
     public function singleUser(Request $request, $id){
         \Log::info($request->all());
