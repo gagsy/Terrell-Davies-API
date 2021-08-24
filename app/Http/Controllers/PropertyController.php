@@ -801,4 +801,59 @@ class PropertyController extends Controller
             'lands' => $lands
         ], 200);
     }
+
+    public function listAgentsData($id)
+    {
+		$estateAgent = User::where('id', $id)->where('userType', 'real_estate_agent')->with('properties')->get();
+        if (count($estateAgent) > 0) {
+            return response()->json([
+                'agent_data' => $estateAgent
+            ], 200);
+        } else {
+            return response()->json([
+                'response' => 'User is not registered as an estate agent'
+            ], 400);
+        }
+    }
+
+    public function listPropertyOwnerData($id){
+        $propertyOwner = User::where('id', $id)->where('userType', 'property_owner')->with('properties')->get();
+        if (count($propertyOwner) > 0) {
+            return response()->json([
+                'property_owner_data' => $propertyOwner
+            ], 200);
+        } else {
+            return response()->json([
+                'response' => 'User is not registered as a Property Owner'
+            ], 400);
+        }
+    }
+
+    public function listAllAgents()
+    {
+        $estateAgents = User::where('userType', 'real_estate_agent')->with('properties')->paginate(5);
+        if (count($estateAgents) > 0) {
+            return response()->json([
+                'agents_data' => $estateAgents
+            ], 200);
+        } else {
+            return response()->json([
+                'response' => '0 estate agent found'
+            ], 400);
+        }
+    }
+    
+    public function listAllPropertyOwners()
+    {
+        $propertyOwners = User::where('userType', 'property_owner')->with('properties')->paginate(5);
+        if (count($propertyOwners) > 0) {
+            return response()->json([
+                'property_owners_data' => $propertyOwners
+            ], 200);
+        } else {
+            return response()->json([
+                'response' => '0 Property Owner found'
+            ], 400);
+        }
+    }
 }

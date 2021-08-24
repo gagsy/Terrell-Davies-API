@@ -267,5 +267,19 @@ Route::get('/policy/{id}', 'PrivacyPolicyController@edit');
 Route::put('/policy/{id}', 'PrivacyPolicyController@update');
 Route::delete('policy/{id}', 'PrivacyPolicyController@destroy');
 
-// chats 
+// chats
 Route::get('/chat/{id}', 'ChatController@show');
+Route::get('/chat/{id1}/{id2}', 'ChatController@showIndividualChat');
+Route::post('/chat/create', 'ChatController@store');
+
+// estate agents and their details
+Route::get('/estate-agents/{id}','PropertyController@listAgentsData');
+
+// property owner and their details
+Route::get('/property-owner/{id}','PropertyController@listPropertyOwnerData');
+
+// all estate agents
+Route::get('/estate-agents/','PropertyController@listAllAgents');
+
+// all property owners
+Route::get('/property-owners/','PropertyController@listAllPropertyOwners');

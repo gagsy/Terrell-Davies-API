@@ -14,7 +14,8 @@ class PropertyTypeController extends Controller
      */
     public function index()
     {
-        $propertytypes = PropertyType::all();
+		//dd('check');
+        $propertytypes = PropertyType::with('propertyType')->get();
         return response()->json(['propertytypes' => $propertytypes], 200);
     }
 
@@ -38,7 +39,7 @@ class PropertyTypeController extends Controller
     {
         $request->validate([
             'type_id' => 'required',
-            'property_id' => 'required',
+            'property_id' => 'sometimes',
         ]);
 
         $propertytype = PropertyType::create($request->all());

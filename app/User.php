@@ -43,7 +43,7 @@ class User extends Model implements AuthenticatableContract
     ];
 
     public function properties(){
-        return $this->hasMany(Property::class);
+        return $this->hasMany(Property::class,'user_id', 'id');
     }
 
     public function sendApiEmailVerificationNotification()
