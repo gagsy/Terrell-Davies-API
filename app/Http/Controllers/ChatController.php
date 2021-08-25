@@ -79,7 +79,7 @@ class ChatController extends Controller
         }
 
     }
-	
+
 	public function showIndividualChat($id1, $id2)
     {
         //
@@ -91,7 +91,6 @@ class ChatController extends Controller
               "message" => "Chat not found",
             ], 404);
         }
-
     }
 
     /**
